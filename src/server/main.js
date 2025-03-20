@@ -89,6 +89,6 @@ app.post('/register', async (req, res) => {
     );
 });
 
-ViteExpress.listen(app, port, '0.0.0.0', () =>
-    console.log(`Server is listening on  http://0.0.0.0:${port} ...`)
-);
+ViteExpress.listen(app, port, () => {
+    console.log(`Server is listening on  http://localhost:${port} ...`)
+});
