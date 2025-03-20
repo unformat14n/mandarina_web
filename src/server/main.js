@@ -4,10 +4,12 @@ import mysql from "mysql2";
 
 const app = express();
 
+const port = process.env.PORT || 4000;
 app.use(express.json());
 
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
+    port: 3306,
     user: 'root',       // Your MySQL username
     password: 'm4nd4r1n4srv',       // Your MySQL password
     multipleStatements: true // Allows running multiple SQL commands
@@ -87,6 +89,6 @@ app.post('/register', async (req, res) => {
     );
 });
 
-ViteExpress.listen(app, 4000, () =>
-    console.log("Server is listening on  http://localhost:4000 ...")
+ViteExpress.listen(app, port, () =>
+    console.log(`Server is listening on  http://localhost:${port} ...`)
 );
