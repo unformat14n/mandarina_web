@@ -9,7 +9,7 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',       // Your MySQL username
-    password: '12345678',       // Your MySQL password
+    password: 'm4nd4r1n4srv',       // Your MySQL password
     multipleStatements: true // Allows running multiple SQL commands
 });
 
@@ -87,6 +87,6 @@ app.post('/register', async (req, res) => {
     );
 });
 
-ViteExpress.listen(app, 3000, () =>
-    console.log("Server is listening on  http://localhost:3000 ...")
+ViteExpress.listen(app, 3001, () =>
+    console.log("Server is listening on  http://localhost:3001 ...")
 );
