@@ -1,0 +1,17 @@
+body {
+    display: flex;
+    width: auto;
+}
+
+nav#sidebar {
+    max-width: 18vw;
+    width: 18vw;
+}
+
+section.main {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100%;
+}
+

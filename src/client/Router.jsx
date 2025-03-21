@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
-import App from './App'
+import MonthCalendar from './components/MonthCalendar';
+import MainPage from './components/MainPage';
 // import Calendar from '../pages/Calendar';
 
 function AppRouter() {
@@ -10,7 +11,7 @@ function AppRouter() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/app" element={<App />} />
+                <Route path="/calendar/monthly" element={<MainPage />} />
             </Routes>
         </Router>
     );

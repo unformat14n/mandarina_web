@@ -23,8 +23,8 @@ function Register() {
             const data = await response.json();
 
             if (data.success) {
-                alert('Registration successful! Please log in.');
-                navigate('/login');
+                alert('Registration successful! Welcome to Mandarina!');
+                navigate('/app');
             } else {
                 alert(data.message || 'Failed to register. Try again.');
             }
@@ -38,7 +38,7 @@ function Register() {
     };
 
     return (
-        <section className="center">
+        <div className="center">
             <div className="card">
                 <h1>Create an Account</h1>
                 <form onSubmit={(e) => e.preventDefault()}>
@@ -69,7 +69,7 @@ function Register() {
                 </form>
                 <button onClick={handleRegister}>Register</button>
             </div>
-        </section>
+        </div>
     );
 }
 

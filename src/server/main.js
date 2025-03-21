@@ -8,10 +8,9 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 const db = mysql.createConnection({
-    host: '127.0.0.1',
-    port: 3306,
+    host: 'localhost',
     user: 'root',       // Your MySQL username
-    password: 'm4nd4r1n4srv',       // Your MySQL password
+    password: '12345678',       // Your MySQL password
     multipleStatements: true // Allows running multiple SQL commands
 });
 

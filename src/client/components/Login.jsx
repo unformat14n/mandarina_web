@@ -1,5 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { useState } from 'react';
+import '../index.css';
 
 function Login() {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Login() {
             const data = await response.json();
 
             if (data.success) {
-                navigate('/app');
+                navigate('/calendar/monthly');
             } else {
                 alert('Invalid username or password');
             }
@@ -28,9 +29,9 @@ function Login() {
     };
 
     return (
-        <section className="center">
+        <div className="center">
             <div className="card">
-                <h1>Welcome to Mandarina!</h1>
+                <h1>Welcome back!</h1>
                 <form onSubmit={(e) => e.preventDefault()}>
                     <label htmlFor="uname">Username: </label>
                     <input
@@ -52,7 +53,7 @@ function Login() {
                 <button onClick={handleLogin}>Login</button>
                 <p>Don't have an account? <Link to="/register">Register here</Link></p>
             </div>
-        </section>
+        </div>
     );
 }
 
