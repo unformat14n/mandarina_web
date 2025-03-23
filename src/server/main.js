@@ -81,7 +81,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Serve static files from the build (React app)
-app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(express.static(path.join(__dirname, 'dist')));
 
 // Catch-all handler for SPA (single-page application) routing
 app.get('*', (req, res) => {
