@@ -4,10 +4,11 @@ import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
 
 const app = express();
-const port = 4000;
+const port = 3000;
 
 // app.use(cors()); // Enable CORS for all domains
 
+app.use(express.json());
 app.use(cors({
     origin: 'http://3.80.101.187', // Allow only your frontend
     methods: ['POST', 'GET'],
@@ -16,10 +17,9 @@ app.use(cors({
 }));
 
 app.options('*', cors());  
-app.use(express.json());
 
 const db = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "root",
     password: "m4nd4r1n4srv",
     multipleStatements: true,
