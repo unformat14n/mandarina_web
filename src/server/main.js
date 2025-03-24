@@ -1,11 +1,12 @@
 import express from "express";
 import ViteExpress from "vite-express";
 import mysql from "mysql2";
-import path from 'path';
+import cors from 'cors';  // Import CORS module
 
 const app = express();
 const port = 4000;
 
+app.use(cors());  // Enable CORS for all domains
 app.use(express.json());
 
 const db = mysql.createConnection({
