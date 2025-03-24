@@ -9,13 +9,7 @@ const port = 4000;
 // app.use(cors()); // Enable CORS for all domains
 
 app.use(express.json());
-app.use(cors({
-    origin: 'http://3.80.101.187', // Allow only your frontend
-    methods: ['POST', 'GET'],
-    allowedHeaders: ['Content-Type'],
-    credentials: true
-}));
-
+app.use(cors());
 app.options('*', cors());  
 
 const db = mysql.createConnection({
