@@ -17,11 +17,11 @@ function Register() {
             const response = await fetch('http://localhost:4000/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            })
-
+                body: JSON.stringify({ username, password }) // Ensure this is being sent correctly
+            });
+    
             const data = await response.json();
-
+    
             if (data.success) {
                 navigate('/calendar/monthly/');
             } else {
@@ -29,9 +29,6 @@ function Register() {
             }
         } catch (error) {
             console.error('Error during registration:', error);
-            console.log("uname", username);
-            console.log("password", password);
-            console.log(JSON.stringify({ username, password }))
             alert('Server error. Please try again later.');
         }
     };
