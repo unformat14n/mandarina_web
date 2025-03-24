@@ -4,7 +4,7 @@ import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 // app.use(cors()); // Enable CORS for all domains
 
