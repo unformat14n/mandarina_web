@@ -6,7 +6,15 @@ import cors from "cors"; // Import CORS module
 const app = express();
 const port = 4000;
 
-app.use(cors()); // Enable CORS for all domains
+// app.use(cors()); // Enable CORS for all domains
+
+app.use(cors({
+    origin: 'http://3.80.101.187', // Allow only your frontend
+    methods: ['POST', 'GET'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true
+}));
+
 app.options('*', cors());  
 app.use(express.json());
 
@@ -137,5 +145,5 @@ app.post("/register", async (req, res) => {
 // });
 
 ViteExpress.listen(app, port, () => {
-    console.log(`Server is listening on http://localhost:${port} ...`);
+    console.log(`Server is listening on http://3.80.101.187:${port} ...`);
 });
