@@ -10,7 +10,6 @@ const port = 4000;
 
 app.use(express.json());
 app.use(cors());
-app.options('*', cors());  
 
 const db = mysql.createConnection({
     host: "localhost",
