@@ -4,7 +4,8 @@ import mysql from "mysql2";
 import path from 'path';
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = 4000;
+
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -60,6 +61,7 @@ app.post('/login', (req, res) => {
     });
 });
 
+
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -73,9 +75,9 @@ app.post('/register', async (req, res) => {
         (err, result) => {
             if (err) {
                 console.error('Database error:', err);
-                return res.status(500).json({ error: 'Failed to register user' });
+                return res.status(500).json({ success: false, error: 'Failed to register user' });
             }
-            res.status(201).json({ message: 'User registered successfully' });
+            res.status(201).json({ success: true, message: 'User registered successfully' });
         }
     );
 });
@@ -83,10 +85,10 @@ app.post('/register', async (req, res) => {
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
 
-// Catch-all handler for SPA (single-page application) routing
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
-});
+// // Catch-all handler for SPA (single-page application) routing
+// app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+// });
 
 ViteExpress.listen(app, port, () => {
     console.log(`Server is listening on http://localhost:${port} ...`)

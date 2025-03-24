@@ -14,7 +14,7 @@ function Register() {
         }
 
         try {
-            const response = await fetch('/register', {
+            const response = await fetch('http://localhost:4000/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -23,8 +23,7 @@ function Register() {
             const data = await response.json();
 
             if (data.success) {
-                alert('Registration successful! Welcome to Mandarina!');
-                navigate('/app');
+                navigate('/calendar/monthly/');
             } else {
                 alert(data.message || 'Failed to register. Try again.');
             }

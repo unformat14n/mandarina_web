@@ -9,7 +9,7 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('/login', {
+            const response = await fetch('http://localhost:4000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
@@ -45,7 +45,7 @@ function Login() {
                     <input
                         type='password'
                         id='psswd'
-                        name="passwd"
+                        name="psswd"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     /><br />

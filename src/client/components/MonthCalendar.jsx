@@ -21,6 +21,10 @@ const MonthCalendar = () => {
         );
     };
 
+    const renderToday = () => {
+        setCurrentDate(new Date()); // Resets the current date to today's date
+    };
+
     const renderDays = () => {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
@@ -32,10 +36,19 @@ const MonthCalendar = () => {
             days.push(<div key={`empty-${i}`} className="empty-day"></div>);
         }
 
+        let today = new Date();
         for (let day = 1; day <= daysInMonth; day++) {
+            let classes = "date";
+            if (
+                day == today.getDate() &&
+                month == today.getMonth() &&
+                year == today.getFullYear()
+            ) {
+                classes += " today";
+            }
             days.push(
                 <div key={day} className="day">
-                    {day}
+                    <p className={classes}>{day}</p>
                 </div>
             );
         }
@@ -52,6 +65,9 @@ const MonthCalendar = () => {
                     {currentDate.getFullYear()}
                 </h2>
                 <button onClick={handleNextMonth}>{">"}</button>
+                <button onClick={renderToday} className="simple">
+                    Today
+                </button>
             </div>
             <div className="calendar_day">
                 <div className="day-label">DOM</div>
