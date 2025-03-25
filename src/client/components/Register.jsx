@@ -14,7 +14,7 @@ function Register() {
         }
 
         try {
-            const response = await fetch('http://3.80.101.187:4000/register', {
+            const response = await fetch('http://localhost:4004/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }) // Ensure this is being sent correctly

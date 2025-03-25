@@ -1,0 +1,140 @@
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 80vw;
+}
+
+.calendar-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    font-weight: bold;
+    /* overflow-y: auto; */
+}
+
+.calendar-header * {
+    margin-inline: 0.25em;
+}
+
+.calendar-header h2 {
+    width: 8em;
+}
+
+.calendar_day {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: solid 0.1em #666;
+    box-shadow: 0 0.3em 0.4em 0em rgba(65, 65, 89, 0.2);
+    z-index: 10;
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Ensures header stays visible */
+}
+
+.scrollable-dates {
+    max-height: 100%;
+    height: 100%;
+}
+
+.calendar-contents {
+    overflow-y: auto; /* Enables scrolling */
+    flex-grow: 1;
+    height: 100%;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Ensures all rows fill evenly */
+    height: 100%; 
+}
+
+.day-label,
+.day,
+.empty-day {
+    text-align: center;
+    padding: 10px 0;
+    color: #666;
+}
+
+.day-label {
+    font-weight: bold;
+    /* background-color: #f0f0f0; */
+}
+
+.day {
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: #ffffff;
+    padding: 0.5em;
+    margin: 0;
+    color: #666;
+}
+
+.day .date {
+    margin: 0;
+    text-align: left;
+    color: #c0c0c0;
+}
+
+.day .today {
+    color: white;
+    font-weight: 900;
+    background-color: var(--primary);
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    place-content: center;
+    border-radius: 1em;
+}
+
+.day:hover {
+    background-color: #e6f7ff;
+}
+
+.hour-row {
+    padding: 1em 2em;
+}
+.hour-row .hour-label {
+    margin: 0;
+    text-align: left;
+    color: #c0c0c0;
+}
+
+.rounded-button {
+    background-color: var(--primary); /* Blue */
+    border: none;
+    border-radius: 9999px; /* Fully rounded */
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.rounded-button:hover {
+    background-color: var(--primary);
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+}
+
+.view-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+}
+
+#view-select {
+    padding: 0.5em 2rem;
+    border-radius: 2em;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}

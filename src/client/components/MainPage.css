@@ -1,15 +1,23 @@
 nav#sidebar {
-    margin: 0;
     max-width: 20vw;
     width: 20vw;
     padding-left: 1em;
+    /* height: 100%; */
 
     z-index: 100;
     box-shadow: 0.1em 0 0.4em  rgb(0 0 0 / 0.2);
 
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    overflow: scroll;
 }
+
+/* .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+} */
 
 section.main {
     display: flex;
@@ -23,10 +31,11 @@ section.main {
 .sidebar-item {
     text-decoration: none;
     color: #8c8c8c;
-    padding: 1em;
+    padding: 0.2em 0.5em;
     font-size: 1em;
-    margin: 1em;
-    border-radius: 1em;
+    margin-block: 1em;
+    margin-inline: 0.5em;
+    border-radius: 0.5em;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -35,10 +44,53 @@ section.main {
     background-color: var(--primary); /* Accent color */
     color: white;
     font-weight: 900;
+    font-size: 1.5em;
 }
 
 /* Optional: Hover effect for the items */
 .sidebar-item:hover {
     background-color: var(--secondary); 
     color: white;
+}
+
+.mini-calendar {
+    display: flex;
+    flex-direction: column;
+    padding: 0em 0.2em;
+    margin-top: auto;
+}
+
+.mini-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    place-content: center;
+    height: auto;
+}
+
+.mini-week > .mini-day:first-child, /* First "S" (Sunday) */
+.mini-week > .mini-day:last-child {  /* Last "S" (Saturday) */
+    color: var(--secondary); /* Or any color you prefer */
+    font-weight: bold;
+}
+
+.mini-day {
+    text-align:center;
+}
+
+.mini-contents {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.mini-date {
+    text-align:center;
+    padding: 0.5em;
+
+}
+.mini-today {
+    border-radius: 50%;
+    text-align:center;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 900;
 }

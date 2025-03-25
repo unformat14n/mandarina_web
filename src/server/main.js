@@ -4,7 +4,7 @@ import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
 
 const app = express();
-const port = 4000;
+const port = 4004;
 
 // app.use(cors()); // Enable CORS for all domains
 
@@ -138,5 +138,5 @@ app.post("/register", async (req, res) => {
 // });
 
 ViteExpress.listen(app, port, () => {
-    console.log(`Server is listening on http://3.80.101.187:${port} ...`);
+    console.log(`Server is listening on http://localhost:${port} ...`);
 });
