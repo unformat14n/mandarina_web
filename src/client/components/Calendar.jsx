@@ -132,12 +132,12 @@ function Calendar() {
                 <button onClick={renderToday} className="simple">
                     Today
                 </button>
-                { view == "day" && (
+                {view == "day" && (
                     <h3>
                         {currentDate.toLocaleString("default", {
-                              month: "long",
-                              year: "numeric",
-                          })}
+                            month: "long",
+                            year: "numeric",
+                        })}
                     </h3>
                 )}
                 <div className="view-selector">
@@ -177,13 +177,9 @@ function Calendar() {
             </div>
             {/* <MonthCalendar currentDate={currentDate} /> */}
             {/* Calendar View Content */}
-            <div className="calendar-contents">
-                {view === "month" && (
-                    <MonthCalendar currentDate={currentDate} />
-                )}
-                {/* {view === "week" && <WeekView />} */}
-                {view === "day" && <DayCalendar currentDate={currentDate} />}
-            </div>
+            {view === "month" && <MonthCalendar currentDate={currentDate} />}
+            {/* {view === "week" && <WeekView />} */}
+            {view === "day" && <DayCalendar currentDate={currentDate} />}
         </div>
     );
 }
