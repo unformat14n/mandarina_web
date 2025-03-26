@@ -2,6 +2,7 @@ import express from "express";
 import ViteExpress from "vite-express";
 import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
+import bcrypt from 'bcryptjs';
 
 const app = express();
 const port = 4004;
@@ -18,32 +19,38 @@ const db = mysql.createConnection({
     multipleStatements: true,
 });
 
-// Initialize Database and Tables
-db.connect((err) => {
-    if (err) throw err;
-    console.log("Connected to MySQL server.");
-
+function setupDatabase(db) {
     const createDB = `CREATE DATABASE IF NOT EXISTS mandarina;`;
     const useDB = `USE mandarina;`;
-    const createTable = `
+    const usersTable = `
         CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(50) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL
-        );
-    `;
-    const insertSampleData = `
-        INSERT INTO users (username, password)
-        SELECT 'testuser', 'password123' FROM DUAL
-        WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'testuser');
-    `;
-    const setupQueries = `${createDB} ${useDB} ${createTable} ${insertSampleData}`;
+            password VARCHAR(255) NOT NULL    
+        );`;
+    const taskTable =` 
+        CREATE TABLE IF NOT EXISTS tasks (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255),
+            description TEXT,
+            dueDate DATE,
+            priority ENUM('Low', 'Medium', 'High'),
+            status ENUM('Pending', 'In Progress', 'Completed'),
+            hour int,
+            minute int,
+            user_id INT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );`;
+    const setupQueries = `${createDB} ${useDB} ${usersTable} ${taskTable}`;
 
     db.query(setupQueries, (err) => {
         if (err) throw err;
         console.log("Database and table setup complete.");
     });
-});
+}
+
+// Initialize Database and Tables
+setupDatabase(db);
 
 app.get("/hello", (req, res) => {
     res.send("Hello Vite + React!");
@@ -51,6 +58,7 @@ app.get("/hello", (req, res) => {
 
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
+    console.log("Received login request:", { username, password });
 
     const query = "SELECT * FROM users WHERE username = ? AND password = ?";
     db.query(query, [username, password], (err, results) => {
@@ -83,50 +91,47 @@ app.post("/register", async (req, res) => {
             .json({ error: "Username and password are required" });
     }
 
-    // Check if the username already exists
-    db.query(
-        "SELECT * FROM users WHERE username = ?",
-        [username],
-        (err, result) => {
-            if (err) {
-                console.error("Database error during username check:", err);
-                return res
-                    .status(500)
-                    .json({ success: false, error: "Database error" });
-            }
 
-            if (result.length > 0) {
-                console.log("Username already exists");
-                return res.status(400).json({
-                    success: false,
-                    error: "Username already exists",
-                });
-            }
+    if (password.length < 8) {
+        console.log("Password must be at least 8 characters long");
+        return res
+           .status(400)
+           .json({ error: "Password must be at least 8 characters long" });
+    }
 
-            // Proceed with the registration if the username is available
-            db.query(
-                "INSERT INTO users (username, password) VALUES (?, ?)",
-                [username, password],
-                (err, result) => {
-                    if (err) {
-                        console.error(
-                            "Database error during registration:",
-                            err
-                        );
-                        return res.status(500).json({
-                            success: false,
-                            error: "Failed to register user",
-                        });
-                    }
-                    console.log("User registered successfully");
-                    res.status(201).json({
-                        success: true,
-                        message: "User registered successfully",
+    // Hash the password
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashed = await bcrypt.hash(password, salt);
+        
+        db.query(
+            `INSERT INTO users (username, password) VALUES (?, ?)`,
+            [username, hashed],
+            (err, results)  => {
+                if (err) {
+                    console.error("Error inserting user:", err);
+                    return res.status(500).json({
+                        success: false,
+                        error: "Internal Server Error",
                     });
                 }
-            );
-        }
-    );
+                console.log("User registered successfully");
+                res.status(201).json({
+                    success: true,
+                    message: "User registered successfully",
+                });
+            } 
+        )
+    } catch (error) {
+        console.error("Error during registration:", error);
+        return res.status(500).json({
+            success: false,
+            error: "Internal Server Error",
+        });
+    } 
+
+
+    // Check if the username already exists
 });
 
 // Serve static files from the build (React app)
