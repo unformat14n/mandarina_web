@@ -1,6 +1,6 @@
 import express from "express";
 import ViteExpress from "vite-express";
-import mysql from "mysql2";
+import mysql from "mysql2"; 
 import cors from "cors"; // Import CORS module
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
@@ -13,6 +13,7 @@ const port = 4004;
 app.use(express.json());
 app.use(cors());
 let verificationCodes = {};
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -91,10 +92,24 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     console.log("Received login request:", { email, password });
 
+    // Input validation - empty
+    if (!email || !password ) {
+        return res.status(400).json({ 
+            success: false, 
+            message: "Invalid input, empty fields" 
+        });
+    }
+
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid email format"
+        });
+    }
+
     const query = "SELECT * FROM users WHERE email = ?;";
     db.query(query, [email], async (err, results) => {
         if (err) return res.status(500).json({ error: "Database error" });
-
         if (results.length > 0) {
             const match = await bcrypt.compare(password, results[0].password);
             if (!match) {
@@ -132,6 +147,13 @@ app.post("/register", async (req, res) => {
             .json({ error: "Username and password are required" });
     }
 
+    // Email format validation
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ 
+            success: false, 
+            error: "Invalid email format" 
+        });
+    }
 
     if (password.length < 8) {
         console.log("Password must be at least 8 characters long");
@@ -141,20 +163,20 @@ app.post("/register", async (req, res) => {
     }
 
     // Check if the username already exists
-    const checkEmailQuery = "SELECT * FROM users WHERE email = ?";
+    const checkEmailQuery = "SELECT 1 FROM users WHERE email = ?";
     db.query(checkEmailQuery, [email], async (err, results) => {
         if (err) {
-            console.error("Error checking username:", err);
+            console.error("Error checking email:", err);
             return res.status(500).json({
                 success: false,
                 error: "Internal Server Error", 
             })
         }
         if (results.length > 0) {
-            console.log("Username already exists");
+            console.log("Email already exists");
             return res.status(400).json({
                 success: false,
-                error: "Username already exists",
+                error: "Email already exists",
             });
         }
     })
@@ -179,6 +201,8 @@ app.post("/register", async (req, res) => {
 
 app.post('/verify', async (req, res) => {
     const { email, password, code } = req.body;
+    console.log("Received verification request:", { email, password, code });
+    console.log("Stored code:", verificationCodes[email]); // Log the stored code for verificatio
 
     if (verificationCodes[email] === code) {
         try {
