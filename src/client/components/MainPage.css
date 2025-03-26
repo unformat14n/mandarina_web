@@ -31,9 +31,9 @@ section.main {
 .sidebar-item {
     text-decoration: none;
     color: #8c8c8c;
-    padding: 0.2em 0.5em;
+    padding: 1em;
     font-size: 1em;
-    margin-block: 1em;
+    margin-block: 0.2em;
     margin-inline: 0.5em;
     border-radius: 0.5em;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -45,12 +45,23 @@ section.main {
     color: white;
     font-weight: 900;
     font-size: 1.5em;
+    margin-block: 0.2em;
+    margin-inline: 0.5em;
+    padding: 0.5em;
+    margin-left: 1em;
 }
 
 /* Optional: Hover effect for the items */
 .sidebar-item:hover {
     background-color: var(--secondary); 
+    padding: 0.75em;
+    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.5em;
+    margin-block: 0.2em;
+    margin-left: 1em;
     color: white;
+    transition: all 0.2s ease;
 }
 
 .mini-calendar {
