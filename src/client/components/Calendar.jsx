@@ -89,6 +89,70 @@ const DayCalendar = ({ currentDate }) => {
     );
 };
 
+const WeekCalendar = ({ currentDate }) => {
+    const getWeekDays = () => {
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Get Sunday
+
+        const today = new Date();
+        const weekDays = [<div className="week-hdr">Hour</div>];
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(startOfWeek.getTime()); // Create a new instance for each day
+            day.setDate(startOfWeek.getDate() + i); // Move forward day by day
+            let classes = "date";
+            if (
+                day.getDate() == today.getDate() &&
+                day.getMonth() == today.getMonth() &&
+                day.getFullYear() == today.getFullYear() 
+            ) {
+                classes += " today"
+            }
+
+
+            weekDays.push(
+                <div className="week-hdr">
+                    <p className="date">{day.toLocaleDateString("default", { weekday: "short"})}</p>
+                    <p className={classes}>{day.getDate()}</p>
+                </div>
+            );
+        }
+        return weekDays;
+    };
+
+    const renderHours = () => {
+        const hours = [];
+
+        for (let hour = 0; hour < 24; hour++) {
+            const formattedHour =
+                hour === 0 ? "12 AM" :
+                hour < 12 ? `${hour} AM` :
+                hour === 12 ? "12 PM" : `${hour - 12} PM`;
+
+
+            hours.push(
+                <div className="hour-slot">{formattedHour}</div>
+            )
+            for (let i = 0; i < 7; i++) {
+                hours.push(
+                    <div key={`day-${i}-hour-${hour}`} className="hour-slot"></div>
+                );
+            }
+        }
+
+        return hours;
+    };
+
+    return (
+        <div>
+            <div className="week-header">{getWeekDays()}</div>
+            <div className="calendar-contents">
+                <div className="week-body">{renderHours()}</div>
+            </div>
+        </div>
+    );
+};
+
+
 function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [view, setView] = useState("month"); // Default view: Month
@@ -97,16 +161,41 @@ function Calendar() {
         setView(event.target.value);
     };
 
-    const handlePrevMonth = () => {
-        setCurrentDate(
-            new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
-        );
+    const handlePrev = () => {
+        if (view == "month") {
+            setCurrentDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
+            );
+        } else if ( view == "week") {
+            setCurrentDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7)
+            )
+
+        } else {
+
+            setCurrentDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
+            )
+        }
     };
 
-    const handleNextMonth = () => {
-        setCurrentDate(
-            new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
-        );
+    const handleNext = () => {
+        if (view == "month") {
+            setCurrentDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
+            );
+        } else if ( view == "week") {
+            setCurrentDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7)
+            )
+
+        } else {
+
+            setCurrentDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1)
+            )
+            
+        }
     };
 
     const renderToday = () => {
@@ -116,19 +205,13 @@ function Calendar() {
     return (
         <div className="calendar-container">
             <div className="calendar-header">
-                <button onClick={handlePrevMonth}>{"<"}</button>
-                <h2>
-                    {view === "month"
-                        ? currentDate.toLocaleString("default", {
-                              month: "long",
-                              year: "numeric",
-                          })
-                        : currentDate.toLocaleString("default", {
-                              weekday: "long",
-                              day: "numeric",
-                          })}
-                </h2>
-                <button onClick={handleNextMonth}>{">"}</button>
+                <button onClick={handlePrev}>{"<"}</button>
+                {(view == "month" || view == "week") && (
+    <h2>{currentDate.toLocaleString("default", { month: "long", year: "numeric" })}</h2>
+)}                {view === "day" && (
+                <h2>{currentDate.toLocaleString("default", { weekday: "long", day: "numeric" })}</h2>
+            )}
+                <button onClick={handleNext}>{">"}</button>
                 <button onClick={renderToday} className="simple">
                     Today
                 </button>
@@ -146,9 +229,9 @@ function Calendar() {
                         id="view-select"
                         value={view}
                         onChange={handleViewChange}>
-                        <option value="month">Month View</option>
-                        <option value="week">Week View</option>
-                        <option value="day">Day View</option>
+                        <option value="month">Month</option>
+                        <option value="week">Week</option>
+                        <option value="day">Day</option>
                     </select>
                 </div>
                 <button className="rounded-button">
@@ -177,9 +260,14 @@ function Calendar() {
             </div>
             {/* <MonthCalendar currentDate={currentDate} /> */}
             {/* Calendar View Content */}
-            {view === "month" && <MonthCalendar currentDate={currentDate} />}
-            {/* {view === "week" && <WeekView />} */}
-            {view === "day" && <DayCalendar currentDate={currentDate} />}
+            <div className="calendar-contents">
+                {view === "month" && (
+                    <MonthCalendar currentDate={currentDate} />
+                )}
+                {/* {view === "week" && <WeekView />} */}
+                {view === "day" && <DayCalendar currentDate={currentDate} />}
+                {view === "week" && <WeekCalendar currentDate={currentDate} />}
+            </div>
         </div>
     );
 }
