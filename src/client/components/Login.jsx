@@ -4,7 +4,7 @@ import '../index.css';
 
 function Login() {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
@@ -12,7 +12,7 @@ function Login() {
             const response = await fetch('http://localhost:4004/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ email, password })
             });
 
             const data = await response.json();
@@ -20,7 +20,7 @@ function Login() {
             if (data.success) {
                 navigate('/calendar/');
             } else {
-                alert('Invalid username or password');
+                alert(data.message || data.error);
             }
         } catch (error) {
             console.error('Error during login:', error);
@@ -33,13 +33,13 @@ function Login() {
             <div className="card">
                 <h1>Welcome back!</h1>
                 <form onSubmit={(e) => e.preventDefault()}>
-                    <label htmlFor="uname">Username: </label>
+                    <label htmlFor="email">E-Mail: </label>
                     <input
-                        type='text'
-                        id='uname'
-                        name="uname"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        type='email'
+                        id='email'
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     /><br />
                     <label htmlFor="psswd">Password: </label>
                     <input
