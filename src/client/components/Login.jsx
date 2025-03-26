@@ -18,7 +18,7 @@ function Login() {
             const data = await response.json();
 
             if (data.success) {
-                navigate('/calendar/monthly');
+                navigate('/calendar/');
             } else {
                 alert('Invalid username or password');
             }

@@ -23,7 +23,7 @@ function Register() {
             const data = await response.json();
     
             if (data.success) {
-                navigate('/calendar/monthly/');
+                navigate('/calendar/');
             } else {
                 alert(data.message || 'Failed to register. Try again.');
             }

@@ -90,7 +90,7 @@ function Sidebar() {
                     Account
                 </NavLink>
                 <NavLink
-                    to="/calendar/monthly"
+                    to="/calendar/"
                     className="sidebar-item"
                     activeclassname="active-link">
                     {/* <span class="material-symbols-outlined">

@@ -9,7 +9,7 @@ function AppRouter() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/calendar/monthly" element={<MainPage />} />
+                <Route path="/calendar/" element={<MainPage />} />
             </Routes>
         </Router>
     );
