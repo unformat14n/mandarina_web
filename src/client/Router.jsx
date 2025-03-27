@@ -9,7 +9,9 @@ function AppRouter() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/calendar/" element={<MainPage />} />
+                <Route path="/calendar/" element={<MainPage type="calendar"/>} />
+                <Route path="/tasks/" element={<MainPage type="tasks"/>} />
+                <Route path="/account/" element={<MainPage type="account"/>} />
             </Routes>
         </Router>
     );
