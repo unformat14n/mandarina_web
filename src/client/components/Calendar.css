@@ -10,7 +10,7 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
-    font-weight: bold;
+    font-weight: italic;
     /* overflow-y: auto; */
 }
 
@@ -25,12 +25,12 @@
 .calendar_day {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    border-bottom: solid 0.1em #666;
-    box-shadow: 0 0.3em 0.4em 0em rgba(154, 154, 180, 0.2);
+    border-bottom: solid 0.1em #ffffff;
+    box-shadow: 0 0.3em 0.4em 0em rgba(49, 49, 58, 0.2);
     z-index: 10;
     position: sticky;
     top: 0;
-    background-color: #fff; /* Ensures header stays visible */
+    background-color: #ffffff; /* Ensures header stays visible */
 }
 
 .scrollable-dates {
@@ -79,7 +79,7 @@
 }
 
 .day .today {
-    color: white;
+    color: rgb(255, 255, 255);
     font-weight: 900;
     background-color: var(--primary);
     width: 2em;
@@ -90,7 +90,7 @@
 }
 
 .day:hover {
-    background-color: #e6f7ff;
+    background-color: #e1e8e2;
 }
 
 .hour-row {
@@ -109,8 +109,8 @@
 .week-header {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    border-bottom: solid 0.1em #666;
-    box-shadow: 0 0.3em 0.4em 0em rgb(154, 154, 180, 0.2);
+    border-bottom: solid 0.1em #ffffff;
+    box-shadow: 0 0.3em 0.4em 0em rgba(82, 82, 109, 0.2);
     z-index: 10;
     position: sticky;
     top: 0;
@@ -172,7 +172,7 @@
     
 
 .rounded-button:hover {
-    background-color: var(--primary);
+    background-color: #ff7300
 }
 
 .icon {
@@ -191,7 +191,7 @@
 #view-select {
     padding: 0.5em 2rem;
     border-radius: 2em;
-    border: 0.5px solid #000000;
+    border: 1px solid #8c8c8c;
     background-color: #fff;
     cursor: pointer;
 }

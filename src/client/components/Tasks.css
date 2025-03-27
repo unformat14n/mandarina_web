@@ -1,0 +1,113 @@
+/* Container for all tasks */
+.task-container {
+    /* position: relative; */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styling */
+.task-header {
+    display: flex;
+    width: 80vw;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 40px;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Updated box shadow */
+    padding-left: 2em;
+    margin-bottom: 20px;
+}
+
+.header-label{
+    padding: 5px;
+}
+
+.sort-select{
+    padding: 5px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #d8d8d8;
+    gap: 10px;
+
+}
+ .sort-select:hover{
+    background-color: #d8d8d8;
+ }
+
+ .header-filter{
+    padding:5px;
+ }
+
+ .filter-btn{
+    padding: 5px;
+    color: #ffffff;
+ }
+
+ .filter-btn:hover{
+    background-color: #ff7300;
+ }
+
+
+/* Body of the tasks */
+.task-body {
+    display: flex;
+    align-items: flex-start; 
+    justify-content: normal; /* Ensures left and right elements are spaced apart */
+    padding: 2em;
+    width: auto;
+    height: 100%;
+}
+
+/* Task List Styling */
+.task-list {
+    flex-grow: 5;
+    text-align: left;
+    padding: 15px;
+    height: 95%;
+    background-color: #ededed;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.task-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.task-date,
+.task-priority,
+.task-status {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Chart Section Styling */
+.task-chart {
+    width: 30%; /* Adjust width as needed */
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center;
+}
+
+.task-chart ul {
+    padding: 0;
+    list-style-type: none;
+    font-size: 14px;
+    color: #000000;
+}
+
+.task-chart p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.recharts-surface {
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+}
