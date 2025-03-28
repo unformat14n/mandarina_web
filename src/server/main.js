@@ -4,9 +4,10 @@ import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 const app = express();
 const port = 4004;
@@ -165,7 +166,7 @@ app.post("/login", async (req, res) => {
                 res.status(200).json({
                     success: true,
                     message: "Login successful",
-                    token,
+                    token: token,
                 });
             }
         } else {
@@ -236,13 +237,17 @@ app.post("/register", async (req, res) => {
     try {
         await sendVerificationEmail(email, verificationCode);
         console.log('Email sent:', email);
+
         res.status(201).json({
             success: true,
             message: "Allow verification. Email sent!",
         })
     } catch (error) {
         console.error('Email error:', error);
-        res.json({ success: false, message: 'Failed to send email.' });
+        // Ensure only one response is sent
+        if (!res.headersSent) {
+            res.status(500).json({ success: false, message: 'Failed to send email.' });
+        }
     }
 });
 
@@ -268,10 +273,18 @@ app.post('/verify', async (req, res) => {
                         });
                     }
                     console.log("User registered successfully");
+
+                    const token = jwt.sign(
+                        { email: email, id: results.insertId }, 
+                        SECRET_KEY,
+                        { expiresIn: '2h' }  // Token expiration time
+                    );
+
                     delete verificationCodes[email]; // Clear the temp code
                     res.status(201).json({
                         success: true,
                         message: "Code correct, user registered successfully",
+                        token: token,
                     });
                 } 
             )
