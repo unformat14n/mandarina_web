@@ -13,7 +13,12 @@ const port = 4004;
 app.use(express.json());
 app.use(cors());
 let verificationCodes = {};
+
+// Regular expressions for input validation
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const hasUppercase = /[A-Z]/;
+const hasNumber = /\d/;
+const noSpaces = /^\S*$/; // No spaces allowed
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -81,6 +86,35 @@ function setupDatabase(db) {
     });
 }
 
+function validatePassword(password) {
+    if (password.length < 8) {
+        return {
+            isValid: false,
+            error: "Password must be at least 8 characters long"
+        };
+    }
+    
+    if (!hasUppercase.test(password)) 
+        return {
+            isValid: false,
+            error: "Password must contain at least one uppercase letter"
+        };
+
+    if (!hasNumber.test(password))
+        return {
+            isValid: false,
+            error: "Password must contain at least one number"
+        };
+        
+    if (!noSpaces.test(password))
+        return {
+            isValid: false,
+            error: "Password must not contain spaces"   
+        }
+
+    return { isValid: true };
+}
+
 // Initialize Database and Tables
 setupDatabase(db);
 
@@ -140,6 +174,7 @@ app.post("/register", async (req, res) => {
     // Log the incoming request
     console.log("Received registration request:", { email, password });
 
+    // Validate that input isn't empty
     if (!email || !password) {
         console.log("Missing username or password");
         return res
@@ -155,11 +190,14 @@ app.post("/register", async (req, res) => {
         });
     }
 
-    if (password.length < 8) {
-        console.log("Password must be at least 8 characters long");
-        return res
-           .status(400)
-           .json({ error: "Password must be at least 8 characters long" });
+    // Password validation
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+        console.log(passwordValidation.error);
+        return res.status(400).json({ 
+            success: false,
+            error: passwordValidation.error 
+        });
     }
 
     // Check if the username already exists
