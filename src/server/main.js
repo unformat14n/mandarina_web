@@ -4,9 +4,14 @@ import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
 import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+
 
 const app = express();
 const port = 4004;
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 // app.use(cors()); // Enable CORS for all domains
 
@@ -153,10 +158,14 @@ app.post("/login", async (req, res) => {
                     message: "Password did not match the stored hash",
                 });
             } else {
+                const token = jwt.sign({ email: results[0].email, id: results[0].id }, SECRET_KEY, {
+                    expiresIn: '2h', // Token expiration time
+                })
                 console.log("Information correct");
                 res.status(200).json({
                     success: true,
                     message: "Login successful",
+                    token,
                 });
             }
         } else {
