@@ -1,0 +1,147 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    overflow: auto;
+}
+
+.account-hdr {
+    display: flex;
+    flex-direction: row;
+    position: sticky;
+    top: 0;
+    width: 80vw;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    background-color: rgb(255, 255, 255);
+}
+
+.account {
+    padding-top: 20px;
+}
+
+.info-container{
+    flex-direction: row;
+    background-color: #f5f3efce;
+    margin: 20px;
+    border-radius: 15px;
+    padding-bottom: 10px;
+}
+
+.mand-logo{
+    height: 80x;
+    width: 105px;
+    padding: 5px;
+}
+
+.divisor {
+    margin-left: 0;   
+    width: 70%;       
+    color: rgb(238, 238, 238);
+}
+
+.infobox-title{
+    padding-left: 20px;
+}
+
+.prefbox-title {
+    padding-left: 20px;
+}
+
+.info-display{
+    padding-left: 20px;
+    font-weight: bolder;
+}
+
+.user-data {
+    color: grey;
+    font-weight: 400;
+}
+
+.pref-container {
+    flex-direction: row;
+    background-color: #f5f3efce;
+    margin: 20px;
+    border-radius: 15px;
+    padding-bottom: 40px;
+}
+
+.pref-display {
+    padding-left: 20px;
+    font-weight: bolder;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.the-checkbox {
+    appearance: none; 
+    width: 20px;
+    height: 20px;
+    border: 2px solid orange;
+    border-radius: 50%; 
+    display: flex;
+    cursor: pointer;
+    position: relative;
+}
+
+.the-checkbox:checked {
+    background-color: empty;
+}
+
+.the-checkbox:checked::before {
+    content: ''; 
+    align-items: center;
+    width: 12px;
+    height: 12px;
+    background-color: rgb(255, 160, 66);
+    border-radius: 50%; 
+    align-self: center;
+    justify-self: center;
+    margin-left: 2px;
+}
+
+/* Themes*/
+.themes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px; 
+}
+
+.theme-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.theme-hdr {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-container {  
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.color-box {
+    width: 40px;  
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+@media (max-width: 600px) {
+    .themes-grid {
+        grid-template-columns: 1fr;
+    }
+}
