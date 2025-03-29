@@ -1,8 +1,53 @@
 import { useNavigate, Link } from "react-router-dom";
-import React, { useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import React, { useState, useEffect, useContext } from "react";
 import "./Calendar.css"; // For styling
+import { ModalContext } from "./MainPage";
+import Task from "./TaskComponent";
 
 const MonthCalendar = ({ currentDate }) => {
+    const [tasks, setTasks] = useState([]);
+
+    let userId = 0;
+    const token = localStorage.getItem("token");
+    try {
+        const decodedToken = jwtDecode(token);
+        userId = decodedToken.id; // Assuming 'id' is stored in the token
+    } catch (error) {
+        console.error("Invalid token:", error);
+        return null;
+    }
+
+    useEffect(() => {
+        const getTasksInMonth = async () => {
+            try {
+                const response = await fetch("/get-tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        date: currentDate.toISOString().split("T")[0],
+                    }),
+                });
+
+                const data = await response.json();
+                console.log("response", data);
+
+                if (data.success) {
+                    setTasks(data.tasks); // Store tasks in state
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        getTasksInMonth();
+    }, [userId, currentDate]);
+
     const getDaysInMonth = (year, month) => {
         return new Date(year, month + 1, 0).getDate();
     };
@@ -28,9 +73,29 @@ const MonthCalendar = ({ currentDate }) => {
             ) {
                 classes += " today";
             }
+
+            // Filter tasks for the current day
+            const tasksForDay = tasks.filter(task => {
+                const taskDate = new Date(task.dueDate).getDate();
+                return taskDate === day;
+            });
+
+            // Create task components
+            const taskComps = tasksForDay.map(task => (
+                // <p key={task.id} className="task">{task.title}</p>
+                <Task
+                    key={task.id}
+                    name={task.title}
+                    date={task.dueDate}
+                    hour={`${task.hour}:${String(task.minute).padStart(2, '0')}`}
+                    priority={task.priority}
+                />
+            ));
+
             days.push(
                 <div key={day} className="day">
                     <p className={classes}>{day}</p>
+                    {taskComps}
                 </div>
             );
         }
@@ -103,15 +168,18 @@ const WeekCalendar = ({ currentDate }) => {
             if (
                 day.getDate() == today.getDate() &&
                 day.getMonth() == today.getMonth() &&
-                day.getFullYear() == today.getFullYear() 
+                day.getFullYear() == today.getFullYear()
             ) {
-                classes += " today"
+                classes += " today";
             }
-
 
             weekDays.push(
                 <div className="week-hdr">
-                    <p className="date">{day.toLocaleDateString("default", { weekday: "short"})}</p>
+                    <p className="date">
+                        {day.toLocaleDateString("default", {
+                            weekday: "short",
+                        })}
+                    </p>
                     <p className={classes}>{day.getDate()}</p>
                 </div>
             );
@@ -124,17 +192,20 @@ const WeekCalendar = ({ currentDate }) => {
 
         for (let hour = 0; hour < 24; hour++) {
             const formattedHour =
-                hour === 0 ? "12 AM" :
-                hour < 12 ? `${hour} AM` :
-                hour === 12 ? "12 PM" : `${hour - 12} PM`;
+                hour === 0
+                    ? "12 AM"
+                    : hour < 12
+                    ? `${hour} AM`
+                    : hour === 12
+                    ? "12 PM"
+                    : `${hour - 12} PM`;
 
-
-            hours.push(
-                <div className="hour-slot">{formattedHour}</div>
-            )
+            hours.push(<div className="hour-slot">{formattedHour}</div>);
             for (let i = 0; i < 7; i++) {
                 hours.push(
-                    <div key={`day-${i}-hour-${hour}`} className="hour-slot"></div>
+                    <div
+                        key={`day-${i}-hour-${hour}`}
+                        className="hour-slot"></div>
                 );
             }
         }
@@ -152,10 +223,13 @@ const WeekCalendar = ({ currentDate }) => {
     );
 };
 
-
 function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [view, setView] = useState("month"); // Default view: Month
+    // const [isOpen, setIsOpen] = useState(false);
+    const { 
+        setIsOpen,
+    } = useContext(ModalContext);
 
     const handleViewChange = (event) => {
         setView(event.target.value);
@@ -166,16 +240,22 @@ function Calendar() {
             setCurrentDate(
                 new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
             );
-        } else if ( view == "week") {
+        } else if (view == "week") {
             setCurrentDate(
-                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7)
-            )
-
+                new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate() - 7
+                )
+            );
         } else {
-
             setCurrentDate(
-                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1)
-            )
+                new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate() - 1
+                )
+            );
         }
     };
 
@@ -184,17 +264,22 @@ function Calendar() {
             setCurrentDate(
                 new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
             );
-        } else if ( view == "week") {
+        } else if (view == "week") {
             setCurrentDate(
-                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7)
-            )
-
+                new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate() + 7
+                )
+            );
         } else {
-
             setCurrentDate(
-                new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1)
-            )
-            
+                new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate() + 1
+                )
+            );
         }
     };
 
@@ -202,15 +287,32 @@ function Calendar() {
         setCurrentDate(new Date()); // Resets the current date to today's date
     };
 
+    const createTask = () => {
+        setIsOpen(true);
+    };
+
+    
+
     return (
         <div className="calendar-container">
             <div className="calendar-header">
                 <button onClick={handlePrev}>{"<"}</button>
                 {(view == "month" || view == "week") && (
-    <h2>{currentDate.toLocaleString("default", { month: "long", year: "numeric" })}</h2>
-)}                {view === "day" && (
-                <h2>{currentDate.toLocaleString("default", { weekday: "long", day: "numeric" })}</h2>
-            )}
+                    <h2>
+                        {currentDate.toLocaleString("default", {
+                            month: "long",
+                            year: "numeric",
+                        })}
+                    </h2>
+                )}{" "}
+                {view === "day" && (
+                    <h2>
+                        {currentDate.toLocaleString("default", {
+                            weekday: "long",
+                            day: "numeric",
+                        })}
+                    </h2>
+                )}
                 <button onClick={handleNext}>{">"}</button>
                 <button onClick={renderToday} className="simple">
                     Today
@@ -234,7 +336,7 @@ function Calendar() {
                         <option value="day">Day</option>
                     </select>
                 </div>
-                <button className="rounded-button">
+                <button onClick={createTask} className="rounded-button">
                     <svg
                         data-slot="icon"
                         aria-hidden="true"

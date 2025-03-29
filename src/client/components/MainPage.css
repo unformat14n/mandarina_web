@@ -4,7 +4,7 @@ nav#sidebar {
     padding-left: 1em;
     /* height: 100%; */
 
-    z-index: 100;
+    z-index: 1;
     box-shadow: 0.1em 0 0.4em  rgba(0, 0, 0, 0.2);
 
     display: flex;

@@ -1,0 +1,51 @@
+.task {
+    display: flex;
+    flex-direction: column;
+    height: 5em;
+    padding: 0.25em;
+    margin: 0em;
+    border-radius: 0.5em;
+    /* width: auto; */
+}
+
+.task-low {
+    background: var(--lowp-bg);
+    border: solid 0.2em var(--lowp);
+    color: var(--lowp);
+}
+
+.task-medium {
+    background: var(--medp-bg);
+    border: solid 0.2em var(--medp);
+    color: var(--medp);
+}
+
+.task-high {
+    background: var(--highp-bg);
+    border: solid 0.2em var(--highp);
+    color: var(--highp);
+}
+
+.task-low p {
+    color: var(--lowp);
+}
+.task-medium p {
+    color: var(--medp);
+}
+.task-high p {
+    color: var(--highp);
+}
+
+h3.task-name {
+    font-weight: 600;
+    font-size: 1em;
+    margin: 0em;
+    line-height: 1em;
+    text-align: left;
+}
+
+.task p {
+    font-size: 0.8em;
+    margin: 0;
+    text-align: left;
+}

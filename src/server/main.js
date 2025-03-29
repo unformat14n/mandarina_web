@@ -301,6 +301,58 @@ app.post('/verify', async (req, res) => {
 });
 
 
+app.post('/create-task', async (req, res) => {
+    const { title, description, dueDate, priority, status, hour, minute, user_id } = req.body;
+    console.log("Received task creation request:", { title, description, dueDate, priority, status, hour, minute, user_id });
+
+    db.query(
+        `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute, user_id) VALUES (?,?,?,?,?,?,?,?)`,
+        [title, description, dueDate, priority, status, hour, minute, user_id],
+        (err, results) => {
+            if (err) {
+                console.error("Error inserting user:", err);
+                return res.status(500).json({
+                    success: false,
+                    error: "Internal Server Error",
+                });
+            }
+            console.log("Task succesfully inserted");
+
+            res.status(201).json({
+                success: true,
+                message: "Task inserted successfully",
+            });
+        }
+    )
+});
+
+app.post('/get-tasks', async (req, res) => {
+    const { userId, date } = req.body;
+    console.log("Received task fetch request:", { userId, date });
+
+    let month = date.substring(5, 7);
+    db.query(
+        `SELECT * FROM tasks WHERE user_id = ? AND MONTH(dueDate) = ?`,
+        [userId, month],
+        (err, results) => {
+            if (err) {
+                console.error("Error fetching tasks:", err);
+                return res.status(500).json({
+                    success: false,
+                    error: "Internal Server Error",
+                });
+            }
+            console.log("Tasks fetched successfully");
+            // console.log(results)
+            res.status(200).json({
+                success: true,
+                message: "Tasks fetched successfully",
+                tasks: results,
+            });
+        }
+    )
+});
+
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
 

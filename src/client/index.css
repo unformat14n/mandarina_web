@@ -17,6 +17,13 @@
 
     --primary: #FFAC5E;
     --secondary: #4dde89;
+
+    --lowp: #73C98D;
+    --lowp-bg: rgb(115 201 141 / 0.1);
+    --medp: #FFC919;
+    --medp-bg: rgb(255 201 25 / 0.1);
+    --highp: #EC6E70;
+    --highp-bg: rgb(236 110 112 / 0.1);
 }
 
 body {
