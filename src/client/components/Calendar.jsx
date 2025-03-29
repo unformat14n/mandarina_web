@@ -75,19 +75,22 @@ const MonthCalendar = ({ currentDate }) => {
             }
 
             // Filter tasks for the current day
-            const tasksForDay = tasks.filter(task => {
+            const tasksForDay = tasks.filter((task) => {
                 const taskDate = new Date(task.dueDate).getDate();
                 return taskDate === day;
             });
 
             // Create task components
-            const taskComps = tasksForDay.map(task => (
+            const taskComps = tasksForDay.map((task) => (
                 // <p key={task.id} className="task">{task.title}</p>
                 <Task
                     key={task.id}
                     name={task.title}
                     date={task.dueDate}
-                    hour={`${task.hour}:${String(task.minute).padStart(2, '0')}`}
+                    hour={`${task.hour}:${String(task.minute).padStart(
+                        2,
+                        "0"
+                    )}`}
                     priority={task.priority}
                 />
             ));
@@ -122,9 +125,51 @@ const MonthCalendar = ({ currentDate }) => {
 };
 
 const DayCalendar = ({ currentDate }) => {
+    const [tasks, setTasks] = useState([]);
+
+    let userId = 0;
+    const token = localStorage.getItem("token");
+    try {
+        const decodedToken = jwtDecode(token);
+        userId = decodedToken.id; // Assuming 'id' is stored in the token
+    } catch (error) {
+        console.error("Invalid token:", error);
+        return null;
+    }
+
+    useEffect(() => {
+        const getTasksInMonth = async () => {
+            try {
+                const response = await fetch("/get-tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        date: currentDate.toISOString().split("T")[0],
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    setTasks(data.tasks); // Store tasks in state
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        getTasksInMonth();
+    }, [userId, currentDate]);
+
     // Generates an array of 24 hours in the day
     const renderHours = () => {
         const hours = [];
+        let day = new Date(currentDate).getDate();
         for (let hour = 0; hour < 24; hour++) {
             const formattedHour =
                 hour === 0
@@ -135,10 +180,32 @@ const DayCalendar = ({ currentDate }) => {
                     ? "12 PM"
                     : `${hour - 12} PM`;
 
+            const tasksForDay = tasks.filter((task) => {
+                const taskDate = new Date(task.dueDate).getDate();
+                return taskDate === day && task.hour === hour;
+            });
+
+            // Create task components
+            const taskComps = tasksForDay.map((task) => (
+                // <p key={task.id} className="task">{task.title}</p>
+                <Task
+                    key={task.id}
+                    name={task.title}
+                    date={task.dueDate}
+                    hour={`${task.hour}:${String(task.minute).padStart(
+                        2,
+                        "0"
+                    )}`}
+                    priority={task.priority}
+                />
+            ));
+
             hours.push(
                 <div key={hour} className="hour-row">
                     <div className="hour-label">{formattedHour}</div>
-                    <div className="hour-content"></div>
+                    <div className="hour-content">
+                        {taskComps}
+                    </div>
                 </div>
             );
         }
@@ -155,6 +222,47 @@ const DayCalendar = ({ currentDate }) => {
 };
 
 const WeekCalendar = ({ currentDate }) => {
+    const [tasks, setTasks] = useState([]);
+
+    let userId = 0;
+    const token = localStorage.getItem("token");
+    try {
+        const decodedToken = jwtDecode(token);
+        userId = decodedToken.id; // Assuming 'id' is stored in the token
+    } catch (error) {
+        console.error("Invalid token:", error);
+        return null;
+    }
+
+    useEffect(() => {
+        const getTasksInMonth = async () => {
+            try {
+                const response = await fetch("/get-tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        date: currentDate.toISOString().split("T")[0],
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    setTasks(data.tasks); // Store tasks in state
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        getTasksInMonth();
+    }, [userId, currentDate]);
+
     const getWeekDays = () => {
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Get Sunday
@@ -201,11 +309,35 @@ const WeekCalendar = ({ currentDate }) => {
                     : `${hour - 12} PM`;
 
             hours.push(<div className="hour-slot">{formattedHour}</div>);
+            const startOfWeek = new Date(currentDate);
+            startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
             for (let i = 0; i < 7; i++) {
+                const day = new Date(startOfWeek.getTime()); // Create a new instance for each day
+                day.setDate(startOfWeek.getDate() + i);
+                const tasksForDay = tasks.filter((task) => {
+                    const taskDate = new Date(task.dueDate).getDate();
+                    return taskDate === day.getDate() && task.hour === hour;
+                });
+
+                // Create task components
+                const taskComps = tasksForDay.map((task) => (
+                    // <p key={task.id} className="task">{task.title}</p>
+                    <Task
+                        key={task.id}
+                        name={task.title}
+                        date={task.dueDate}
+                        hour={`${task.hour}:${String(task.minute).padStart(
+                            2,
+                            "0"
+                        )}`}
+                        priority={task.priority}
+                    />
+                ));
+
                 hours.push(
-                    <div
-                        key={`day-${i}-hour-${hour}`}
-                        className="hour-slot"></div>
+                    <div key={`day-${i}-hour-${hour}`} className="hour-slot">
+                        {taskComps}
+                    </div>
                 );
             }
         }
@@ -226,10 +358,7 @@ const WeekCalendar = ({ currentDate }) => {
 function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [view, setView] = useState("month"); // Default view: Month
-    // const [isOpen, setIsOpen] = useState(false);
-    const { 
-        setIsOpen,
-    } = useContext(ModalContext);
+    const { setIsOpen } = useContext(ModalContext);
 
     const handleViewChange = (event) => {
         setView(event.target.value);
@@ -290,8 +419,6 @@ function Calendar() {
     const createTask = () => {
         setIsOpen(true);
     };
-
-    
 
     return (
         <div className="calendar-container">

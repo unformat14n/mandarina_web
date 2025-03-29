@@ -148,7 +148,8 @@
 .hour-slot {
     /* border-right: 1px solid #ddd; */
     border-bottom: 1px solid #ddd;
-    height: 40px;
+    min-height: 40px;
+    padding-block: 0.5em;
     color: #c0c0c0;
 }
 .week-hdr .today {
