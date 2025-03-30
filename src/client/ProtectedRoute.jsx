@@ -6,7 +6,7 @@ function ProtectedRoute({ children }) {
 
     if (!token) {
         console.log("No token found");
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     try {
@@ -18,12 +18,12 @@ function ProtectedRoute({ children }) {
         if (decodedToken.exp < currentTime) {
             // Token is expired, redirect to login
             localStorage.removeItem("token"); // Optionally remove the token
-            return <Navigate to="/" replace />;
+            return <Navigate to="/login" replace />;
         }
     } catch (error) {
         console.log("Token verification failed:", error);
         // If token verification fails, redirect to login
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     console.log("Token is valid"); // Log for debugging purposes

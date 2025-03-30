@@ -1,35 +1,224 @@
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.front-page {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.front-page div, section {
+    margin-block: 40px;
+    padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+header.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    /* width: 100%; */
+    /* padding: 0 1em; */
+    background: var(--bg);
+    box-shadow: 0 4px   6px rgba(0, 0, 0, 0.1);
+
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 60px;
 }
 
-.card {
-  padding: 2em;
+header.header img.logo {
+    width: 100px;
+    margin: 0;
+    padding: 0;
 }
 
-.read-the-docs {
-  color: #888;
+header.header a {
+    margin-inline: 20px;
+}
+
+header.header h1 {
+    color: var(--primary)
+}
+
+header.header div.logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.hero {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.hero * {
+    margin-left: 20px;
+}
+
+.hero button {
+    align-self: center;
+}
+
+.left-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+h1.hero {
+    font-size: 5em;
+    line-height: 1em;
+    color: var(--fg);
+    margin-block: 0;
+    padding: 0;
+}
+h2.hero {
+    font-size: 4em;
+    line-height: 1em;
+    margin-block: 0;
+    padding: 0;
+    color: var(--fg);
+}
+
+.hero p {
+    font-size: 2em;
+    margin-block: 0.2em;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.hero-image {
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+    width: 65%;
+    overflow-x: hidden;
+}
+
+.hero-image img {
+    width: 100%;
+    border: solid 0.1em var(--bg-secondary);
+    border-radius: 1em;
+
+    /* margin-left: 10em; */
+}
+
+section.centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h2 {
+        font-size: 3em;
+    }
+}
+
+section.features-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: auto;
+    margin: auto;
+}
+
+div.card-ft {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    height: 100%;
+    /* min-width: 25%; */
+    width: 25%;
+    margin-block: 0.1em;
+    padding: 2em 1em;
+    margin-inline: 0.5em;
+    background-color: var(--primary);
+    color: var(--bg);
+    border-radius: 1em;
+    transition: all 0.2s ease-in-out;
+    /* overflow-x: hidden; */
+}
+
+div.card-ft * {
+    margin-block: 0.2em;
+    padding: 0;
+}
+
+div.card-ft:hover {
+    /* background-color: var(--primary-hover); */
+    width: 50%;
+}
+
+section.steps {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: flex-start;
+    margin-block: 0;
+}
+
+div.step {
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-start;
+    align-items: flex-start;
+    margin-block: 0.5em;
+    margin-inline: 20px;
+}
+
+div.step-number {
+    background: var(--primary);
+    width: 2em;
+    height: 2em;
+    font-size: 2em;
+    text-align: center;
+    place-content: center;
+    border-radius: 50%;
+    color: var(--bg);
+    font-weight: bold;
+    margin-inline: 1em;
+    align-self: flex-start;
+    justify-content: flex-start;
+    justify-self: flex-start;
+    margin-block: 0;
+}
+
+div.step-content {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    /* align-items: center; */
+    margin-block: 0;
+    /* margin-inline: 20px; */
+
+}
+div.step-content * {
+    margin-block: 0;
+}
+
+div.step-content h3 {
+    font-size: 2.5em;
+    font-weight: 900;
+}
+
+div.step-content p {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+div.step:hover p {
+    opacity: 1
 }

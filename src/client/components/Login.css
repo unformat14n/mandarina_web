@@ -6,7 +6,7 @@
 }
 
 .card {
-    background: white;
+    background: var(--bg);
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -15,14 +15,14 @@
 }
 
 .card h1 {
-    color: #333;
+    color: var(--fg);
     margin-bottom: 1.5rem;
     text-align: center;
 }
 
 .card input {
     margin: 0 0.75em;
-    border: 1px solid #ddd;
+    border: 1px solid var(--bg-secondary);
     border-radius: 4px;
     font-size: 1rem;
     margin-bottom: 1rem;
@@ -42,7 +42,6 @@
     font-size: 1rem;
     cursor: pointer;
     width: 100%;
-
 }
 
 .card button:hover {
@@ -51,7 +50,7 @@
 
 .card p {
     text-align: center;
-    color: #666;
+    color: var(--fg);
 }
 
 .card a {

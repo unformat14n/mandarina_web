@@ -48,6 +48,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr); /* Ensures all rows fill evenly */
     height: 100%;
+    gap: 0.1em;
 }
 
 .day-label,
@@ -67,6 +68,7 @@
 .day {
     border: 1px solid var(--bg-secondary);
     cursor: pointer;
+    border-radius: 0.5em;
     /* background-color: #ffffff; */
     padding: 0.5em;
     margin: 0;

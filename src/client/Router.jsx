@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useEffect } from "react";
 import Login from "./components/Login";
+import App from "./App";
 import Register from "./components/Register";
 import MainPage from "./components/MainPage";
 import ProtectedRoute from "./ProtectedRoute";
@@ -24,7 +25,8 @@ function AppRouter() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<App />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 {/* Wrap protected routes with ProtectedRoute */}
                 <Route

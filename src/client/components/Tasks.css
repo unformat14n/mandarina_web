@@ -1,18 +1,16 @@
 /* Container for all tasks */
 .task-container {
-    /* position: relative; */
     display: flex;
     flex-direction: column;
+    width: 80vw;
 }
 
 /* Header Styling */
 .task-header {
     display: flex;
-    width: 80vw;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    gap: 40px;
     align-items: center;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Updated box shadow */
     padding-left: 2em;
