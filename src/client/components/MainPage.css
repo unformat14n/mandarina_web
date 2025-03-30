@@ -29,6 +29,9 @@ section.main {
 
 /* Sidebar item */
 .sidebar-item {
+    display: flex;
+    align-items: center;
+
     text-decoration: none;
     color: #8c8c8c;
     padding: 1em;
@@ -95,13 +98,40 @@ section.main {
 
 .mini-date {
     text-align:center;
-    padding: 0.5em;
-
+    /*padding: 0.5em; */
 }
+
 .mini-today {
     border-radius: 50%;
     text-align:center;
     background-color: var(--primary);
     color: white;
     font-weight: 900;
+}
+
+/*.icon {
+    width: 2em;
+}*/
+
+.sidebar-item .size-medium {
+    color: rgb(125, 126, 142);
+    width: 50%;
+    height: auto;
+    max-width: 50px;
+    min-width: 30px;
+}
+
+.sidebar-item.active .size-medium {
+    color: white;
+}
+
+.sidebar-item:hover .size-medium {
+    color: white;
+}
+
+
+@media (max-width: 1000px) {
+    .sidebar-item span.sidebar-text {
+        display: none;
+    }
 }
