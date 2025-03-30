@@ -91,6 +91,8 @@ function MainPage({ type }) {
                         },
                         content: {
                             // position: "sticky",
+                            background: 'var(--bg)',
+                            color: 'var(--fg)',
                             zIndex: "1000",
                             width: "420px",
                             height: "420px",

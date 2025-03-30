@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Account.css";
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from "../contexts/ThemeContext";
 
 export function Checkbox() {
     const [isChecked, setIsChecked] = useState(false);
@@ -76,8 +76,8 @@ function ColorPalettes() {
 
 function Account() {
     const [email, setEmail] = useState("");
-    const { theme, toggleTheme } = useTheme();
-    
+    const { theme, toggleTheme, clrPalette, setPalette } = useTheme();
+
     useEffect(() => {
         const storedEmail = localStorage.getItem("userEmail");
         if (storedEmail) {
@@ -112,7 +112,19 @@ function Account() {
                         Switch to {theme === "light" ? "Dark" : "Light"} Theme
                     </button>
                     <hr className="divisor" />
-                    <ColorPalettes />
+                    <p>Palette</p>
+                    <div className="view-selector">
+                        <label htmlFor="view-select">View:</label>
+                        <select
+                            id="view-select"
+                            value={clrPalette}
+                            onChange={(e) => setPalette(e.target.value)}>
+                            <option value="mandarina">Mandarina</option>
+                            <option value="peach">Peach</option>
+                            <option value="coffee">Coffee</option>
+                        </select>
+                    </div>
+                    {/* <ColorPalettes /> */}
                 </div>
             </div>
         </div>

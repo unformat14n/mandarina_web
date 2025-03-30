@@ -1,18 +1,25 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import React, { useEffect } from 'react';
-import Login from './components/Login';
-import Register from './components/Register';
-import MainPage from './components/MainPage';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import MainPage from "./components/MainPage";
 import ProtectedRoute from "./ProtectedRoute";
-import { useTheme } from './contexts/ThemeContext';
+import { useTheme } from "./contexts/ThemeContext";
 
 function AppRouter() {
-    const { theme } = useTheme();
-
+    const { theme, clrPalette } = useTheme();
+    
     useEffect(() => {
         // Apply the current theme to the body class
         document.body.className = theme;
-    }, [theme]);
+        // Apply the current palette to the body class
+        document.body.classList.remove(
+            "Mandarina",
+            "Peach",
+            "Coffee"
+        );
+        document.body.classList.add(clrPalette);
+    }, [theme, clrPalette]);
 
     return (
         <Router>
@@ -20,17 +27,29 @@ function AppRouter() {
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 {/* Wrap protected routes with ProtectedRoute */}
-                <Route 
-                    path="/calendar" 
-                    element={<ProtectedRoute><MainPage type="calendar" /></ProtectedRoute>} 
+                <Route
+                    path="/calendar"
+                    element={
+                        <ProtectedRoute>
+                            <MainPage type="calendar" />
+                        </ProtectedRoute>
+                    }
                 />
-                <Route 
-                    path="/tasks" 
-                    element={<ProtectedRoute><MainPage type="tasks" /></ProtectedRoute>} 
+                <Route
+                    path="/tasks"
+                    element={
+                        <ProtectedRoute>
+                            <MainPage type="tasks" />
+                        </ProtectedRoute>
+                    }
                 />
-                <Route 
-                    path="/account" 
-                    element={<ProtectedRoute><MainPage type="account" /></ProtectedRoute>} 
+                <Route
+                    path="/account"
+                    element={
+                        <ProtectedRoute>
+                            <MainPage type="account" />
+                        </ProtectedRoute>
+                    }
                 />
             </Routes>
         </Router>
