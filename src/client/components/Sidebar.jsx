@@ -84,7 +84,7 @@ function Sidebar() {
 
   useEffect(() => {
     const checkSize = () => {
-      setShowCalendar(window.innerWidth > 800);
+      setShowCalendar(window.innerWidth > 1000);
     };
 
     checkSize();

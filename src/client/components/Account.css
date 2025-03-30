@@ -1,9 +1,10 @@
-.container{
+.container {
     display: flex;
     flex-direction: column;
     width: auto;
     height: auto;
-    overflow: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .account-hdr {
@@ -14,44 +15,32 @@
     width: 80vw;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--bg);
 }
 
 .account {
     padding-top: 20px;
 }
 
-.info-container{
+.info-container {
     flex-direction: row;
-    background-color: #f5f3efce;
-    margin: 20px;
-    border-radius: 15px;
-    padding-bottom: 10px;
+    background-color: var(--bg-secondary);
+    margin: 2em;
+    border-radius: 1em;
+    padding: 2em;
+
 }
 
-.mand-logo{
+.mand-logo {
     height: 80x;
     width: 105px;
     padding: 5px;
 }
 
 .divisor {
-    margin-left: 0;   
-    width: 70%;       
-    color: rgb(238, 238, 238);
-}
-
-.infobox-title{
-    padding-left: 20px;
-}
-
-.prefbox-title {
-    padding-left: 20px;
-}
-
-.info-display{
-    padding-left: 20px;
-    font-weight: bolder;
+    margin-left: 0;
+    width: 70%;
+    color: var(--bg);
 }
 
 .user-data {
@@ -61,10 +50,10 @@
 
 .pref-container {
     flex-direction: row;
-    background-color: #f5f3efce;
-    margin: 20px;
-    border-radius: 15px;
-    padding-bottom: 40px;
+    background-color: var(--bg-secondary);
+    margin: 2em;
+    border-radius: 1em;
+    padding: 2em;
 }
 
 .pref-display {
@@ -79,11 +68,11 @@
 }
 
 .the-checkbox {
-    appearance: none; 
+    appearance: none;
     width: 20px;
     height: 20px;
-    border: 2px solid orange;
-    border-radius: 50%; 
+    border: 2px solid var(--primary);
+    border-radius: 50%;
     display: flex;
     cursor: pointer;
     position: relative;
@@ -94,12 +83,12 @@
 }
 
 .the-checkbox:checked::before {
-    content: ''; 
+    content: "";
     align-items: center;
     width: 12px;
     height: 12px;
-    background-color: rgb(255, 160, 66);
-    border-radius: 50%; 
+    background-color: var(--primary);
+    border-radius: 50%;
     align-self: center;
     justify-self: center;
     margin-left: 2px;
@@ -109,7 +98,7 @@
 .themes-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px; 
+    gap: 20px;
 }
 
 .theme-item {
@@ -125,7 +114,7 @@
     gap: 8px;
 }
 
-.color-container {  
+.color-container {
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -134,7 +123,7 @@
 }
 
 .color-box {
-    width: 40px;  
+    width: 40px;
     height: 40px;
     border-radius: 8px;
     border: 1px solid #ccc;

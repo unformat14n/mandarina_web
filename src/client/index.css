@@ -20,16 +20,37 @@
 
     --lowp: #73C98D;
     --lowp-bg: rgb(115 201 141 / 0.1);
-    --medp: #FFC919;
+    --medp: #FFC919;    
     --medp-bg: rgb(255 201 25 / 0.1);
     --highp: #EC6E70;
     --highp-bg: rgb(236 110 112 / 0.1);
+}
+
+.light {
+    --fg: rgb(39, 36, 42);
+    --fg-secondary: rgb(124, 114, 133);
+    --bg: #ffffff;
+    --bg-secondary: #f0eef4;
+    --bg-tertiary: #fcfaff;
+}
+
+.dark {
+    --fg: rgb(244, 240, 255);
+    --fg-secondary: rgb(182, 175, 188);
+    --bg: #222024;
+    --bg-secondary: #323036;
+    --bg-tertiary: #3f3c43;
 }
 
 body {
     margin: 0;
     padding: 0;
     width: 100%;
+
+
+    background: var(--bg);
+    color: var(--fg);
+    transition: all 0.2s linear;
 }
 
 #root {
@@ -70,13 +91,6 @@ h4 {
 .accented {
     color: var(--primary)
 }
-
-/* section.center {
-    display: flex;
-    max-width: 720px;
-    flex-direction: column;
-    align-items:center;
-} */
 
 div.card {
     max-width: 400px;

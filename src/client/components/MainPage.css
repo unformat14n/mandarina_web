@@ -33,7 +33,7 @@ section.main {
     align-items: center;
 
     text-decoration: none;
-    color: #8c8c8c;
+    color: var(--fg-secondary);
     padding: 1em;
     font-size: 1em;
     margin-block: 0.2em;

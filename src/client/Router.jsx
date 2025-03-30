@@ -1,10 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
 import MainPage from './components/MainPage';
 import ProtectedRoute from "./ProtectedRoute";
+import { useTheme } from './contexts/ThemeContext';
 
 function AppRouter() {
+    const { theme } = useTheme();
+
+    useEffect(() => {
+        // Apply the current theme to the body class
+        document.body.className = theme;
+    }, [theme]);
+
     return (
         <Router>
             <Routes>

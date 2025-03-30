@@ -19,40 +19,34 @@
     margin-bottom: 20px;
 }
 
-.header-label{
+.header-label {
     padding: 5px;
 }
 
-.sort-select{
+.sort-select {
     padding: 5px;
-    background-color: #ffffff;
+    background-color: var(--bg);
     border-radius: 5px;
-    border: 1px solid #d8d8d8;
-    gap: 10px;
-
+    border: 1px solid var(--bg-secondary);
+    color: var(--fg);
 }
- .sort-select:hover{
-    background-color: #d8d8d8;
- }
+.sort-select:hover {
+    background-color: var(--bg);
+}
 
- .header-filter{
-    padding:5px;
- }
-
- .filter-btn{
+.filter-btn {
     padding: 5px;
-    color: #ffffff;
- }
+    color: var(--fg);
+}
 
- .filter-btn:hover{
+.filter-btn:hover {
     background-color: #ff7300;
- }
-
+}
 
 /* Body of the tasks */
 .task-body {
     display: flex;
-    align-items: flex-start; 
+    align-items: flex-start;
     justify-content: normal; /* Ensures left and right elements are spaced apart */
     padding: 2em;
     width: auto;
@@ -65,7 +59,7 @@
     text-align: left;
     padding: 15px;
     height: 95%;
-    background-color: #ededed;
+    background-color: var(--bg-secondary);
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
@@ -79,7 +73,7 @@
 .task-priority,
 .task-status {
     font-size: 14px;
-    color: #555;
+    color: var(--fg-secondary);
 }
 
 /* Chart Section Styling */
@@ -87,9 +81,9 @@
     width: 30%; /* Adjust width as needed */
     padding: 20px;
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
 }
 
@@ -97,7 +91,7 @@
     padding: 0;
     list-style-type: none;
     font-size: 14px;
-    color: #000000;
+    color: var(--fg-secondary);
 }
 
 .task-chart p {

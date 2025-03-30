@@ -1,11 +1,11 @@
 import express from "express";
 import ViteExpress from "vite-express";
-import mysql from "mysql2"; 
+import mysql from "mysql2";
 import cors from "cors"; // Import CORS module
-import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -34,13 +34,13 @@ const db = mysql.createConnection({
 });
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",  // Gmail SMTP server
-    port: 587,               // Use 587 for TLS (recommended)
-    secure: false,           // `false` for TLS, `true` for SSL (port 465)
+    host: "smtp.gmail.com", // Gmail SMTP server
+    port: 587, // Use 587 for TLS (recommended)
+    secure: false, // `false` for TLS, `true` for SSL (port 465)
     auth: {
-        user: "mandarina.task.manager@gmail.com",  // Your email
-        pass: "phrb ltjj eedb lckn "   // Your app password (not your regular password)
-    }
+        user: "mandarina.task.manager@gmail.com", // Your email
+        pass: "phrb ltjj eedb lckn ", // Your app password (not your regular password)
+    },
 });
 
 async function sendVerificationEmail(email, code) {
@@ -48,16 +48,16 @@ async function sendVerificationEmail(email, code) {
         await transporter.sendMail({
             from: `"Mandarina" <mandarina.task.manager@gmail.com>`,
             to: email,
-            subject: 'Your Verification Code',
+            subject: "Your Verification Code",
             text: `
                 Hello ${email}, welcome to Mandarina!
                 You are almost there!
                 Please use the following verification code to complete your registration:
                 Your verification code is: ${code}
-            `
+            `,
         });
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error("Error sending email:", error);
         throw error;
     }
 }
@@ -69,9 +69,10 @@ function setupDatabase(db) {
         CREATE TABLE IF NOT EXISTS users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             email VARCHAR(50) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL    
+            password VARCHAR(255) NOT NULL,
+            theme VARCHAR(10) NOT NULL DEFAULT 'light'
         );`;
-    const taskTable =` 
+    const taskTable = ` 
         CREATE TABLE IF NOT EXISTS tasks (
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(255),
@@ -96,27 +97,27 @@ function validatePassword(password) {
     if (password.length < 8) {
         return {
             isValid: false,
-            error: "Password must be at least 8 characters long"
+            error: "Password must be at least 8 characters long",
         };
     }
-    
-    if (!hasUppercase.test(password)) 
+
+    if (!hasUppercase.test(password))
         return {
             isValid: false,
-            error: "Password must contain at least one uppercase letter"
+            error: "Password must contain at least one uppercase letter",
         };
 
     if (!hasNumber.test(password))
         return {
             isValid: false,
-            error: "Password must contain at least one number"
+            error: "Password must contain at least one number",
         };
-        
+
     if (!noSpaces.test(password))
         return {
             isValid: false,
-            error: "Password must not contain spaces"   
-        }
+            error: "Password must not contain spaces",
+        };
 
     return { isValid: true };
 }
@@ -133,17 +134,17 @@ app.post("/login", async (req, res) => {
     console.log("Received login request:", { email, password });
 
     // Input validation - empty
-    if (!email || !password ) {
-        return res.status(400).json({ 
-            success: false, 
-            message: "Invalid input, empty fields" 
+    if (!email || !password) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid input, empty fields",
         });
     }
 
     if (!emailRegex.test(email)) {
         return res.status(400).json({
             success: false,
-            message: "Invalid email format"
+            message: "Invalid email format",
         });
     }
 
@@ -159,9 +160,13 @@ app.post("/login", async (req, res) => {
                     message: "Password did not match the stored hash",
                 });
             } else {
-                const token = jwt.sign({ email: results[0].email, id: results[0].id }, SECRET_KEY, {
-                    expiresIn: '2h', // Token expiration time
-                })
+                const token = jwt.sign(
+                    { email: results[0].email, id: results[0].id },
+                    SECRET_KEY,
+                    {
+                        expiresIn: "2h", // Token expiration time
+                    }
+                );
                 console.log("Information correct");
                 res.status(200).json({
                     success: true,
@@ -194,9 +199,9 @@ app.post("/register", async (req, res) => {
 
     // Email format validation
     if (!emailRegex.test(email)) {
-        return res.status(400).json({ 
-            success: false, 
-            error: "Invalid email format" 
+        return res.status(400).json({
+            success: false,
+            error: "Invalid email format",
         });
     }
 
@@ -204,9 +209,9 @@ app.post("/register", async (req, res) => {
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
         console.log(passwordValidation.error);
-        return res.status(400).json({ 
+        return res.status(400).json({
             success: false,
-            error: passwordValidation.error 
+            error: passwordValidation.error,
         });
     }
 
@@ -217,8 +222,8 @@ app.post("/register", async (req, res) => {
             console.error("Error checking email:", err);
             return res.status(500).json({
                 success: false,
-                error: "Internal Server Error", 
-            })
+                error: "Internal Server Error",
+            });
         }
         if (results.length > 0) {
             console.log("Email already exists");
@@ -227,31 +232,36 @@ app.post("/register", async (req, res) => {
                 error: "Email already exists",
             });
         }
-    })
+    });
 
     // Generate a 6-digit code
-    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationCode = Math.floor(
+        100000 + Math.random() * 900000
+    ).toString();
 
     // Store the code temporarily
     verificationCodes[email] = verificationCode;
     try {
         await sendVerificationEmail(email, verificationCode);
-        console.log('Email sent:', email);
+        console.log("Email sent:", email);
 
         res.status(201).json({
             success: true,
             message: "Allow verification. Email sent!",
-        })
+        });
     } catch (error) {
-        console.error('Email error:', error);
+        console.error("Email error:", error);
         // Ensure only one response is sent
         if (!res.headersSent) {
-            res.status(500).json({ success: false, message: 'Failed to send email.' });
+            res.status(500).json({
+                success: false,
+                message: "Failed to send email.",
+            });
         }
     }
 });
 
-app.post('/verify', async (req, res) => {
+app.post("/verify", async (req, res) => {
     const { email, password, code } = req.body;
     console.log("Received verification request:", { email, password, code });
     console.log("Stored code:", verificationCodes[email]); // Log the stored code for verificatio
@@ -260,11 +270,11 @@ app.post('/verify', async (req, res) => {
         try {
             const salt = await bcrypt.genSalt(10);
             const hashed = await bcrypt.hash(password, salt);
-            
+
             db.query(
                 `INSERT INTO users (email, password) VALUES (?, ?)`,
                 [email, hashed],
-                (err, results)  => {
+                (err, results) => {
                     if (err) {
                         console.error("Error inserting user:", err);
                         return res.status(500).json({
@@ -275,9 +285,9 @@ app.post('/verify', async (req, res) => {
                     console.log("User registered successfully");
 
                     const token = jwt.sign(
-                        { email: email, id: results.insertId }, 
+                        { email: email, id: results.insertId },
                         SECRET_KEY,
-                        { expiresIn: '2h' }  // Token expiration time
+                        { expiresIn: "2h" } // Token expiration time
                     );
 
                     delete verificationCodes[email]; // Clear the temp code
@@ -286,8 +296,8 @@ app.post('/verify', async (req, res) => {
                         message: "Code correct, user registered successfully",
                         token: token,
                     });
-                } 
-            )
+                }
+            );
         } catch (error) {
             console.error("Error during validation:", error);
             return res.status(500).json({
@@ -296,14 +306,31 @@ app.post('/verify', async (req, res) => {
             });
         }
     } else {
-        res.json({ success: false, message: 'Invalid verification code.' });
+        res.json({ success: false, message: "Invalid verification code." });
     }
 });
 
-
-app.post('/create-task', async (req, res) => {
-    const { title, description, dueDate, priority, status, hour, minute, user_id } = req.body;
-    console.log("Received task creation request:", { title, description, dueDate, priority, status, hour, minute, user_id });
+app.post("/create-task", async (req, res) => {
+    const {
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        hour,
+        minute,
+        user_id,
+    } = req.body;
+    console.log("Received task creation request:", {
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        hour,
+        minute,
+        user_id,
+    });
 
     db.query(
         `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute, user_id) VALUES (?,?,?,?,?,?,?,?)`,
@@ -323,10 +350,10 @@ app.post('/create-task', async (req, res) => {
                 message: "Task inserted successfully",
             });
         }
-    )
+    );
 });
 
-app.post('/get-tasks', async (req, res) => {
+app.post("/get-tasks", async (req, res) => {
     const { userId, date } = req.body;
     console.log("Received task fetch request:", { userId, date });
 
@@ -350,7 +377,7 @@ app.post('/get-tasks', async (req, res) => {
                 tasks: results,
             });
         }
-    )
+    );
 });
 
 // Serve static files from the build (React app)
