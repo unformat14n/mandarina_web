@@ -66,7 +66,7 @@ header.header div.logo {
 }
 
 .hero button {
-    align-self: center;
+    align-self: left;
 }
 
 .left-container {
@@ -221,4 +221,120 @@ div.step-content p {
 
 div.step:hover p {
     opacity: 1
+}
+
+section.about {
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-inline: 20px;
+}
+
+section.about h2 {
+    font-size: 3em;
+    text-align: center;
+}
+
+section.about div.who {
+    background: var(--primary);
+    color: var(--bg);
+    border-radius: 1em;
+    padding: 2em;
+    font-weight: 600;
+}
+
+section.about div.who h3 {
+    font-size: 2em;
+    text-align: left;
+}
+
+section.about div.purpose {
+    background: var(--secondary);
+    color: var(--bg);
+    border-radius: 1em;
+    padding: 2em;
+    font-weight: 600;
+}
+
+section.about div.purpose h3 {
+    font-size: 2em;
+    text-align: right;
+}
+
+@media screen and (max-width: 768px)  {
+    section.features-section {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        flex-grow: 1;
+    }
+
+    div.card-ft {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        margin-block: 0.1em;
+        padding: 2em 1em;
+        margin-inline: 0.5em;
+        background-color: var(--primary);
+        color: var(--bg);
+        border-radius: 1em;
+        transition: all 0.2s ease-in-out;
+    }
+    div.card-ft p {
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+    }
+    div.card-ft:hover {
+        width: 80%;
+    }
+
+    div.card-ft:hover p {
+        opacity: 1;
+    }
+
+    .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: auto;
+        padding: 0;
+        margin: 0;
+    }
+
+    .h1.hero {
+        font-size: 3em;
+        line-height: 1em;
+        color: var(--fg);
+        margin-block: 0;
+        padding: 0;
+    }
+    h2.hero {
+        font-size: 3em;
+        line-height: 1em;
+        margin-block: 0;
+        padding: 0;
+        color: var(--fg);
+    }
+
+    .hero-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+        margin: 20px;
+        width: auto;
+    }
+
+    .hero-image img {
+        width: 100%;
+        border: solid 0.1em var(--bg-secondary);
+        border-radius: 1em;
+        margin: 0;
+        padding: 0;
+    }
 }

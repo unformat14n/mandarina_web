@@ -22,10 +22,10 @@ function App() {
                     <h1 className="logo">Mandarina</h1>
                 </div>
                 <div>
-                <a href="#features">Features</a>
-                <a href="#how-it-works">How it works</a>
-                <a href="#pricing">Something</a>
-                <a href="#contact">Something else</a>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How it works</a>
+                    <a href="#pricing">Something</a>
+                    <a href="#contact">Something else</a>
                 </div>
             </header>
 
@@ -107,14 +107,52 @@ function App() {
                 </section>
             </section>
 
+            <section className="about">
+                <div className="about-content">
+                    <h2>About Us</h2>
+                    <div className="who">
+                        <h3>Who Is "<em>Us</em>"?</h3>
+                        <p>
+                            We are a team of passionate college students
+                            currently on our junior/sophomore year of studying
+                            BS in Software Engineering at Keiser University
+                            Latin American Campus, San Marcos, Nicaragua. Our
+                            team is composed of 4 students: Ximena Ruiz, Jordana
+                            Puentes, Osvaldo Rodriguez and Kenneth Herrera. Each
+                            of us has a unique skill set and we are all driven
+                            by our desire to create applications, frameworks,
+                            and other tools to help others in their daily lives
+                            and solve problems in a way that can be attractive
+                            and at the same time, effective.
+                        </p>
+                    </div>
+                    <div className="purpose">
+                        <h3>What's Our Purpose?</h3>
+                        <p>
+                            Our proyect has been through a lot of iterations and
+                            changes. Since the beginning, we wanted to create a
+                            task manager that would help people manage their
+                            time and tasks in a more efficient way, mostly
+                            focusing on students–since we found ourselves in the
+                            situation in which we were most affected by it.
+                        </p>
+                        <p>
+                            We are currently living in a world in which time
+                            management is a very crucial skill to have. Thus, we
+                            wanted to create a tool that would help people
+                            manage their time and tasks efficiently and in a
+                            simplified way, while also providing an interactive
+                            and user-friendly interface making the process
+                            enjoyable and fun.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             {/* Footer */}
             <footer className="bg-gray-900 text-white text-center py-6">
                 <p>&copy; 2025 Mandarina. All rights reserved.</p>
                 <div className="mt-2">
-                    <a href="#" className="text-orange-400 hover:underline">
-                        About Us
-                    </a>{" "}
-                    |
                     <a href="#" className="text-orange-400 hover:underline">
                         {" "}
                         Contact
