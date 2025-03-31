@@ -53,6 +53,14 @@ function AppRouter() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <MainPage type="dashboard" />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </Router>
     );

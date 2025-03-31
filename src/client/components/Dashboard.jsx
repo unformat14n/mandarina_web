@@ -2,6 +2,8 @@ import React from "react";
 import "./Dashboard.css";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
+
+// no me convence esto xd pero bue
 const tasksStatusHdr = [
     { status: "Not started", count: 5, color: "#F0F4F8" },
     { status: "In Progress", count: 10, color: "#E6F7FF" },
@@ -21,6 +23,8 @@ function TrackStatus() {
     );
 }
 
+
+// agarra los colores del index.css
 const weeklychart = [
     { Day: "S", completed: 10, color: "#E6FFED" },
     { Day: "M", completed: 5, color: "#E6FFED" },
@@ -31,7 +35,7 @@ const weeklychart = [
     { Day: "S", completed: 12, color: "#E6FFED" },
 ];
 
-function Account() {
+function Dashboard() {
     return (
         <div className="container">
             <header className="dashboard-hdr">
@@ -77,4 +81,4 @@ function Account() {
     );
 }
 
-export default Account;
+export default Dashboard;

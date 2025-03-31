@@ -4,6 +4,7 @@ import Calendar from "./Calendar";
 import Sidebar from "./Sidebar";
 import Account from "./Account";
 import Tasks from "./Tasks";
+import Dashboard from "./Dashboard";
 import "./MainPage.css";
 import Modal from 'react-modal';
 import { jwtDecode } from "jwt-decode";
@@ -79,6 +80,7 @@ function MainPage({ type }) {
                 {type === "calendar" && <Calendar />}
                 {type === "account" && <Account />}
                 {type === "tasks" && <Tasks />}
+                {type === "dashboard" && <Dashboard />}
 
                 <Modal
                     isOpen={isOpen}
