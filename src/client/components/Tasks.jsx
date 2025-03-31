@@ -1,14 +1,83 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts"; // Import from Recharts
+import { TaskListItem } from "./TaskComponent";
+import { jwtDecode } from "jwt-decode";
 import "./Tasks.css";
 
-const mockData = [
-    { name: "Completed", value: 60 },
-    { name: "Pending", value: 40 },
-];
-
 function Tasks() {
+    const [tasks, setTasks] = useState([]);
+    const [completionData, setData] = useState([
+        { name: "Completed", value: 0 },
+        { name: "Pending", value: 0 },
+    ]);
+
+    let userId = 0;
+    const token = localStorage.getItem("token");
+    try {
+        const decodedToken = jwtDecode(token);
+        userId = decodedToken.id; // Assuming 'id' is stored in the token
+    } catch (error) {
+        console.error("Invalid token:", error);
+        return null;
+    }
+
+    useEffect(() => {
+        const getTasksInMonth = async () => {
+            try {
+                const response = await fetch("/get-tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    setTasks(data.tasks); // Store tasks in state
+                    setData([
+                        {
+                            name: "Completed",
+                            value: data.tasks.filter(
+                                (task) => task.status === "Completed"
+                            ).length,
+                        },
+                        {
+                            name: "Pending",
+                            value: data.tasks.filter(
+                                (task) => task.status === "Pending"
+                            ).length,
+                        },
+                    ]);
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        getTasksInMonth();
+    }, [userId]);
+
+    const renderTasks = () => {
+        return tasks.map((task, index) => (
+            <TaskListItem
+                key={index}
+                name={task.title}
+                date={task.dueDate}
+                hour={`${task.hour}:${String(task.minute).padStart(2, "0")}`}
+                priority={task.priority}
+                status={task.status}
+                description={task.description}
+            />
+        ));
+    };
+
     return (
         /* Tasks header*/
 
@@ -32,7 +101,7 @@ function Tasks() {
                             fill="none"
                         /> */}
                         <svg
-                        width={24}
+                            width={24}
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -67,28 +136,32 @@ function Tasks() {
             {/*Body*/}
 
             <div className="task-body">
-                <div className="task-list">
-                    <h3 className="task-title">Hola</h3>
-                    <p className="task-date">0000</p>
-                    <p className="task=priority">Important</p>
-                    <p className="task-status">Completed</p>
-                    {/*Pie chart*/}
-                </div>
+                <div className="task-list">{renderTasks()}</div>
                 <div className="task-chart">
-                    <p>Task Status</p>
-                    <ul>
-                        <li>Completed: 60%</li>
-                        <li>Pending: 40%</li>
-                    </ul>
+                    <div>
+                        <p>Task Status</p>
+                        <ul>
+                            <li>
+                                Completed:{" "}
+                                {(completionData[0].value * 100) / tasks.length}
+                                %
+                            </li>
+                            <li>
+                                Pending:{" "}
+                                {(completionData[1].value * 100) / tasks.length}
+                                %
+                            </li>
+                        </ul>
+                    </div>
                     <PieChart width={300} height={300}>
                         <Pie
-                            data={mockData}
+                            data={completionData}
                             dataKey="value"
                             nameKey="name"
                             outerRadius={100}
                             fill="#8884d8"
                             label>
-                            {mockData.map((entry, index) => (
+                            {completionData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
                                     fill={index === 0 ? "#00C49F" : "#FF8042"}

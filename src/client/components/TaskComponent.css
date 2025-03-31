@@ -50,6 +50,43 @@ h3.task-name {
     text-align: left;
 }
 
+.task-li {
+    display: flex;
+    flex-direction: column;
+    padding: 0em;
+    margin: 0.75em;
+    border-radius: 0.5em;
+}
+
+.task-li p {
+    margin: 0;
+}
+
+.task-li h3 {
+    margin: 0em;
+    color: var(--primary);
+    font-weight: 900;
+}
+
+.task-li .task-priority-li {
+    font-weight: 900;
+}
+
+.task-low-li {
+    color: var(--lowp);
+}
+.task-medium-li {
+    color: var(--medp);
+}
+.task-high-li {
+    color: var(--highp);
+}
+
+.task-status-li {
+    color: var(--secondary);
+    font-weight: 900;
+}
+
 @media (max-width: 1000px)  {
     .task p {
         display: none;

@@ -28,7 +28,6 @@ const MonthCalendar = ({ currentDate }) => {
                     },
                     body: JSON.stringify({
                         userId: userId,
-                        date: currentDate.toISOString().split("T")[0],
                     }),
                 });
 
@@ -76,8 +75,12 @@ const MonthCalendar = ({ currentDate }) => {
 
             // Filter tasks for the current day
             const tasksForDay = tasks.filter((task) => {
-                const taskDate = new Date(task.dueDate).getDate();
-                return taskDate === day;
+                const taskDate = new Date(task.dueDate);
+                return (
+                    taskDate.getDate() === day &&
+                    taskDate.getMonth() === month &&
+                    taskDate.getFullYear() === year
+                );
             });
 
             // Create task components
@@ -147,7 +150,6 @@ const DayCalendar = ({ currentDate }) => {
                     },
                     body: JSON.stringify({
                         userId: userId,
-                        date: currentDate.toISOString().split("T")[0],
                     }),
                 });
 
@@ -169,7 +171,7 @@ const DayCalendar = ({ currentDate }) => {
     // Generates an array of 24 hours in the day
     const renderHours = () => {
         const hours = [];
-        let day = new Date(currentDate).getDate();
+        let day = new Date(currentDate);
         for (let hour = 0; hour < 24; hour++) {
             const formattedHour =
                 hour === 0
@@ -181,8 +183,13 @@ const DayCalendar = ({ currentDate }) => {
                     : `${hour - 12} PM`;
 
             const tasksForDay = tasks.filter((task) => {
-                const taskDate = new Date(task.dueDate).getDate();
-                return taskDate === day && task.hour === hour;
+                const taskDate = new Date(task.dueDate);
+                return (
+                    taskDate.getDate() === day.getDate() &&
+                    task.hour === hour &&
+                    taskDate.getMonth() === day.getMonth() &&
+                    taskDate.getFullYear() === day.getFullYear()
+                );
             });
 
             // Create task components
@@ -203,9 +210,7 @@ const DayCalendar = ({ currentDate }) => {
             hours.push(
                 <div key={hour} className="hour-row">
                     <div className="hour-label">{formattedHour}</div>
-                    <div className="hour-content">
-                        {taskComps}
-                    </div>
+                    <div className="hour-content">{taskComps}</div>
                 </div>
             );
         }
@@ -244,7 +249,6 @@ const WeekCalendar = ({ currentDate }) => {
                     },
                     body: JSON.stringify({
                         userId: userId,
-                        date: currentDate.toISOString().split("T")[0],
                     }),
                 });
 
@@ -315,8 +319,13 @@ const WeekCalendar = ({ currentDate }) => {
                 const day = new Date(startOfWeek.getTime()); // Create a new instance for each day
                 day.setDate(startOfWeek.getDate() + i);
                 const tasksForDay = tasks.filter((task) => {
-                    const taskDate = new Date(task.dueDate).getDate();
-                    return taskDate === day.getDate() && task.hour === hour;
+                    const taskDate = new Date(task.dueDate);
+                    return (
+                        taskDate.getDate() === day.getDate() &&
+                        task.hour === hour &&
+                        taskDate.getMonth() === day.getMonth() &&
+                        taskDate.getFullYear() === day.getFullYear()
+                    );
                 });
 
                 // Create task components

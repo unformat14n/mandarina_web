@@ -354,13 +354,12 @@ app.post("/create-task", async (req, res) => {
 });
 
 app.post("/get-tasks", async (req, res) => {
-    const { userId, date } = req.body;
-    console.log("Received task fetch request:", { userId, date });
+    const { userId } = req.body;
+    console.log("Received task fetch request:", { userId });
 
-    let month = date.substring(5, 7);
     db.query(
-        `SELECT * FROM tasks WHERE user_id = ? AND MONTH(dueDate) = ?`,
-        [userId, month],
+        `SELECT * FROM tasks WHERE user_id = ?;`,
+        [userId],
         (err, results) => {
             if (err) {
                 console.error("Error fetching tasks:", err);

@@ -49,6 +49,7 @@
     grid-template-columns: repeat(7, 1fr); /* Ensures all rows fill evenly */
     height: 100%;
     gap: 0.1em;
+    margin-top: 10px;
 }
 
 .day-label,
@@ -85,8 +86,6 @@
     color: rgb(255, 255, 255);
     font-weight: 900;
     background-color: var(--primary);
-    width: 2em;
-    height: 2em;
     text-align: center;
     place-content: center;
     border-radius: 1em;
@@ -114,7 +113,7 @@
     grid-template-columns: repeat(8, 1fr);
     border-bottom: solid 0.1em var(--bg-secondary);
     box-shadow: 0 0.3em 0.4em 0em rgba(82, 82, 109, 0.2);
-    z-index: 10;
+    z-index: 0;
     position: sticky;
     top: 0;
     background-color: var(--bg);
