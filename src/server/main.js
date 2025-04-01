@@ -157,7 +157,7 @@ app.post("/login", async (req, res) => {
                 console.log("Invalid password");
                 return res.status(401).json({
                     success: false,
-                    message: "Password did not match the stored hash",
+                    message: "Your email or password is incorrect. Please try again",
                 });
             } else {
                 const token = jwt.sign(
