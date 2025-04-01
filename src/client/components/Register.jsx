@@ -9,7 +9,9 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [code, setCode] = useState("");
 
-    const handleRegister = async () => {
+    const handleRegister = async (e) => {
+        if (e) e.preventDefault();
+        
         if (password !== confirmPassword) {
             alert("Passwords do not match!");
             return;
@@ -36,7 +38,7 @@ function Register() {
         }
     };
 
-    const handleVerify = async () => {
+    const handleVerify = async (e) => {
         try {
             const response = await fetch("http://localhost:4004/verify", {
                 method: "POST",
@@ -75,7 +77,7 @@ function Register() {
             ) : (
                 <div className="card">
                     <h1>Create an Account</h1>
-                    <form onSubmit={(e) => e.preventDefault()}>
+                    <form onSubmit={handleVerify} method="post">
                         <label htmlFor="email">E-Mail:</label>
                         <input
                             type="email"
@@ -84,6 +86,7 @@ function Register() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
+                        <button type="submit" style={{display: 'none'}}></button>
                         <br />
                         <label htmlFor="psswd">Password: </label>
                         <input
@@ -102,6 +105,7 @@ function Register() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
+                        
                         <br />
                     </form>
                     <button onClick={handleRegister}>Continue</button>

@@ -14,7 +14,9 @@ function Login() {
     const [modalMessage, setModalMessage] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        if (e) e.preventDefault();
+        
         try {
             const response = await fetch("http://localhost:4004/login", {
                 method: "POST",
@@ -44,7 +46,7 @@ function Login() {
         <div className="center">
             <div className="card">
                 <h1>Welcome back!</h1>
-                <form onSubmit={(e) => e.preventDefault()}>
+                <form onSubmit={handleLogin} method="post">
                     <label htmlFor="email">E-Mail: </label>
                     <input
                         className="email-container"
@@ -64,6 +66,7 @@ function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <br />
+                    <button type="submit" style={{display: 'none'}}></button>
                 </form>
                 <button onClick={handleLogin}>Login</button>
                 <p>
@@ -91,7 +94,7 @@ function Login() {
                         textAlign: "left",
                     },
                 }}>
-                <h2 style={{ margin: "0", padding: "0" }}>Login Alert</h2>
+                <h2 style={{ margin: "0", padding: "0" }}>Login Failed</h2>
                 <p style={{ margin: "0", padding: "0" }}>{modalMessage}</p>
                 <button
                     onClick={() => setIsOpen(false)}
