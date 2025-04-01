@@ -26,13 +26,13 @@ function TrackStatus() {
 
 // agarra los colores del index.css
 const weeklychart = [
-    { Day: "S", completed: 10, color: "#E6FFED" },
-    { Day: "M", completed: 5, color: "#E6FFED" },
-    { Day: "T", completed: 6, color: "#E6FFED" },
-    { Day: "W", completed: 8, color: "#E6FFED" },
-    { Day: "TH", completed: 3, color: "#E6FFED" },
-    { Day: "F", completed: 10, color: "#E6FFED" },
-    { Day: "S", completed: 12, color: "#E6FFED" },
+    { Day: "S", completed: 10, color: "#b1e3bf" },
+    { Day: "M", completed: 5, color: "#b1e3bf" },
+    { Day: "T", completed: 6, color: "#b1e3bf" },
+    { Day: "W", completed: 8, color: "#b1e3bf" },
+    { Day: "TH", completed: 3, color: "#b1e3bf" },
+    { Day: "F", completed: 10, color: "#b1e3bf" },
+    { Day: "S", completed: 12, color: "#b1e3bf" },
 ];
 
 function Dashboard() {
