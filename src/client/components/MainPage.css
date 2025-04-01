@@ -31,11 +31,11 @@ section.main {
 .sidebar-item {
     display: flex;
     align-items: center;
-
+    font-size: 1em;
     text-decoration: none;
     color: var(--fg-secondary);
+    padding: 0.5em;
     padding-block: 1em;
-    font-size: 1em;
     margin-block: 0.2em;
     /* margin-inline: 0.5em; */
     border-radius: 0.5em;
@@ -44,27 +44,22 @@ section.main {
 
 /* Highlight the active (selected) item */
 .sidebar-item.active {
-    background-color: var(--primary); /* Accent color */
+    background-color: var(--primary);
     color: white;
     font-weight: 900;
-    font-size: 1.5em;
-    margin-block: 0.2em;
-    margin-inline: 0.2em;
-    padding: 0.5em;
-    margin-left: 0.5em;
+    width: 90%;
 }
 
 /* Optional: Hover effect for the items */
 .sidebar-item:hover {
     background-color: var(--secondary); 
-    padding: 0.75em;
     font-size: 1.5em;
     font-weight: 900;
     font-size: 1.5em;
     margin-block: 0.2em;
-    margin-left: 1em;
     color: rgb(255, 255, 255);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    width: 90%;
 }
 
 .mini-calendar {

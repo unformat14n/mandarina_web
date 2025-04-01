@@ -9,7 +9,7 @@
 }
 
 .task-low {
-    background: var(--lowp-bg);
+    background: black;
     border: solid 0.2em var(--lowp);
     color: var(--lowp);
 }
