@@ -4,7 +4,7 @@ nav#sidebar {
     padding-left: 1em;
     /* height: 100%; */
 
-    z-index: 1;
+    z-index: 2;
     box-shadow: 0.1em 0 0.4em  rgba(0, 0, 0, 0.2);
 
     display: flex;
@@ -102,7 +102,7 @@ section.main {
 }
 
 .mini-today {
-    border-radius: 50%;
+    border-radius: 10%;
     text-align:center;
     background-color: var(--primary);
     color: white;
@@ -119,6 +119,7 @@ section.main {
     height: auto;
     max-width: 50px;
     min-width: 30px;
+    padding-right: 15px;
 }
 
 .sidebar-item.active .size-medium {

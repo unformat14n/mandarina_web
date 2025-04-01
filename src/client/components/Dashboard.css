@@ -1,10 +1,18 @@
 .container {
     display: flex;
     flex-direction: column;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-x: scroll;
+}
+
+.subcontainer {
+    display:flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
 }
 
 .dashboard-hdr {
@@ -12,7 +20,8 @@
     flex-direction: row;
     position: sticky;
     top: 0;
-    width: 80vw;
+    z-index: 1;
+    width: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
     background-color: var(--bg);
@@ -24,48 +33,162 @@
 }
 
 .mand-logo {
-    height: 80x;
+    height: 80px;
     width: 105px;
     padding: 5px;
 }
 
+.char-status-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-inline: 15px;
+}
+
 .track-container {
     display: flex;
-    gap: 100px;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
     padding-top: 20px;
-    padding-left: 35px;
+}
+
+.track-container div.track-card {
+    flex-grow: 1;
+    margin-inline: 20px;
+    margin-block: 10px;
 }
 
 .track-card {
-    width: 250px;
-    padding: 20px 15px;
+    /* width: 250px; */
+    height: 110px;
+    padding: 20px 20px;
     border-radius: 10px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.weeklyprog-container {
+    background: #f3f3f3;
+    margin-top: 40px;
+    padding-bottom: 30px;
+    margin-left: 20px;
+    border-radius: 12px;
+}
+
+h2 {
+    padding-left: 30px;
+    margin-bottom: 0;
+}
+
+.duesoon-txt {
+    padding-left: 0px;
+    padding-bottom: 10px;
+}
+
+.weeklycount-container {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    padding-left: 35px;
 }
 
 .status-text {
     margin: 0;
-    font-size: 20px;
+    font-size: 15px;
+    padding-top: 12px;
 }
 
 .status-count {
-    font-size: 45px;
+    font-size: 40px;
     font-weight: 1000;
     margin: 0;
 }
 
-.chart-container {
-    margin-top: 40px;
+.count-txt {
+    padding-top: 10px;
+    padding-left: 15px;
+}
+
+.weekly-graph {
+    margin-top: 30px;
+    padding-right: 40px;
+    z-index: 0;
+}
+
+.list-duesoon {
+    width: 50%;
+    height: 90.5%;
     background: #f3f3f3;
-    padding: 25px;
-    border-radius: 12px;
-    margin-left: 35px;
-    margin-right: 35px;
+    margin-right: 40px;
+    margin-left: 40px;
+    margin-top: 30px;
+    border-radius: 10px;
+    padding: 0 2.5rem 2.5rem 2.5rem;
+}
+
+.task-item {
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr 1fr; 
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.task-header {
+    font-weight: bold;
+    background: #f9f9f9;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+.task-date {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.task-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.task-status {
+    text-align: left;
+}
+
+/* Priority colors */
+.task-priority.high {
+    color: red;
+}
+
+.task-priority.medium {
+    color: orange;
+}
+
+.task-priority.low {
+    color: green;
+}
+
+@media (max-width: 800px) {
+    .subcontainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .char-status-container {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        margin-inline: 15px;
+    }
+
+    .list-duesoon {
+        width: auto;
+    }
 }
