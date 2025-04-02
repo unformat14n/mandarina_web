@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
+import { TaskListItem } from "./TaskComponent";
+import { useUser } from "../contexts/UserContext";
 import {
     BarChart,
     Bar,
@@ -19,6 +21,22 @@ const tasksStatusHdr = [
 ];
 
 function TrackStatus() {
+
+    const [tasks, setTasks] = useState([]);
+    const [taskStats, setTasksStats] = useState([{
+        name: "pending", value: 0},
+        {name: "completed", value: 0},
+    ]);
+    const [weeklyProgress, setWeeklyProgress] = useState([]);
+    const [dueSoon, setDueSoonTasks] = useState([]);
+
+    useEffect(() => {
+        if (tasks.length > 0) {
+
+        }
+    })
+    
+
     return (
         <div className="track-container">
             {tasksStatusHdr.map((item, index) => (
@@ -85,6 +103,7 @@ const taskDueSoon = [
 ];
 
 function ShowTasksDueSoon() {
+
     return (
         <div className="list-duesoon">
             <h2 className="duesoon-txt">Due Soon</h2>

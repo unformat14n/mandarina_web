@@ -11,6 +11,7 @@ function Tasks() {
         { name: "Completed", value: 0 },
         { name: "Pending", value: 0 },
     ]);
+
     const { userId } = useUser();
 
     useEffect(() => {
@@ -57,17 +58,31 @@ function Tasks() {
 
     const renderTasks = () => {
         return tasks.map((task, index) => (
-            <TaskListItem
-                key={index}
-                name={task.title}
-                date={task.dueDate}
-                hour={`${task.hour}:${String(task.minute).padStart(2, "0")}`}
-                priority={task.priority}
-                status={task.status}
-                description={task.description}
-            />
+            <div key={index} className="task-item">
+                <TaskListItem
+                    key={index}
+                    name={task.title}
+                    date={task.dueDate}
+                    hour={`${task.hour}:${String(task.minute).padStart(2, "0")}`}
+                    priority={task.priority}
+                    status={task.status}
+                    description={task.description}
+                />
+
+                <button className="edit-btn" onClick={handleEdit(task)}>Edit</button>
+                <button className="task-compl" onClick={handleComplete(task)}>Completed</button>
+
+            </div>
         ));
     };
+
+    const handleEdit = (task) => {
+        console.log("Edit task: ", task);
+    }
+
+    const handleComplete = (task) => {
+        console.log("Complete task: ", task);
+    }
 
     return (
         /* Tasks header*/

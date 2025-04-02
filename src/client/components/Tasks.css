@@ -71,6 +71,36 @@ header.task-header {
     overflow-y: scroll;
 }
 
+.buttontask-con {
+    display: flex;
+    position: absolute;
+}
+
+.edit-btn, .task-compl {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-width: 1px;
+    border-color: #4d895e;
+    border-radius: 15px;
+    color: rgb(255, 255, 255);
+}
+
+.edit-btn {
+    background-color: var(--secondary);
+    height: 40px;
+    width: 55px;
+}
+
+.task-compl {
+    background-color: var(--secondary);
+    height: 40px;
+    width: 115px;
+}
+
+.edit-btn:hover, .task-compl:hover{
+    background-color: #4d895e;
+}
+
 .task-title {
     font-size: 20px;
     font-weight: bold;
