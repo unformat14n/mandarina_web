@@ -167,10 +167,12 @@ app.post("/login", async (req, res) => {
                         expiresIn: "2h", // Token expiration time
                     }
                 );
+                console.log(results[0])
                 console.log("Information correct");
                 res.status(200).json({
                     success: true,
                     message: "Login successful",
+                    id: results[0].id,
                     token: token,
                 });
             }
@@ -295,6 +297,7 @@ app.post("/verify", async (req, res) => {
                         success: true,
                         message: "Code correct, user registered successfully",
                         token: token,
+                        id: results.insertId
                     });
                 }
             );
@@ -319,7 +322,7 @@ app.post("/create-task", async (req, res) => {
         status,
         hour,
         minute,
-        user_id,
+        userId,
     } = req.body;
     console.log("Received task creation request:", {
         title,
@@ -329,12 +332,12 @@ app.post("/create-task", async (req, res) => {
         status,
         hour,
         minute,
-        user_id,
+        userId,
     });
 
     db.query(
         `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute, user_id) VALUES (?,?,?,?,?,?,?,?)`,
-        [title, description, dueDate, priority, status, hour, minute, user_id],
+        [title, description, dueDate, priority, status, hour, minute, userId],
         (err, results) => {
             if (err) {
                 console.error("Error inserting user:", err);

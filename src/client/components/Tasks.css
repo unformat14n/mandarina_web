@@ -7,15 +7,14 @@
 }
 
 /* Header Styling */
-.task-header {
+header.task-header {
     display: flex;
     flex-direction: row;
     position: sticky;
-    top: 0;
+    background: var(--bg);
     width: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-    background-color: var(--bg);
 }
 
 .task-header * {
@@ -43,7 +42,7 @@
 }
 
 .filter-btn:hover {
-    background-color: #ff7300;
+    background-color: var(--primary);
 }
 
 /* Body of the tasks */

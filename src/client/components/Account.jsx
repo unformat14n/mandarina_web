@@ -21,33 +21,6 @@ export function Checkbox() {
     );
 }
 
-const themes = [
-    {
-        name: "Peach Dreams",
-        colors: ["#FFDAB9", "#FFA07A", "#E9967A", "#FF4500"],
-    },
-    {
-        name: "Peach Dreams",
-        colors: ["#FFDAB9", "#FFA07A", "#E9967A", "#FF4500"],
-    },
-    {
-        name: "Peach Dreams",
-        colors: ["#FFDAB9", "#FFA07A", "#E9967A", "#FF4500"],
-    },
-    {
-        name: "Peach Dreams",
-        colors: ["#FFDAB9", "#FFA07A", "#E9967A", "#FF4500"],
-    },
-    {
-        name: "Peach Dreams",
-        colors: ["#FFDAB9", "#FFA07A", "#E9967A", "#FF4500"],
-    },
-    {
-        name: "Peach Dreams",
-        colors: ["#FFDAB9", "#FFA07A", "#E9967A", "#FF4500"],
-    },
-];
-
 function ColorPalettes() {
     return (
         <div>

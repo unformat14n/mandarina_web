@@ -21,7 +21,7 @@ function App() {
                     />
                     <h1 className="logo">Mandarina</h1>
                 </div>
-                <div>
+                <div className="quick-access">
                     <a href="#features">Features</a>
                     <a href="#how-it-works">How it works</a>
                     <a href="#pricing">Something</a>

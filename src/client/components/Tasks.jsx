@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts"; // Import from Recharts
 import { TaskListItem } from "./TaskComponent";
-import { jwtDecode } from "jwt-decode";
+import { useUser } from "../contexts/UserContext";
 import "./Tasks.css";
 
 function Tasks() {
@@ -11,16 +11,7 @@ function Tasks() {
         { name: "Completed", value: 0 },
         { name: "Pending", value: 0 },
     ]);
-
-    let userId = 0;
-    const token = localStorage.getItem("token");
-    try {
-        const decodedToken = jwtDecode(token);
-        userId = decodedToken.id; // Assuming 'id' is stored in the token
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
+    const { userId } = useUser();
 
     useEffect(() => {
         const getTasksInMonth = async () => {

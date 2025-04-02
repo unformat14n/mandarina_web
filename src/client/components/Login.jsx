@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import Modal from "react-modal";
+import { useUser } from "../contexts/UserContext";
 import "../index.css";
 import "./Login.css";
 
@@ -12,7 +13,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+    const { userId, setUserId } = useUser();
 
     const handleLogin = async (e) => {
         if (e) e.preventDefault();
@@ -28,6 +29,9 @@ function Login() {
 
             if (data.success) {
                 localStorage.setItem("token", data.token);
+                setUserId(data.id);
+                sessionStorage.setItem("userId", userId);
+                console.log("User ID:", userId);
                 navigate("/calendar/");
             } else {
                 setModalMessage(

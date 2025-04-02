@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 
 function Register() {
     const navigate = useNavigate();
@@ -8,6 +9,7 @@ function Register() {
     const [verification, setVerification] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
     const [code, setCode] = useState("");
+    const { userId, setUserId } = useUser();
 
     const handleRegister = async (e) => {
         if (e) e.preventDefault();
@@ -50,6 +52,8 @@ function Register() {
 
             if (data.success) {
                 alert("Email verified successfully!");
+                setUserId(data.id);
+                sessionStorage.setItem("userId", userId);
                 navigate('/calendar'); // Navigate to the calendar page after success
             } else {
                 alert(data.message || "Invalid verification code.");

@@ -4,19 +4,10 @@ import React, { useState, useEffect, useContext } from "react";
 import "./Calendar.css"; // For styling
 import { ModalContext } from "./MainPage";
 import Task from "./TaskComponent";
+import { useUser } from "../contexts/UserContext";
 
-const MonthCalendar = ({ currentDate }) => {
+const MonthCalendar = ({ currentDate, userId }) => {
     const [tasks, setTasks] = useState([]);
-
-    let userId = 0;
-    const token = localStorage.getItem("token");
-    try {
-        const decodedToken = jwtDecode(token);
-        userId = decodedToken.id; // Assuming 'id' is stored in the token
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
 
     useEffect(() => {
         const getTasksInMonth = async () => {
@@ -127,19 +118,9 @@ const MonthCalendar = ({ currentDate }) => {
     );
 };
 
-const DayCalendar = ({ currentDate }) => {
+const DayCalendar = ({ currentDate, userId }) => {
     const [tasks, setTasks] = useState([]);
-
-    let userId = 0;
-    const token = localStorage.getItem("token");
-    try {
-        const decodedToken = jwtDecode(token);
-        userId = decodedToken.id; // Assuming 'id' is stored in the token
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
-
+    
     useEffect(() => {
         const getTasksInMonth = async () => {
             try {
@@ -226,18 +207,8 @@ const DayCalendar = ({ currentDate }) => {
     );
 };
 
-const WeekCalendar = ({ currentDate }) => {
+const WeekCalendar = ({ currentDate, userId }) => {
     const [tasks, setTasks] = useState([]);
-
-    let userId = 0;
-    const token = localStorage.getItem("token");
-    try {
-        const decodedToken = jwtDecode(token);
-        userId = decodedToken.id; // Assuming 'id' is stored in the token
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
 
     useEffect(() => {
         const getTasksInMonth = async () => {
@@ -368,6 +339,7 @@ function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [view, setView] = useState("month"); // Default view: Month
     const { setIsOpen } = useContext(ModalContext);
+    const { userId } = useUser();
 
     const handleViewChange = (event) => {
         setView(event.target.value);
@@ -500,11 +472,11 @@ function Calendar() {
             {/* Calendar View Content */}
             <div className="calendar-contents">
                 {view === "month" && (
-                    <MonthCalendar currentDate={currentDate} />
+                    <MonthCalendar currentDate={currentDate} userId={userId} />
                 )}
                 {/* {view === "week" && <WeekView />} */}
-                {view === "day" && <DayCalendar currentDate={currentDate} />}
-                {view === "week" && <WeekCalendar currentDate={currentDate} />}
+                {view === "day" && <DayCalendar currentDate={currentDate} userId={userId} />}
+                {view === "week" && <WeekCalendar currentDate={currentDate} userId={userId} />}
             </div>
         </div>
     );

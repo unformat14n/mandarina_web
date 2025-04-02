@@ -6,8 +6,8 @@ import Account from "./Account";
 import Tasks from "./Tasks";
 import Dashboard from "./Dashboard";
 import "./MainPage.css";
-import Modal from 'react-modal';
-import { jwtDecode } from "jwt-decode";
+import Modal from "react-modal";
+import { useUser } from "../contexts/UserContext";
 
 const ModalContext = createContext(null);
 
@@ -18,16 +18,13 @@ function MainPage({ type }) {
     const [taskDate, setTaskDate] = useState("");
     const [taskHour, setTaskHour] = useState("");
     const [priority, setPriority] = useState("HIGH");
+    const { userId, setUserId } = useUser();
 
-    let userId = 0;
-    const token = localStorage.getItem("token");
-    try {
-        const decodedToken = jwtDecode(token);
-        userId = decodedToken.id; // Assuming 'id' is stored in the token
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return null;
-    }
+    setUserId(
+        userId == 0 || userId == undefined
+            ? sessionStorage.getItem("userId")
+            : userId
+    );
 
     const saveTask = async () => {
         if (!taskName || !taskContent || !taskDate || !taskHour || !priority) {
@@ -51,7 +48,7 @@ function MainPage({ type }) {
                     hour: parseInt(hours),
                     minute: parseInt(minutes),
                     priority: priority.toUpperCase(),
-                    user_id: userId,
+                    userId: userId,
                 }),
             });
 
@@ -93,8 +90,8 @@ function MainPage({ type }) {
                         },
                         content: {
                             // position: "sticky",
-                            background: 'var(--bg)',
-                            color: 'var(--fg)',
+                            background: "var(--bg)",
+                            color: "var(--fg)",
                             zIndex: "1000",
                             width: "420px",
                             height: "420px",
