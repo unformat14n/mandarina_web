@@ -382,6 +382,100 @@ app.post("/get-tasks", async (req, res) => {
     );
 });
 
+app.post("/update-task", async (req, res) => {
+    const {
+        title,
+        description,
+        dueDate,
+        priority,
+        hour,
+        minute,
+        taskId,
+    } = req.body;
+    console.log("Received task update request:", {
+        title,
+        description,
+        dueDate,
+        priority,
+        hour,
+        minute,
+        userId,
+    });
+
+    db.query(
+        `UPDATE tasks 
+        SET title = ?, description = ?, dueDate = ?, priority = ?, 
+        status = ?, hour = ?, minute = ? WHERE id = ?`,
+        [title, description, dueDate, priority, hour, minute, taskId],
+        (err, results) => {
+          if (err) {
+            console.error("Error editing task:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+          }  
+          console.log("Task succesfully updated");
+
+          res.status(200).json({
+            success: true,
+            message: "Task updated successfully",
+          });
+        }
+    )
+});
+
+app.post("/update-status", async (req, res) => {
+    const { status, taskId } = req.body;
+    console.log("Received task status update request:", { status, taskId }); 
+
+    db.query(
+        `UPDATE tasks
+        SET status =? WHERE id =?`,
+        [status, taskId],
+        (err, results) => {
+          if (err) {
+            console.error("Error updating task status:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+          } 
+          console.log("Task status succesfully updated");
+
+          res.status(200).json({
+            success: true,
+            message: "Task status updated successfully",
+          });
+        } 
+    )
+})
+
+app.post("/delete-task", async (req, res) => {
+    const { taskId } = req.body;
+    console.log("Received task deletion request:", { taskId });
+
+    db.query(
+        `DELETE FROM tasks WHERE id =?;`,
+        [taskId],  
+        (err, results) => {
+          if (err) {
+            console.error("Error deleting task:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+          } 
+          console.log("Task succesfully deleted");
+
+          res.status(200).json({
+            success: true,
+            message: "Task deleted successfully",
+          });
+        }
+    )
+})
+
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
 
