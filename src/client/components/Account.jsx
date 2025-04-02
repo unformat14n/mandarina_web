@@ -63,22 +63,23 @@ function Account() {
             <header className="account-hdr">
                 <img src="/mandarinaLogo.png" className="mand-logo" />
                 <h1 className="account">Account</h1>
+                <button className="logout-btn">Log out</button>
             </header>
 
             <div className="info-container">
-                <h2 className="infobox-title">Personal Information</h2>
+                <h2 className="box-title">Personal Information</h2>
                 <div className="info-display">
                     <p>Email:</p>
                     <p className="user-data">sampleemail@gmail.com</p>
                     <hr className="divisor" />
                     <p>Password:</p>
                     <p className="user-data">********</p>
+                    <button>Edit</button>
                 </div>
-                <button>Edit</button>
             </div>
 
             <div className="pref-container">
-                <h2 className="prefbox-title">Preferences</h2>
+                <h2 className="box-title">Preferences</h2>
                 <div className="pref-display">
                     <p>Appearance</p>
                     <button onClick={toggleTheme}>

@@ -192,3 +192,7 @@ h2 {
         width: auto;
     }
 }
+
+p {
+ font-weight: 600;
+}

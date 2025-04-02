@@ -22,10 +22,10 @@ function App() {
                     <h1 className="logo">Mandarina</h1>
                 </div>
                 <div className="quick-access">
-                    <a href="#features">Features</a>
-                    <a href="#how-it-works">How it works</a>
-                    <a href="#pricing">Something</a>
-                    <a href="#contact">Something else</a>
+                    <a href="#features" className="quickaccs">Features</a>
+                    <a href="#how-it-works" className="quickaccs">How it works</a>
+                    <a href="#about-us" className="quickaccs">About Us</a>
+                    <a href="#contact" className="quickaccs">Something else</a>
                 </div>
             </header>
 
@@ -107,7 +107,7 @@ function App() {
                 </section>
             </section>
 
-            <section className="about">
+            <section className="about" id="about-us">
                 <div className="about-content">
                     <h2>About Us</h2>
                     <div className="who">
@@ -152,17 +152,6 @@ function App() {
             {/* Footer */}
             <footer className="bg-gray-900 text-white text-center py-6">
                 <p>&copy; 2025 Mandarina. All rights reserved.</p>
-                <div className="mt-2">
-                    <a href="#" className="text-orange-400 hover:underline">
-                        {" "}
-                        Contact
-                    </a>{" "}
-                    |
-                    <a href="#" className="text-orange-400 hover:underline">
-                        {" "}
-                        FAQ
-                    </a>
-                </div>
             </footer>
         </div>
     );

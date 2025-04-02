@@ -21,14 +21,14 @@ header.header {
     /* width: 100%; */
     /* padding: 0 1em; */
     background: var(--bg);
-    box-shadow: 0 4px   6px rgba(255, 0, 0, 0.1);
+    box-shadow: 0 4px   6px rgba(255, 115, 1, 0.174);
 
     position: sticky;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: 60px;
+    height: 80px;
 }
 
 header.header img.logo {
@@ -64,6 +64,12 @@ header.header div.quick-access {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+
+.quickaccs {
+    color: var(--lowp);
+    font-weight: 600;
 }
 
 .hero * {
@@ -344,4 +350,13 @@ section.about div.purpose h3 {
     header.header div.quick-access {
         display: none;
     }
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem; 
+    flex-wrap: wrap; 
 }
