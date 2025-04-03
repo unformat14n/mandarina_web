@@ -19,7 +19,7 @@ function Login() {
         if (e) e.preventDefault();
         
         try {
-            const response = await fetch("http://localhost:4004/login", {
+            const response = await fetch("/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),

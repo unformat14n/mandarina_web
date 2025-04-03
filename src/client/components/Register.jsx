@@ -28,7 +28,7 @@ function Register() {
 
         setIsLoading(true); // Show the loading indicator
         try {
-            const response = await fetch("http://localhost:4004/register", {
+            const response = await fetch("/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }) 
@@ -57,7 +57,7 @@ function Register() {
         setIsLoading(true); // Show the loading indicator
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:4004/verify", {
+            const response = await fetch("/verify", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password, code }) // Send email and code for verification

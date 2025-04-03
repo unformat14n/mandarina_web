@@ -10,7 +10,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const port = 4004;
+const port = 40000;
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
