@@ -3,6 +3,31 @@ import "./TaskComponent.css";
 
 function TaskListItem({ id, name, date, hour, priority, status, description }) {
     console.log(id);
+    const handleDelete = async (id) => {
+        console.log("Deleting task:", id); // Log the task object for debugging
+        try {
+            const response = await fetch("/delete-task", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }, 
+                body: JSON.stringify({
+                    taskId: id,
+                }),
+            });
+            const data = await response.json();
+
+            if (data.success) {
+               console.log("Task deleted successfully");
+               // setTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id)); 
+            } else {
+                console.error("Error deleting task:", data.error);
+            }
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        }
+    }
+
     return (
         <div key={id} className="task-li">
             <div className="task-li-content">
@@ -14,7 +39,7 @@ function TaskListItem({ id, name, date, hour, priority, status, description }) {
                 <p className="task-status-li">{status}</p>
             </div>
             <div className="btn-container">
-            <button className="task-del" onClick={() => handleDelete(task)}>
+            <button className="task-del" onClick={() => handleDelete(id)}>
                     <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     fill="none" viewBox="0 0 24 24" 
