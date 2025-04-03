@@ -1,9 +1,10 @@
 import React from "react";
 import "./TaskComponent.css";
 
-function TaskListItem({ name, date, hour, priority, status, description }) {
+function TaskListItem({ id, name, date, hour, priority, status, description }) {
+    console.log(id);
     return (
-        <div className="task-li">
+        <div key={id} className="task-li">
             <div className="task-li-content">
                 <h3 className="task-name-li">{name}</h3>
                 <p className="task-date-li">{new Date(date).toISOString().split("T")[0]}</p>

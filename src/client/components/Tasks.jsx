@@ -60,6 +60,7 @@ function Tasks() {
         return tasks.map((task, index) => (
             <TaskListItem
                 key={index}
+                id={task.id}
                 name={task.title}
                 date={task.dueDate}
                 hour={`${task.hour}:${String(task.minute).padStart(2, "0")}`}
