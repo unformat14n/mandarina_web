@@ -15,9 +15,9 @@ import {
 
 // no me convence esto xd pero bue
 const tasksStatusHdr = [
-    { status: "Not started", count: 5, color: "#F0F4F8" },
-    { status: "In Progress", count: 10, color: "#E6F7FF" },
-    { status: "Completed", count: 20, color: "#E6FFED" },
+    { status: "Not started", count: 5, color: "var(--bg-secondary)" },
+    { status: "In Progress", count: 10, color: "var(--bg-secondary)" },
+    { status: "Completed", count: 20, color: "var(--bg-secondary)" },
 ];
 
 function TrackStatus() {
@@ -54,13 +54,13 @@ function TrackStatus() {
 
 // agarra los colores del index.css
 const weeklychart = [
-    { Day: "S", completed: 10, color: "#b1e3bf" },
-    { Day: "M", completed: 5, color: "#b1e3bf" },
-    { Day: "T", completed: 6, color: "#b1e3bf" },
-    { Day: "W", completed: 8, color: "#b1e3bf" },
-    { Day: "TH", completed: 3, color: "#b1e3bf" },
-    { Day: "F", completed: 10, color: "#b1e3bf" },
-    { Day: "S", completed: 12, color: "#b1e3bf" },
+    { Day: "S", completed: 10, color: "var(--secondary)" },
+    { Day: "M", completed: 5, color: "var(--secondary)" },
+    { Day: "T", completed: 6, color: "var(--secondary)" },
+    { Day: "W", completed: 8, color: "var(--secondary)" },
+    { Day: "TH", completed: 3, color: "var(--secondary)" },
+    { Day: "F", completed: 10, color: "var(--secondary)" },
+    { Day: "S", completed: 12, color: "var(--secondary)" },
 ];
 
 const taskDueSoon = [

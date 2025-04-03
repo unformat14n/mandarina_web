@@ -28,14 +28,16 @@
 }
 
 .dashboard-title {
-    color: rgb(0, 0, 0);
-    padding-top: 20px;
+    padding-top: 8px;
+    color: var(--primary);
+    font-size: 30px;
 }
 
 .mand-logo {
     height: 80px;
     width: 105px;
-    padding: 5px;
+    margin-top: 8px; 
+    margin-left: 20px;
 }
 
 .char-status-container {
@@ -71,7 +73,7 @@
 }
 
 .weeklyprog-container {
-    background: #f3f3f3;
+    background: var(--bg-secondary);
     margin-top: 40px;
     padding-bottom: 30px;
     margin-left: 20px;
@@ -108,7 +110,7 @@ h2 {
 }
 
 .count-txt {
-    padding-top: 10px;
+    padding-top: 7px;
     padding-left: 15px;
 }
 
@@ -121,7 +123,7 @@ h2 {
 .list-duesoon {
     width: 50%;
     height: 90.5%;
-    background: #f3f3f3;
+    background: var(--bg-secondary);
     margin-right: 40px;
     margin-left: 40px;
     margin-top: 30px;
@@ -164,15 +166,15 @@ h2 {
 
 /* Priority colors */
 .task-priority.high {
-    color: red;
+    color: var(--highp);
 }
 
 .task-priority.medium {
-    color: orange;
+    color: var(--medp);
 }
 
 .task-priority.low {
-    color: green;
+    color: var(--lowp);
 }
 
 @media (max-width: 800px) {
