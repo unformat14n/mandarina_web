@@ -7,7 +7,7 @@
 }
 
 /* Header Styling */
-header.task-header {
+.task-header {
     display: flex;
     flex-direction: row;
     position: sticky;
@@ -15,14 +15,12 @@ header.task-header {
     width: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
+    padding-left: 30px;
 }
 
-.task-header * {
-    margin-inline: 0.25em;
-}
 
 .header-label {
-    padding: 5px;
+    padding-right: 10px;
 }
 
 .sort-select {
@@ -31,7 +29,9 @@ header.task-header {
     border-radius: 5px;
     border: 1px solid var(--bg-secondary);
     color: var(--fg);
+    margin-right: 40px;
 }
+
 .sort-select:hover {
     background-color: var(--bg);
 }
@@ -39,66 +39,58 @@ header.task-header {
 .filter-btn {
     padding: 5px;
     color: var(--fg);
+    width: 40px;
+    height: 40px;
 }
 
 .filter-btn:hover {
     background-color: var(--primary);
+
 }
 
 /* Body of the tasks */
 .task-body {
     display: flex;
     align-items: flex-start;
-    justify-content: center; /* Ensures left and right elements are spaced apart */
+    justify-content: center;
+    /* Ensures left and right elements are spaced apart */
     margin-left: 20px;
     height: 100%;
     overflow-y: scroll;
 }
 
+
 /* Task List Styling */
+.task-item {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    /* padding: 10px; */
+}
+
 .task-list {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-
-    /* padding: 15px; */
     width: 100%;
-    height: 100%;
+    flex-direction: column;
+    padding: 15px;
     background-color: var(--bg-secondary);
-    border-radius: 1em;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-y: scroll;
+    border-radius: 10px;
+    box-shadow: 1 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.buttontask-con {
-    display: flex;
-    position: absolute;
+.task-del {
+    margin-left: auto;
+    height: 30px;
+    width: 30px;
+    padding: 3px;
+    background: none;
+    color: black;
+    align-self: flex-start;
+    justify-self: flex-end;
 }
 
-.edit-btn, .task-compl {
-    padding: 8px 12px;
-    font-size: 14px;
-    border-width: 1px;
-    border-color: #4d895e;
-    border-radius: 15px;
-    color: rgb(255, 255, 255);
-}
-
-.edit-btn {
-    background-color: var(--secondary);
-    height: 40px;
-    width: 55px;
-}
-
-.task-compl {
-    background-color: var(--secondary);
-    height: 40px;
-    width: 115px;
-}
-
-.edit-btn:hover, .task-compl:hover{
-    background-color: #4d895e;
+.task-del:hover {
+    color: white;
 }
 
 .task-title {

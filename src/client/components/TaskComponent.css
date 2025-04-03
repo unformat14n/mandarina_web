@@ -52,9 +52,19 @@ h3.task-name {
 
 .task-li {
     display: flex;
-    flex-direction: column;
+    width: 100%;
+    flex-direction: row;
     padding: 0em;
-    margin: 0.75em;
+    border-radius: 0.5em;
+    justify-content: space-between;
+}
+.task-li-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* width: 100%; */
+    padding: 0em;
+    padding-bottom: 25px;
     border-radius: 0.5em;
 }
 
