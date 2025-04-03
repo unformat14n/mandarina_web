@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../contexts/UserContext";
+import Modal from "react-modal";
+
+Modal.setAppElement("#root");
 
 function Register() {
     const navigate = useNavigate();
@@ -10,20 +13,25 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [code, setCode] = useState("");
     const { userId, setUserId } = useUser();
+    const [isOpen, setIsOpen] = useState(false); // State for the modal alert
+    const [modalMessage, setModalMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false); // State for the loading indicator
 
     const handleRegister = async (e) => {
         if (e) e.preventDefault();
         
         if (password !== confirmPassword) {
-            alert("Passwords do not match!");
+            setModalMessage("Passwords do not match!");
+            setIsOpen(true);
             return;
         }
 
+        setIsLoading(true); // Show the loading indicator
         try {
             const response = await fetch("http://localhost:4004/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }) // FIXED: Changed 'username' to 'email'
+                body: JSON.stringify({ email, password }) 
             });
 
             const data = await response.json();
@@ -32,15 +40,22 @@ function Register() {
                 console.log("Registration successful!");
                 setVerification(true); // Show the verification view
             } else {
-                alert(data.message || "Registration failed");
+                setModalMessage(
+                    data.message || data.error || "Unknown error occurred."
+                );
+                setIsOpen(true);
             }
         } catch (error) {
             console.error("Error during registration:", error);
             alert("Server error. Please try again later.");
+        } finally {
+            setIsLoading(false); // Hide the loading indicator 
         }
     };
 
     const handleVerify = async (e) => {
+        setIsLoading(true); // Show the loading indicator
+        e.preventDefault();
         try {
             const response = await fetch("http://localhost:4004/verify", {
                 method: "POST",
@@ -56,17 +71,24 @@ function Register() {
                 sessionStorage.setItem("userId", userId);
                 navigate('/calendar'); // Navigate to the calendar page after success
             } else {
-                alert(data.message || "Invalid verification code.");
+                setModalMessage(
+                    data.message || data.error || "Unknown error occurred."
+                );
+                setIsOpen(true);
             }
         } catch (error) {
             console.error("Error during email verification:", error);
             alert("Server error. Please try again later.");
+        } finally {
+            setIsLoading(false); // Hide the loading indicator 
         }
     };
 
     return (
         <div className="center">
-            {verification ? (
+           {isLoading ? (
+                <div className="loading">Loading...</div> // Loading indicator
+            ) : verification ? (
                 <div className="card">
                     <h1>Verify Your Email</h1>
                     <p>Check your inbox, we have sent you a verification code.</p>
@@ -81,7 +103,7 @@ function Register() {
             ) : (
                 <div className="card">
                     <h1>Create an Account</h1>
-                    <form onSubmit={handleVerify} method="post">
+                    <form onSubmit={handleRegister} method="post">
                         <label htmlFor="email">E-Mail:</label>
                         <input
                             type="email"
@@ -115,6 +137,33 @@ function Register() {
                     <button onClick={handleRegister}>Continue</button>
                 </div>
             )}
+            {/* Alert Modal */}
+            <Modal
+                isOpen={isOpen}
+                onRequestClose={() => setIsOpen(false)}
+                contentLabel="Register Alert"
+                closeTimeoutMS={100}
+                style={{
+                    overlay: {
+                        backgroundColor: "rgba(238, 238, 238, 0.5)",
+                    },
+                    content: {
+                        width: "420px",
+                        height: "128px",
+                        margin: "auto",
+                        padding: "2em",
+                        borderRadius: "12px",
+                        textAlign: "left",
+                    },
+                }}>
+                <h2 style={{ margin: "0", padding: "0" }}>Registration Failed</h2>
+                <p style={{ margin: "0", padding: "0" }}>{modalMessage}</p>
+                <button
+                    onClick={() => setIsOpen(false)}
+                    className="modal-close-button">
+                    Close
+                </button>
+            </Modal>
         </div>
     );
 }
