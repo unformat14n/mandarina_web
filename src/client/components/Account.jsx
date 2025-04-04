@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Account.css";
 import { useTheme } from "../contexts/ThemeContext";
+import { useUser } from "../contexts/UserContext";
 
 export function Checkbox() {
     const [isChecked, setIsChecked] = useState(false);
@@ -21,34 +22,10 @@ export function Checkbox() {
     );
 }
 
-function ColorPalettes() {
-    return (
-        <div>
-            <p>Themes</p>
-            <div className="themes-grid">
-                {themes.map((theme, index) => (
-                    <div key={index} className="theme-item">
-                        <div className="theme-hdr">
-                            <Checkbox />
-                            <p className="user-data">{theme.name}</p>
-                        </div>
-                        <div className="color-container">
-                            {theme.colors.map((color, idx) => (
-                                <div
-                                    key={idx}
-                                    className="color-box"
-                                    style={{ backgroundColor: color }}></div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
 function Account() {
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const { userId } = useUser();
     const { theme, toggleTheme, clrPalette, setPalette } = useTheme();
 
     useEffect(() => {
@@ -57,6 +34,47 @@ function Account() {
             setEmail(storedEmail);
         }
     }, []);
+
+    const renderUserInfo = () => {
+        const getUser = async () => {
+            try {
+                const response = await fetch("/request-user", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                    }),
+                });
+
+                const data = await response.json();
+                console.log(data)
+
+                if (data.success) {
+                    setEmail(data.user.email);
+                    setPassword(data.user.password);
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        getUser();
+
+        return (
+            <div className="info-display">
+                <p>Email:</p>
+                <p className="user-data">{email}</p>
+                <hr className="divisor" />
+                <p>Password:</p>
+                <p className="user-data">******</p>
+                <button>Edit</button>
+            </div>
+        );
+    };
 
     return (
         <div className="container">
@@ -68,14 +86,7 @@ function Account() {
 
             <div className="info-container">
                 <h2 className="box-title">Personal Information</h2>
-                <div className="info-display">
-                    <p>Email:</p>
-                    <p className="user-data">sampleemail@gmail.com</p>
-                    <hr className="divisor" />
-                    <p>Password:</p>
-                    <p className="user-data">********</p>
-                    <button>Edit</button>
-                </div>
+                {renderUserInfo()}
             </div>
 
             <div className="pref-container">

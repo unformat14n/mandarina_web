@@ -24,7 +24,7 @@
     --fg-secondary: rgb(124, 114, 133);
     --bg: #ffffff;
     --bg-secondary: #f3f2f5;
-    --bg-tertiary: #fcfaff;
+    --bg-tertiary: #e5e0ed;
 }
 
 .dark {
@@ -38,14 +38,22 @@
 .mandarina {
     --primary: #FFAC5E;
     --secondary: #49cd96;
+    --alt-primary: #ff875c;
+    --alt-secondary: #3c908a;
 }
+
 .peach {
     --primary: #f599a6;
     --secondary: #9ab0a7;
+    --alt-primary: #d5586a;
+    --alt-secondary: #5ca185;
 }
+
 .coffee {
-    --primary: #74512D;
-    --secondary: #AF8F6F;
+    --primary: #91736c;
+    --secondary: #be9e7b;
+    --alt-primary: #6d5651;
+    --alt-secondary: #8f775c;
 }
 
 body {
@@ -116,19 +124,19 @@ button {
     cursor: pointer;
     /* color:  */
     margin-block: 2em;
-    transition: border-color 0.25s;
+    transition: all 0.25s;
 
     background-color: var(--primary);
     color: white;
     font-weight: bolder;
 }
 button:hover {
-    background-color: var(--secondary);
+    background-color: var(--alt-primary);
 }
-button:focus,
+/* button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 
 .ReactModal__Overlay {
     margin: 0;

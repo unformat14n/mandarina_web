@@ -10,6 +10,7 @@ function Tasks() {
     const [completionData, setData] = useState([
         { name: "Completed", value: 0 },
         { name: "Pending", value: 0 },
+        { name: "In Progress", value: 0 },
     ]);
 
     const { userId } = useUser();
@@ -42,6 +43,12 @@ function Tasks() {
                             name: "Pending",
                             value: data.tasks.filter(
                                 (task) => task.status === "Pending"
+                            ).length,
+                        },
+                        {
+                            name: "In Progress",
+                            value: data.tasks.filter(
+                                (task) => task.status === "In Progress"
                             ).length,
                         },
                     ]);
@@ -106,8 +113,6 @@ function Tasks() {
                         </svg>
                     </button>
                 </div>
-
-
             </header>
             {/* <label>Sort by: </label>
                 <select className="option-box">
@@ -143,6 +148,11 @@ function Tasks() {
                                 {(completionData[1].value * 100) / tasks.length}
                                 %
                             </li>
+                            <li>
+                                In Progress:{" "}
+                                {(completionData[2].value * 100) / tasks.length}
+                                %
+                            </li>
                         </ul>
                     </div>
                     <PieChart width={300} height={300}>
@@ -156,7 +166,9 @@ function Tasks() {
                             {completionData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
-                                    fill={index === 0 ? "#00C49F" : "#FF8042"}
+                                    fill={index === 0 ? "#00C49F" : (
+                                        index === 1? "#FFBB58" : "#FF647C"
+                                    )}
                                 />
                             ))}
                         </Pie>

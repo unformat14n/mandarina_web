@@ -15,9 +15,9 @@ import {
 
 // no me convence esto xd pero bue
 const tasksStatusHdr = [
-    { status: "Not started", count: 5, color: "var(--bg-secondary)" },
-    { status: "In Progress", count: 10, color: "var(--bg-secondary)" },
-    { status: "Completed", count: 20, color: "var(--bg-secondary)" },
+    { status: "Not started", count: 5, color: "var(--primary)" },
+    { status: "In Progress", count: 10, color: "var(--alt-secondary)" },
+    { status: "Completed", count: 20, color: "var(--secondary)" },
 ];
 
 function TrackStatus() {
@@ -29,13 +29,6 @@ function TrackStatus() {
     ]);
     const [weeklyProgress, setWeeklyProgress] = useState([]);
     const [dueSoon, setDueSoonTasks] = useState([]);
-
-    useEffect(() => {
-        if (tasks.length > 0) {
-
-        }
-    })
-    
 
     return (
         <div className="track-container">

@@ -5,7 +5,19 @@
     padding: 0.25em;
     margin: 0.25em;
     border-radius: 0.5em;
-    /* width: auto; */
+}
+
+.task-completed {
+    opacity: 0.5;
+}
+.task-in-progress.task-low {
+    box-shadow: 0 0 15px var(--lowp);
+}
+.task-in-progress.task-medium {
+    box-shadow: 0 0 15px var(--medp);
+}
+.task-in-progress.task-high {
+    box-shadow: 0 0 15px var(--highp);
 }
 
 .task-low {
@@ -56,8 +68,8 @@ h3.task-name {
     flex-direction: row;
     flex-grow: 0;
     padding: 0em;
-    border-radius: 0.5em;
     justify-content: space-between;
+    border-bottom: solid 0.1em var(--bg-tertiary);
 }
 
 .task-li-content {
@@ -102,7 +114,7 @@ h3.task-name {
 .btn-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     /* width: 100%; */
     padding: 0em;
@@ -160,6 +172,10 @@ h3.task-name {
     }
 
     .status-btn {
+        display: none;
+    }
+
+    .task:hover .status-btn {
         display: none;
     }
 }

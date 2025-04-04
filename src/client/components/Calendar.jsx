@@ -48,8 +48,10 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
                 // <p key={task.id} className="task">{task.title}</p>
                 <Task
                     key={task.id}
+                    id={task.id}
                     name={task.title}
                     date={task.dueDate}
+                    curStatus={task.status}
                     hour={`${task.hour}:${String(task.minute).padStart(
                         2,
                         "0"
@@ -117,8 +119,10 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
                 // <p key={task.id} className="task">{task.title}</p>
                 <Task
                     key={task.id}
+                    id={task.id}
                     name={task.title}
                     date={task.dueDate}
+                    curStatus={task.status}
                     hour={`${task.hour}:${String(task.minute).padStart(
                         2,
                         "0"
@@ -213,8 +217,10 @@ const WeekCalendar = ({ currentDate, userId, tasks }) => {
                     // <p key={task.id} className="task">{task.title}</p>
                     <Task
                         key={task.id}
+                        id={task.id}
                         name={task.title}
                         date={task.dueDate}
+                        curStatus={task.status}
                         hour={`${task.hour}:${String(task.minute).padStart(
                             2,
                             "0"

@@ -389,16 +389,6 @@ app.post("/update-task", async (req, res) => {
         minute,
         taskId,
     } = req.body;
-    console.log("Received task update request:", {
-        title,
-        description,
-        dueDate,
-        priority,
-        hour,
-        minute,
-        userId,
-    });
-
     db.query(
         `UPDATE tasks 
         SET title = ?, description = ?, dueDate = ?, priority = ?, 
@@ -428,7 +418,7 @@ app.post("/update-status", async (req, res) => {
 
     db.query(
         `UPDATE tasks
-        SET status =? WHERE id =?`,
+        SET status =? WHERE id = ?`,
         [status, taskId],
         (err, results) => {
           if (err) {
@@ -471,7 +461,33 @@ app.post("/delete-task", async (req, res) => {
           });
         }
     )
-})
+});
+
+app.post("/request-user", async (req, res) => {
+    const { userId } = req.body;
+
+    db.query(
+        `SELECT * FROM users WHERE id =?;`,
+        [userId],
+        (err, results) => {
+            if (err) {
+                console.error("Error fetching user:", err);
+                return res.status(500).json({
+                    success: false,
+                    error: "Internal Server Error", 
+                });
+            }
+
+            let user = results[0];
+            let password = 
+            res.status(200).json({
+                success: true,
+                message: "User fetched successfully",
+                user: results[0]
+            });
+        }
+    );
+});
 
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
