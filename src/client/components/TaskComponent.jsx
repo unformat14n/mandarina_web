@@ -9,7 +9,7 @@ function TaskListItem({ id, name, date, hour, priority, status, description }) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                }, 
+                },
                 body: JSON.stringify({
                     taskId: id,
                 }),
@@ -17,14 +17,14 @@ function TaskListItem({ id, name, date, hour, priority, status, description }) {
             const data = await response.json();
 
             if (data.success) {
-               // setTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id)); 
+                // setTasks((prevTasks) => prevTasks.filter((t) => t.id !== task.id));
             } else {
                 console.error("Error deleting task:", data.error);
             }
         } catch (error) {
             console.error("Error deleting task:", error);
         }
-    }
+    };
 
     return (
         <div key={id} className="task-li">
@@ -63,61 +63,64 @@ function TaskListItem({ id, name, date, hour, priority, status, description }) {
 }
 
 function Task({ name, date, hour, priority }) {
+    const handleClick = () => {
+        console.log("Clicked");
+    };
+
     return (
-        <button className= {`task task-${priority.toLocaleLowerCase()}`}
-        onClick = {() => console.log("Clicked")}
-        style = {{border: 'none', background: 'none', padding: 0, width: '100%',
-        textAlign: 'left',
-        }}>
-            <div className={`task task-${priority.toLocaleLowerCase()}`}>
-                <h3 className="task-name">{name}</h3>
-                <div className="task-content">
-                    <p className="task-date">
-                        {new Date(date).toISOString().split("T")[0]}
-                    </p>
-                    <p className="task-hour">{hour}</p>
-                    <button className="complete-btn"onClick={(e) => {
-                        e.stopPropagation(); // Prevent the event from bubbling up to the parent button
-                        console.log("Completed clicked");}}
-                        >
-                        <div className="btn-row">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                className="smol-icon">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            <p>Completed</p>
-                        </div>
-                    </button>
-                    <button className="complete-btn"
+        <div
+            onDoubleClick={handleClick}
+            className={`task task-${priority.toLocaleLowerCase()}`}>
+            <h3 className="task-name">{name}</h3>
+            <div className="task-content">
+                <p className="task-date">
+                    {new Date(date).toISOString().split("T")[0]}
+                </p>
+                <p className="task-hour">{hour}</p>
+                <button
+                    className="status-btn"
                     onClick={(e) => {
                         e.stopPropagation(); // Prevent the event from bubbling up to the parent button
-                        console.log("In Progress clicked");}}
-                        >
-                        <div className="btn-row">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                className="smol-icon">
-                                <path
-                                    fillRule="evenodd"
-                                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 8.625a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25ZM15.375 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 10.875a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25Z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            <p>In Progress</p>
-                        </div>
-                    </button>
-                </div>
+                        console.log("Completed clicked");
+                    }}>
+                    <div className="btn-row">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="smol-icon">
+                            <path
+                                fillRule="evenodd"
+                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        <p>Completed</p>
+                    </div>
+                </button>
+                <button
+                    className="status-btn"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent the event from bubbling up to the parent button
+                        console.log("In Progress clicked");
+                    }}>
+                    <div className="btn-row">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="smol-icon">
+                            <path
+                                fillRule="evenodd"
+                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm0 8.625a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25ZM15.375 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0ZM7.5 10.875a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        <p>In Progress</p>
+                    </div>
+                </button>
             </div>
-        </button>
+        </div>
     );
 }
 
