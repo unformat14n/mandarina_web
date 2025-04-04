@@ -54,6 +54,7 @@ h3.task-name {
     display: flex;
     width: 100%;
     flex-direction: row;
+    flex-grow: 0;
     padding: 0em;
     border-radius: 0.5em;
     justify-content: space-between;
@@ -95,6 +96,53 @@ h3.task-name {
 .task-status-li {
     color: var(--secondary);
     font-weight: 900;
+}
+
+.btn-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0em;
+}
+
+.btn-row p {
+    opacity: 0;
+    transition:all 0.5s ease-in-out;
+}
+
+.btn-row:hover p {
+    opacity: 1;
+}
+
+.smol-icon {
+    max-width: 30px;
+    width: 100%;
+    /* height: 100%; */
+    margin-right: 0.5em;
+    color: var(--primary);
+    transition:all 0.5s ease-in-out;
+}
+.complete-btn {
+    background: none;
+    width: auto;
+    flex-grow: 0;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;  
+    /* border: none; */
+}
+
+.complete-btn:hover {
+    background: none;
+    flex-grow: 0;
+    border-radius: 50%;
+    color: var(--secondary);
+    /* border: none; */
+}
+.complete-btn:hover .smol-icon {
+    color: var(--secondary);
 }
 
 @media (max-width: 1000px)  {

@@ -6,38 +6,7 @@ import { ModalContext } from "./MainPage";
 import Task from "./TaskComponent";
 import { useUser } from "../contexts/UserContext";
 
-const MonthCalendar = ({ currentDate, userId }) => {
-    const [tasks, setTasks] = useState([]);
-
-    useEffect(() => {
-        const getTasksInMonth = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                    }),
-                });
-
-                const data = await response.json();
-                console.log("response", data);
-
-                if (data.success) {
-                    setTasks(data.tasks); // Store tasks in state
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
-
-        getTasksInMonth();
-    }, [userId, currentDate]);
-
+const MonthCalendar = ({ currentDate, userId, tasks }) => {
     const getDaysInMonth = (year, month) => {
         return new Date(year, month + 1, 0).getDate();
     };
@@ -118,37 +87,7 @@ const MonthCalendar = ({ currentDate, userId }) => {
     );
 };
 
-const DayCalendar = ({ currentDate, userId }) => {
-    const [tasks, setTasks] = useState([]);
-    
-    useEffect(() => {
-        const getTasksInMonth = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    setTasks(data.tasks); // Store tasks in state
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
-
-        getTasksInMonth();
-    }, [userId, currentDate]);
-
+const DayCalendar = ({ currentDate, userId, tasks }) => {
     // Generates an array of 24 hours in the day
     const renderHours = () => {
         const hours = [];
@@ -207,37 +146,7 @@ const DayCalendar = ({ currentDate, userId }) => {
     );
 };
 
-const WeekCalendar = ({ currentDate, userId }) => {
-    const [tasks, setTasks] = useState([]);
-
-    useEffect(() => {
-        const getTasksInMonth = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    setTasks(data.tasks); // Store tasks in state
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
-
-        getTasksInMonth();
-    }, [userId, currentDate]);
-
+const WeekCalendar = ({ currentDate, userId, tasks }) => {
     const getWeekDays = () => {
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Get Sunday
@@ -337,6 +246,7 @@ const WeekCalendar = ({ currentDate, userId }) => {
 
 function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [tasks, setTasks] = useState([]);
     const [view, setView] = useState("month"); // Default view: Month
     const { setIsOpen } = useContext(ModalContext);
     const { userId } = useUser();
@@ -346,51 +256,31 @@ function Calendar() {
     };
 
     const handlePrev = () => {
-        if (view == "month") {
-            setCurrentDate(
-                new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
-            );
-        } else if (view == "week") {
-            setCurrentDate(
-                new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    currentDate.getDate() - 7
-                )
-            );
-        } else {
-            setCurrentDate(
-                new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    currentDate.getDate() - 1
-                )
-            );
-        }
+        setCurrentDate((prevDate) => {
+            const newDate = new Date(prevDate);
+            if (view === "month") {
+                newDate.setMonth(newDate.getMonth() - 1);
+            } else if (view === "week") {
+                newDate.setDate(newDate.getDate() - 7);
+            } else {
+                newDate.setDate(newDate.getDate() - 1);
+            }
+            return newDate;
+        });
     };
 
     const handleNext = () => {
-        if (view == "month") {
-            setCurrentDate(
-                new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
-            );
-        } else if (view == "week") {
-            setCurrentDate(
-                new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    currentDate.getDate() + 7
-                )
-            );
-        } else {
-            setCurrentDate(
-                new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    currentDate.getDate() + 1
-                )
-            );
-        }
+        setCurrentDate((prevDate) => {
+            const newDate = new Date(prevDate);
+            if (view === "month") {
+                newDate.setMonth(newDate.getMonth() + 1);
+            } else if (view === "week") {
+                newDate.setDate(newDate.getDate() + 7);
+            } else {
+                newDate.setDate(newDate.getDate() + 1);
+            }
+            return newDate;
+        });
     };
 
     const renderToday = () => {
@@ -400,6 +290,55 @@ function Calendar() {
     const createTask = () => {
         setIsOpen(true);
     };
+
+    // const renderCalendar = () => {
+    //     switch (view) {
+    //         case "month":
+    //             return <MonthCalendar currentDate={currentDate} userId={userId} tasks={tasks} />;
+    //         case "week":
+    //             return <WeekCalendar currentDate={currentDate} userId={userId} tasks={tasks} />;
+    //         case "day":
+    //             return <DayCalendar currentDate={currentDate} userId={userId} tasks={tasks} />;
+    //         default:
+    //             return null;
+    //     }
+    // }
+
+    useEffect(() => {
+        /**
+         * Resets the current date to the same date every time the tasks are updated.
+         * This is to ensure a refresh of the calendar every time a task is added or deleted.
+         */
+        setCurrentDate((prevDate) => new Date(prevDate));
+    }, [tasks]);
+
+    useEffect(() => {
+        const getTasksInMonth = async () => {
+            try {
+                const response = await fetch("/get-tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    setTasks(data.tasks); // Store tasks in state
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        getTasksInMonth();
+    }, [userId, tasks]);
 
     return (
         <div className="calendar-container">
@@ -461,22 +400,29 @@ function Calendar() {
                         />
                     </svg>
                 </button>
-                {/* Calendar View Content */}
-                {/* <div className="calendar-contents">
-                    {view === "month" && <MonthView />}
-                    {view === "week" && <WeekView />}
-                    {view === "day" && <DayView />}
-                </div> */}
             </div>
-            {/* <MonthCalendar currentDate={currentDate} /> */}
-            {/* Calendar View Content */}
             <div className="calendar-contents">
                 {view === "month" && (
-                    <MonthCalendar currentDate={currentDate} userId={userId} />
+                    <MonthCalendar
+                        currentDate={currentDate}
+                        userId={userId}
+                        tasks={tasks}
+                    />
                 )}
-                {/* {view === "week" && <WeekView />} */}
-                {view === "day" && <DayCalendar currentDate={currentDate} userId={userId} />}
-                {view === "week" && <WeekCalendar currentDate={currentDate} userId={userId} />}
+                {view === "week" && (
+                    <WeekCalendar
+                        currentDate={currentDate}
+                        userId={userId}
+                        tasks={tasks}
+                    />
+                )}
+                {view === "day" && (
+                    <DayCalendar
+                        currentDate={currentDate}
+                        userId={userId}
+                        tasks={tasks}
+                    />
+                )}
             </div>
         </div>
     );

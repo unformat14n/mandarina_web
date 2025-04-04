@@ -71,11 +71,6 @@ function Tasks() {
         ));
     };
 
-
-    const handleDelete = (task) => {
-        console.log("Delete task: ", task);
-    }
-
     return (
         /* Tasks header*/
 
