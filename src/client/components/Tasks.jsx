@@ -54,7 +54,7 @@ function Tasks() {
         };
 
         getTasksInMonth();
-    }, [userId]);
+    }, [userId, tasks]);
 
     const renderTasks = () => {
         return tasks.map((task, index) => (
@@ -67,7 +67,7 @@ function Tasks() {
                 priority={task.priority}
                 status={task.status}
                 description={task.description}
-            />   
+            />
         ));
     };
 

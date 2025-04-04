@@ -358,7 +358,6 @@ app.post("/create-task", async (req, res) => {
 
 app.post("/get-tasks", async (req, res) => {
     const { userId } = req.body;
-    console.log("Received task fetch request:", { userId });
 
     db.query(
         `SELECT * FROM tasks WHERE user_id = ?;`,
@@ -371,8 +370,6 @@ app.post("/get-tasks", async (req, res) => {
                     error: "Internal Server Error",
                 });
             }
-            console.log("Tasks fetched successfully");
-            // console.log(results)
             res.status(200).json({
                 success: true,
                 message: "Tasks fetched successfully",
