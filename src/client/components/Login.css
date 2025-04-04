@@ -9,7 +9,7 @@
     background: var(--bg);
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(88, 78, 68, 0.271);
     width: 100%;
     max-width: 400px;
 }
@@ -21,11 +21,14 @@
 }
 
 .card input {
-    margin: 0 0.75em;
-    border: 1px solid var(--bg-secondary);
-    border-radius: 4px;
+
+    border: 2px solid var(--bg-secondary);
+    border-radius: 5px;
     font-size: 1rem;
     margin-bottom: 1rem;
+    display: flex;
+    width: 97%;
+    height: 23px;
 }
 
 .card input:focus {
@@ -38,14 +41,14 @@
     background-color: #ff7300;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 1rem;
     cursor: pointer;
     width: 100%;
 }
 
 .card button:hover {
-    background-color: #4cbd35;
+    background-color: #6dbc5f;
 }
 
 .card p {
@@ -75,18 +78,6 @@
 
 .modal-close-button:hover {
     background-color: #c82333;
-}
-
-.email-container {
-    position: relative;
-    width: auto;
-    margin-bottom: 1rem; 
-}
-
-.password-container {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1rem;
 }
 
 .size-medium {

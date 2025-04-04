@@ -60,7 +60,7 @@ function Login() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <br />
+
                     <label htmlFor="psswd">Password: </label>
                     <input
                         type="password"
@@ -69,7 +69,7 @@ function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <br />
+    
                     <button type="submit" style={{display: 'none'}}></button>
                 </form>
                 <button onClick={handleLogin}>Login</button>
