@@ -1,6 +1,7 @@
 import express from "express";
 import ViteExpress from "vite-express";
 import mysql from "mysql2";
+import * as dbOps from "./dbOps.js";
 import cors from "cors"; // Import CORS module
 import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
@@ -62,37 +63,6 @@ async function sendVerificationEmail(email, code) {
     }
 }
 
-function setupDatabase(db) {
-    const createDB = `CREATE DATABASE IF NOT EXISTS mandarina;`;
-    const useDB = `USE mandarina;`;
-    const usersTable = `
-        CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(50) NOT NULL UNIQUE,
-            password VARCHAR(255) NOT NULL,
-            theme VARCHAR(10) NOT NULL DEFAULT 'light'
-        );`;
-    const taskTable = ` 
-        CREATE TABLE IF NOT EXISTS tasks (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(255),
-            description TEXT,
-            dueDate DATE,
-            priority ENUM('Low', 'Medium', 'High'),
-            status ENUM('Pending', 'In Progress', 'Completed'),
-            hour int,
-            minute int,
-            user_id INT,
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        );`;
-    const setupQueries = `${createDB} ${useDB} ${usersTable} ${taskTable}`;
-
-    db.query(setupQueries, (err) => {
-        if (err) throw err;
-        console.log("Database and table setup complete.");
-    });
-}
-
 function validatePassword(password) {
     if (password.length < 8) {
         return {
@@ -123,7 +93,7 @@ function validatePassword(password) {
 }
 
 // Initialize Database and Tables
-setupDatabase(db);
+dbOps.setupDatabase(db);
 
 app.get("/hello", (req, res) => {
     res.send("Hello Vite + React!");
@@ -148,8 +118,7 @@ app.post("/login", async (req, res) => {
         });
     }
 
-    const query = "SELECT * FROM users WHERE email = ?;";
-    db.query(query, [email], async (err, results) => {
+    dbOps.getUserByEmail(db, email, async (err, results) => {
         if (err) return res.status(500).json({ error: "Database error" });
         if (results.length > 0) {
             const match = await bcrypt.compare(password, results[0].password);
@@ -218,8 +187,7 @@ app.post("/register", async (req, res) => {
     }
 
     // Check if the username already exists
-    const checkEmailQuery = "SELECT 1 FROM users WHERE email = ?";
-    db.query(checkEmailQuery, [email], async (err, results) => {
+    dbOps.checkEmail(db, email, async (err, results) => {
         if (err) {
             console.error("Error checking email:", err);
             return res.status(500).json({
@@ -273,10 +241,7 @@ app.post("/verify", async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashed = await bcrypt.hash(password, salt);
 
-            db.query(
-                `INSERT INTO users (email, password) VALUES (?, ?)`,
-                [email, hashed],
-                (err, results) => {
+            dbOps.addUser(db, email, async (err, results) => {
                     if (err) {
                         console.error("Error inserting user:", err);
                         return res.status(500).json({
@@ -324,21 +289,9 @@ app.post("/create-task", async (req, res) => {
         minute,
         userId,
     } = req.body;
-    console.log("Received task creation request:", {
-        title,
-        description,
-        dueDate,
-        priority,
-        status,
-        hour,
-        minute,
-        userId,
-    });
 
-    db.query(
-        `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute, user_id) VALUES (?,?,?,?,?,?,?,?)`,
-        [title, description, dueDate, priority, status, hour, minute, userId],
-        (err, results) => {
+    dbOps.createTask
+    (db, title, description, dueDate, priority, status, hour, minute, userId, async (err, results) => {
             if (err) {
                 console.error("Error inserting user:", err);
                 return res.status(500).json({
@@ -359,10 +312,7 @@ app.post("/create-task", async (req, res) => {
 app.post("/get-tasks", async (req, res) => {
     const { userId } = req.body;
 
-    db.query(
-        `SELECT * FROM tasks WHERE user_id = ?;`,
-        [userId],
-        (err, results) => {
+    dbOps.getTasksByUserID(db, userId, async(err, results) => {
             if (err) {
                 console.error("Error fetching tasks:", err);
                 return res.status(500).json({
@@ -389,12 +339,8 @@ app.post("/update-task", async (req, res) => {
         minute,
         taskId,
     } = req.body;
-    db.query(
-        `UPDATE tasks 
-        SET title = ?, description = ?, dueDate = ?, priority = ?, 
-        status = ?, hour = ?, minute = ? WHERE id = ?`,
-        [title, description, dueDate, priority, hour, minute, taskId],
-        (err, results) => {
+    dbOps.updateTasky(
+        db,title, description, dueDate, priority, hour, minute, taskId, async (err, results) => {
           if (err) {
             console.error("Error editing task:", err);
             return res.status(500).json({
@@ -415,12 +361,7 @@ app.post("/update-task", async (req, res) => {
 app.post("/update-status", async (req, res) => {
     const { status, taskId } = req.body;
     console.log("Received task status update request:", { status, taskId }); 
-
-    db.query(
-        `UPDATE tasks
-        SET status =? WHERE id = ?`,
-        [status, taskId],
-        (err, results) => {
+    dbOps.updateStatus(db, status, taskId, async (err, results) => {
           if (err) {
             console.error("Error updating task status:", err);
             return res.status(500).json({
@@ -442,10 +383,7 @@ app.post("/delete-task", async (req, res) => {
     const { taskId } = req.body;
     console.log("Received task deletion request:", { taskId });
 
-    db.query(
-        `DELETE FROM tasks WHERE id =?;`,
-        [taskId],  
-        (err, results) => {
+    dbOps.deleteTask(db, taskId, async (err, results) => {
           if (err) {
             console.error("Error deleting task:", err);
             return res.status(500).json({
@@ -454,7 +392,7 @@ app.post("/delete-task", async (req, res) => {
             });
           } 
           console.log("Task succesfully deleted");
-
+ 
           res.status(200).json({
             success: true,
             message: "Task deleted successfully",
@@ -463,13 +401,27 @@ app.post("/delete-task", async (req, res) => {
     )
 });
 
+app.post("delete-old-tasks", async (req, res) => {
+    const { userId } = req.body;
+
+    // Deletes 1 month old comp. tasks and 3 month old tasks in general.
+    dbOps.deleteOldTasks(db, userId, async(err, results) => {
+           if (err) {
+            console.error("Error deleting old tasks:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+           }
+           console.log("Old tasks succesfully deleted"); 
+        }
+    )
+});
+
 app.post("/request-user", async (req, res) => {
     const { userId } = req.body;
 
-    db.query(
-        `SELECT * FROM users WHERE id =?;`,
-        [userId],
-        (err, results) => {
+    dbOps.requestUser(db, userId, async (err, results) => {
             if (err) {
                 console.error("Error fetching user:", err);
                 return res.status(500).json({
@@ -489,6 +441,39 @@ app.post("/request-user", async (req, res) => {
     );
 });
 
+app.post("/delete-user", async (req, res) => {
+    const { userId } = req.body;
+    console.log("Received user deletion request:", { userId });
+
+    db.Ops.deleteUser(db, userId, async (err, results) => {
+           if (err) {
+            console.error("Error deleting user:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+           } 
+           console.log("User succesfully deleted");
+           res.status(200).json({
+            success: true,
+            message: "User deleted successfully",
+           });
+        }
+    )
+});
+
+app.post("/get-task-progress", async (req, res) => {
+    const { userId } = req.body;
+    dbOps.getTaskProgress(db, userId, async (err, results) => {
+            if (err) {
+                console.error("Error fetching task progress:", err);
+                return res.status(500).json({
+                    success: false,
+                    error: "Internal Server Error",
+                });  
+            }
+    });
+});
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
 
