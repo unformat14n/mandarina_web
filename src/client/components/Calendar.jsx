@@ -260,8 +260,6 @@ function Calendar() {
     const { setIsOpen } = useContext(ModalContext);
     const { userId } = useUser();
 
-    console.log(userId, tasks, view, currentDate)
-
     const handleViewChange = (event) => {
         setView(event.target.value);
     };
@@ -349,7 +347,7 @@ function Calendar() {
         };
 
         getTasksInMonth();
-    }, [userId, tasks]);
+    }, [userId]);
 
     return (
         <div className="calendar-container">
