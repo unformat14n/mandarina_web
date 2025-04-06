@@ -7,6 +7,7 @@ import Task from "./TaskComponent";
 import { useUser } from "../contexts/UserContext";
 
 const MonthCalendar = ({ currentDate, userId, tasks }) => {
+    console.log(userId, tasks, currentDate)
     const getDaysInMonth = (year, month) => {
         return new Date(year, month + 1, 0).getDate();
     };
@@ -90,6 +91,7 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
 };
 
 const DayCalendar = ({ currentDate, userId, tasks }) => {
+    console.log(userId, tasks, currentDate)
     // Generates an array of 24 hours in the day
     const renderHours = () => {
         const hours = [];
@@ -151,6 +153,7 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
 };
 
 const WeekCalendar = ({ currentDate, userId, tasks }) => {
+    console.log(userId, tasks, currentDate)
     const getWeekDays = () => {
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Get Sunday
