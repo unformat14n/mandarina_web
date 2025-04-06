@@ -83,6 +83,7 @@ function MainPage({ type }) {
                     isOpen={isOpen}
                     onRequestClose={() => setIsOpen(false)}
                     contentLabel="New Task"
+                    className={"infront"}
                     closeTimeoutMS={100}
                     style={{
                         overlay: {
@@ -90,15 +91,9 @@ function MainPage({ type }) {
                         },
                         content: {
                             // position: "sticky",
-                            background: "var(--bg)",
-                            color: "var(--fg)",
-                            zIndex: "1000",
-                            width: "420px",
-                            height: "420px",
-                            margin: "auto",
-                            padding: "2em",
-                            borderRadius: "12px",
-                            textAlign: "left",
+                            top: "50%",
+                            left: "50%",
+                            right: "auto",
                         },
                     }}>
                     <h2 style={{ margin: "0", padding: "0" }}>New Task</h2>

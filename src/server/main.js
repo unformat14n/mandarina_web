@@ -126,7 +126,8 @@ app.post("/login", async (req, res) => {
                 console.log("Invalid password");
                 return res.status(401).json({
                     success: false,
-                    message: "Your email or password is incorrect. Please try again",
+                    message:
+                        "Your email or password is incorrect. Please try again",
                 });
             } else {
                 const token = jwt.sign(
@@ -136,7 +137,7 @@ app.post("/login", async (req, res) => {
                         expiresIn: "2h", // Token expiration time
                     }
                 );
-                console.log(results[0])
+                console.log(results[0]);
                 console.log("Information correct");
                 res.status(200).json({
                     success: true,
@@ -242,30 +243,29 @@ app.post("/verify", async (req, res) => {
             const hashed = await bcrypt.hash(password, salt);
 
             dbOps.addUser(db, email, async (err, results) => {
-                    if (err) {
-                        console.error("Error inserting user:", err);
-                        return res.status(500).json({
-                            success: false,
-                            error: "Internal Server Error",
-                        });
-                    }
-                    console.log("User registered successfully");
-
-                    const token = jwt.sign(
-                        { email: email, id: results.insertId },
-                        SECRET_KEY,
-                        { expiresIn: "2h" } // Token expiration time
-                    );
-
-                    delete verificationCodes[email]; // Clear the temp code
-                    res.status(201).json({
-                        success: true,
-                        message: "Code correct, user registered successfully",
-                        token: token,
-                        id: results.insertId
+                if (err) {
+                    console.error("Error inserting user:", err);
+                    return res.status(500).json({
+                        success: false,
+                        error: "Internal Server Error",
                     });
                 }
-            );
+                console.log("User registered successfully");
+
+                const token = jwt.sign(
+                    { email: email, id: results.insertId },
+                    SECRET_KEY,
+                    { expiresIn: "2h" } // Token expiration time
+                );
+
+                delete verificationCodes[email]; // Clear the temp code
+                res.status(201).json({
+                    success: true,
+                    message: "Code correct, user registered successfully",
+                    token: token,
+                    id: results.insertId,
+                });
+            });
         } catch (error) {
             console.error("Error during validation:", error);
             return res.status(500).json({
@@ -290,8 +290,17 @@ app.post("/create-task", async (req, res) => {
         userId,
     } = req.body;
 
-    dbOps.createTask
-    (db, title, description, dueDate, priority, status, hour, minute, userId, async (err, results) => {
+    dbOps.createTask(
+        db,
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        hour,
+        minute,
+        userId,
+        async (err, results) => {
             if (err) {
                 console.error("Error inserting user:", err);
                 return res.status(500).json({
@@ -312,25 +321,27 @@ app.post("/create-task", async (req, res) => {
 app.post("/get-tasks", async (req, res) => {
     const { userId } = req.body;
 
-    dbOps.getTasksByUserID(db, userId, async(err, results) => {
-            if (err) {
-                console.error("Error fetching tasks:", err);
-                return res.status(500).json({
-                    success: false,
-                    error: "Internal Server Error",
-                });
-            }
-            res.status(200).json({
-                success: true,
-                message: "Tasks fetched successfully",
-                tasks: results,
+    dbOps.getTasksByUserID(db, userId, async (err, results) => {
+        if (err) {
+            console.error("Error fetching tasks:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
             });
         }
-    );
+        res.status(200).json({
+            success: true,
+            message: "Tasks fetched successfully",
+            tasks: results,
+        });
+    });
 });
 
 app.post("/update-task", async (req, res) => {
-    const {
+    const { title, description, dueDate, priority, hour, minute, taskId } =
+        req.body;
+    dbOps.updateTasky(
+        db,
         title,
         description,
         dueDate,
@@ -338,107 +349,100 @@ app.post("/update-task", async (req, res) => {
         hour,
         minute,
         taskId,
-    } = req.body;
-    dbOps.updateTasky(
-        db,title, description, dueDate, priority, hour, minute, taskId, async (err, results) => {
-          if (err) {
-            console.error("Error editing task:", err);
-            return res.status(500).json({
-                success: false,
-                error: "Internal Server Error",
-            });
-          }  
-          console.log("Task succesfully updated");
+        async (err, results) => {
+            if (err) {
+                console.error("Error editing task:", err);
+                return res.status(500).json({
+                    success: false,
+                    error: "Internal Server Error",
+                });
+            }
+            console.log("Task succesfully updated");
 
-          res.status(200).json({
-            success: true,
-            message: "Task updated successfully",
-          });
+            res.status(200).json({
+                success: true,
+                message: "Task updated successfully",
+            });
         }
-    )
+    );
 });
 
 app.post("/update-status", async (req, res) => {
     const { status, taskId } = req.body;
-    console.log("Received task status update request:", { status, taskId }); 
+    console.log("Received task status update request:", { status, taskId });
     dbOps.updateStatus(db, status, taskId, async (err, results) => {
-          if (err) {
+        if (err) {
             console.error("Error updating task status:", err);
             return res.status(500).json({
                 success: false,
                 error: "Internal Server Error",
             });
-          } 
-          console.log("Task status succesfully updated");
+        }
+        console.log("Task status succesfully updated");
 
-          res.status(200).json({
+        res.status(200).json({
             success: true,
             message: "Task status updated successfully",
-          });
-        } 
-    )
-})
+        });
+    });
+});
 
 app.post("/delete-task", async (req, res) => {
     const { taskId } = req.body;
     console.log("Received task deletion request:", { taskId });
 
     dbOps.deleteTask(db, taskId, async (err, results) => {
-          if (err) {
+        if (err) {
             console.error("Error deleting task:", err);
             return res.status(500).json({
                 success: false,
                 error: "Internal Server Error",
             });
-          } 
-          console.log("Task succesfully deleted");
- 
-          res.status(200).json({
+        }
+        console.log("Task succesfully deleted");
+
+        res.status(200).json({
             success: true,
             message: "Task deleted successfully",
-          });
-        }
-    )
+        });
+    });
 });
 
 app.post("delete-old-tasks", async (req, res) => {
     const { userId } = req.body;
 
     // Deletes 1 month old comp. tasks and 3 month old tasks in general.
-    dbOps.deleteOldTasks(db, userId, async(err, results) => {
-           if (err) {
+    dbOps.deleteOldTasks(db, userId, async (err, results) => {
+        if (err) {
             console.error("Error deleting old tasks:", err);
             return res.status(500).json({
                 success: false,
                 error: "Internal Server Error",
             });
-           }
-           console.log("Old tasks succesfully deleted"); 
         }
-    )
+        console.log("Old tasks succesfully deleted");
+    });
 });
 
 app.post("/request-user", async (req, res) => {
     const { userId } = req.body;
 
     dbOps.requestUser(db, userId, async (err, results) => {
-            if (err) {
-                console.error("Error fetching user:", err);
-                return res.status(500).json({
-                    success: false,
-                    error: "Internal Server Error", 
-                });
-            }
-
-            let user = results[0];
-            let password = 
-            res.status(200).json({
-                success: true,
-                message: "User fetched successfully",
-                user: results[0]
+        if (err) {
+            console.error("Error fetching user:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
             });
         }
-    );
+
+        let user = results[0];
+        let password = res.status(200).json({
+            success: true,
+            message: "User fetched successfully",
+            user: results[0],
+        });
+    });
 });
 
 app.post("/delete-user", async (req, res) => {
@@ -446,34 +450,47 @@ app.post("/delete-user", async (req, res) => {
     console.log("Received user deletion request:", { userId });
 
     db.Ops.deleteUser(db, userId, async (err, results) => {
-           if (err) {
+        if (err) {
             console.error("Error deleting user:", err);
             return res.status(500).json({
                 success: false,
                 error: "Internal Server Error",
             });
-           } 
-           console.log("User succesfully deleted");
-           res.status(200).json({
+        }
+        console.log("User succesfully deleted");
+        res.status(200).json({
             success: true,
             message: "User deleted successfully",
-           });
-        }
-    )
+        });
+    });
 });
 
 app.post("/get-task-progress", async (req, res) => {
     const { userId } = req.body;
     dbOps.getTaskProgress(db, userId, async (err, results) => {
-            if (err) {
-                console.error("Error fetching task progress:", err);
-                return res.status(500).json({
-                    success: false,
-                    error: "Internal Server Error",
-                });  
-            }
+        if (err) {
+            console.error("Error fetching task progress:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+        }
     });
 });
+
+app.post("/get-task-due-soon", async (req, res) => {
+    const { userId } = req.body;
+    dbOps.getTasksDueSoon(db, userId, async (err, results) => {
+        if (err) {
+            console.error("Error fetching task progress:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+        }
+    });
+});
+
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
 

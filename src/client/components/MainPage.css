@@ -5,7 +5,7 @@ nav#sidebar {
     /* height: 100%; */
 
     z-index: 2;
-    box-shadow: 0.1em 0 0.4em  rgba(0, 0, 0, 0.2);
+    box-shadow: 0.1em 0 0.4em rgba(0, 0, 0, 0.2);
 
     display: flex;
     flex-direction: column;
@@ -52,7 +52,7 @@ section.main {
 
 /* Optional: Hover effect for the items */
 .sidebar-item:hover {
-    background-color: var(--secondary); 
+    background-color: var(--secondary);
     font-size: 1.5em;
     font-weight: 900;
     font-size: 1.5em;
@@ -77,13 +77,14 @@ section.main {
 }
 
 .mini-week > .mini-day:first-child, /* First "S" (Sunday) */
-.mini-week > .mini-day:last-child {  /* Last "S" (Saturday) */
+.mini-week > .mini-day:last-child {
+    /* Last "S" (Saturday) */
     color: var(--secondary); /* Or any color you prefer */
     font-weight: bold;
 }
 
 .mini-day {
-    text-align:center;
+    text-align: center;
 }
 
 .mini-contents {
@@ -92,13 +93,29 @@ section.main {
 }
 
 .mini-date {
-    text-align:center;
+    text-align: center;
     /*padding: 0.5em; */
+}
+
+.infront {
+    background: var(--bg);
+    color: var(--fg);
+    width: 420px;
+    height: 420px;
+    margin: auto;
+    z-index: 10;
+    padding: 2em;
+    border-radius: 12px;
+    text-align: left;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
 }
 
 .mini-today {
     border-radius: 10%;
-    text-align:center;
+    text-align: center;
     background-color: var(--primary);
     color: white;
     font-weight: 900;
@@ -124,7 +141,6 @@ section.main {
 .sidebar-item:hover .size-medium {
     color: white;
 }
-
 
 @media (max-width: 1000px) {
     .sidebar-item span.sidebar-text {

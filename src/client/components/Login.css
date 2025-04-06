@@ -38,7 +38,7 @@
 }
 
 .card button {
-    background-color: #ff7300;
+    background-color: var(--primary);
     color: white;
     border: none;
     border-radius: 6px;
@@ -48,7 +48,7 @@
 }
 
 .card button:hover {
-    background-color: #6dbc5f;
+    background-color: var(--alt-primary);
 }
 
 .card p {
@@ -57,7 +57,8 @@
 }
 
 .card a {
-    color: #4a90e2;
+    color: var(--alt-primary);
+    font-weight: bold;
     text-decoration: none;
 }
 
@@ -86,13 +87,4 @@
     max-width: 2em;
 }
 
-.password-toggle {
-    background: none !important;
-    color: black !important;
-    border: none!important;
-    padding: 0!important;
-    margin-block: 0!important;
-
-    position: absolute;
-}
 

@@ -102,10 +102,9 @@ export function getTasksDueSoon(db, user_id, callback){
     FROM tasks 
     WHERE user_id =? 
     AND dueDate >= CURDATE() 
-    AND dueDate <= DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+    AND dueDate <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
     AND status != 'Completed'
-    ORDER BY dueDate ASC
-    LIMIT 6`;
+    ORDER BY dueDate ASC`;
     db.query(query, [user_id], callback);
 }
 
