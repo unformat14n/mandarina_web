@@ -34,14 +34,14 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
             }
 
             // Filter tasks for the current day
-            const tasksForDay = tasks.filter((task) => {
+            const tasksForDay = tasks ? tasks.filter((task) => {
                 const taskDate = new Date(task.dueDate);
                 return (
                     taskDate.getDate() === day &&
                     taskDate.getMonth() === month &&
                     taskDate.getFullYear() === year
                 );
-            });
+            }) : [];
 
             // Create task components
             const taskComps = tasksForDay.map((task) => (
@@ -104,7 +104,7 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
                     ? "12 PM"
                     : `${hour - 12} PM`;
 
-            const tasksForDay = tasks.filter((task) => {
+            const tasksForDay = tasks ? tasks.filter((task) => {
                 const taskDate = new Date(task.dueDate);
                 return (
                     taskDate.getDate() === day.getDate() &&
@@ -112,7 +112,7 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
                     taskDate.getMonth() === day.getMonth() &&
                     taskDate.getFullYear() === day.getFullYear()
                 );
-            });
+            }) : [];
 
             // Create task components
             const taskComps = tasksForDay.map((task) => (
@@ -202,7 +202,7 @@ const WeekCalendar = ({ currentDate, userId, tasks }) => {
             for (let i = 0; i < 7; i++) {
                 const day = new Date(startOfWeek.getTime()); // Create a new instance for each day
                 day.setDate(startOfWeek.getDate() + i);
-                const tasksForDay = tasks.filter((task) => {
+                const tasksForDay = tasks ? tasks.filter((task) => {
                     const taskDate = new Date(task.dueDate);
                     return (
                         taskDate.getDate() === day.getDate() &&
@@ -210,7 +210,7 @@ const WeekCalendar = ({ currentDate, userId, tasks }) => {
                         taskDate.getMonth() === day.getMonth() &&
                         taskDate.getFullYear() === day.getFullYear()
                     );
-                });
+                }) : [];
 
                 // Create task components
                 const taskComps = tasksForDay.map((task) => (
@@ -256,6 +256,8 @@ function Calendar() {
     const [view, setView] = useState("month"); // Default view: Month
     const { setIsOpen } = useContext(ModalContext);
     const { userId } = useUser();
+
+    console.log(userId, tasks, view, currentDate)
 
     const handleViewChange = (event) => {
         setView(event.target.value);
