@@ -95,16 +95,20 @@ function Task({ id, name, date, hour, priority, curStatus }) {
         }
     };
 
+    const formatTime = (hour) => {
+        const [hours, minutes] = hour.split(":");
+        const period = hours >= 12 ? "PM" : "AM";
+        const formattedHours = hours % 12 || 12;
+        return `${formattedHours}:${minutes} ${period}`;
+    }
+
     return (
         <div
             onDoubleClick={handleClick}
             className={`task task-${priority.toLocaleLowerCase()} task-${status.replaceAll(" ", "-").toLocaleLowerCase()}`}>
             <h3 className="task-name">{name}</h3>
             <div className="task-content">
-                <p className="task-date">
-                    {new Date(date).toISOString().split("T")[0]}
-                </p>
-                <p className="task-hour">{hour}</p>
+                <p className="task-hour">{formatTime(hour)}</p>
                 {status != "Completed" && (
                     <button className="status-btn" onClick={() => updateStatus("Completed")}>
                         <div className="btn-row">

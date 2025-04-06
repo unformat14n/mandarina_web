@@ -14,7 +14,7 @@ const ModalContext = createContext(null);
 function MainPage({ type }) {
     const [isOpen, setIsOpen] = useState(false);
     const [taskName, setTaskName] = useState("");
-    const [taskContent, setTaskContent] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
     const [taskDate, setTaskDate] = useState("");
     const [taskHour, setTaskHour] = useState("");
     const [priority, setPriority] = useState("HIGH");
@@ -27,7 +27,7 @@ function MainPage({ type }) {
     );
 
     const saveTask = async () => {
-        if (!taskName || !taskContent || !taskDate || !taskHour || !priority) {
+        if (!taskName || !taskDate || !taskHour || !priority) {
             alert("Please fill in all fields");
             return;
         }
@@ -42,7 +42,7 @@ function MainPage({ type }) {
                 },
                 body: JSON.stringify({
                     title: taskName,
-                    description: taskContent,
+                    description: taskDescription,
                     dueDate: taskDate,
                     status: "PENDING",
                     hour: parseInt(hours),
@@ -56,7 +56,7 @@ function MainPage({ type }) {
             if (result.success) {
                 // Clear form and close modal
                 setTaskName("");
-                setTaskContent("");
+                setTaskDescription("");
                 setTaskDate("");
                 setTaskHour("");
                 setPriority("");
@@ -113,8 +113,8 @@ function MainPage({ type }) {
                             name="task-content"
                             rows="4"
                             cols="53"
-                            value={taskContent}
-                            onChange={(e) => setTaskContent(e.target.value)}
+                            value={taskDescription}
+                            onChange={(e) => setTaskDescription(e.target.value)}
                             style={{ resize: "none" }}
                         />
                         <label htmlFor="task-date">Due Date:</label>
