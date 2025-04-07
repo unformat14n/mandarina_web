@@ -156,4 +156,5 @@ section.main {
     border-radius: 5px;
     background-color: var(--bg-secondary);
     padding: 5px;
+    color: var(--fg);
 }

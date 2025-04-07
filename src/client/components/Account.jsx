@@ -160,10 +160,7 @@ function Account() {
                     contentLabel="Reset Password"
                     closeTimeoutMS={100}
                     style={{
-                        overlay: {
-                            backgroundColor: "rgba(238, 238, 238, 0.5)",
-
-                        },
+                        
                         content: {
                             width: "250px",
                             height: "210px",
@@ -172,6 +169,7 @@ function Account() {
                             borderRadius: "10px",
                             textAlign: "left",
                             overflowY: "hidden",
+                            backgroundColor: "var(--bg)",
     
                         },
                     }}>
@@ -188,9 +186,10 @@ function Account() {
 
                         <input
                             style={{
+                                backgroundColor: "var(--bg--secondary)",
                                 borderRadius: "10px",
                                 padding: "3px", 
-                                border: "1px solid",
+                                border: "1px solid var(--primary)",
                                 marginBottom: "10px",
                             }}
                             type="password"
@@ -202,9 +201,10 @@ function Account() {
                         <label htmlFor="confirm-password">Confirm new password: </label>
                         <input
                         style={{
-                            borderRadius: "10px",
-                            padding: "3px", 
-                            border: "1px solid",
+                                backgroundColor: "var(--bg--secondary)",
+                                borderRadius: "10px",
+                                padding: "3px", 
+                                border: "1px solid var(--primary)",
         
                         }}
                             type="password"

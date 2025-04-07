@@ -159,10 +159,12 @@ h2 {
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
+    margin-left: 15px;
 }
 
 .task-status {
     text-align: left;
+    margin-left: 20px;
 }
 
 /* Priority colors */
