@@ -94,6 +94,8 @@ function MainPage({ type }) {
                             top: "50%",
                             left: "50%",
                             right: "auto",
+                            height: "54%",
+                            boxShadow: "10px 10px 15px rgba(0, 0, 0, 0.1)",
                         },
                     }}>
                     <h2 style={{ margin: "0", padding: "0" }}>New Task</h2>
@@ -105,7 +107,7 @@ function MainPage({ type }) {
                             name="task-name"
                             value={taskName}
                             onChange={(e) => setTaskName(e.target.value)}
-                            style={{ width: "100%" }}
+                            className="input-box"
                         />
                         <label htmlFor="task-content">Description:</label>
                         <textarea
@@ -115,7 +117,7 @@ function MainPage({ type }) {
                             cols="53"
                             value={taskDescription}
                             onChange={(e) => setTaskDescription(e.target.value)}
-                            style={{ resize: "none" }}
+                            className="input-box"
                         />
                         <label htmlFor="task-date">Due Date:</label>
                         <input
@@ -124,7 +126,7 @@ function MainPage({ type }) {
                             name="task-date"
                             value={taskDate}
                             onChange={(e) => setTaskDate(e.target.value)}
-                            style={{ width: "100%" }}
+                            className="input-box"
                         />
                         <label htmlFor="task-hour">Time due:</label>
                         <input
@@ -133,7 +135,7 @@ function MainPage({ type }) {
                             name="task-hour"
                             value={taskHour}
                             onChange={(e) => setTaskHour(e.target.value)}
-                            style={{ width: "100%" }}
+                            className="input-box"
                         />
                         <div className="priority-selector">
                             <label htmlFor="priority-select">Priority:</label>
@@ -147,7 +149,7 @@ function MainPage({ type }) {
                             </select>
                         </div>
                     </form>
-                    <div className="buttons">
+                    <div className="buttons" style={{ display: "flex", justifyContent: "center", marginTop: "20px"}}>
                         <button
                             style={{
                                 marginBlock: "0.5em",
@@ -161,6 +163,7 @@ function MainPage({ type }) {
                             style={{
                                 marginBlock: "0.5em",
                                 marginInline: "1em",
+                                background: "var(--alt-primary)"
                             }}
                             onClick={() => setIsOpen(false)}
                             className="bg-red-500 text-white rounded">
