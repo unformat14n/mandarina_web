@@ -140,17 +140,17 @@ function Tasks() {
                         <ul>
                             <li>
                                 Completed:{" "}
-                                {(completionData[0].value * 100) / tasks.length}
+                                {((completionData[0].value * 100) / tasks.length).toFixed(2)}
                                 %
                             </li>
                             <li>
                                 Pending:{" "}
-                                {(completionData[1].value * 100) / tasks.length}
+                                {((completionData[1].value * 100) / tasks.length).toFixed(2)}
                                 %
                             </li>
                             <li>
                                 In Progress:{" "}
-                                {(completionData[2].value * 100) / tasks.length}
+                                {((completionData[2].value * 100) / tasks.length).toFixed(2)}
                                 %
                             </li>
                         </ul>

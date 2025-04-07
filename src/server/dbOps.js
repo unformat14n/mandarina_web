@@ -108,6 +108,11 @@ export function getTasksDueSoon(db, user_id, callback){
     db.query(query, [user_id], callback);
 }
 
+export function resetPassword(db, password, email, callback){
+    const query = `UPDATE users SET password =? WHERE email =?`;
+    db.query(query, [password, email], callback);
+}
+
 /*
 export function getCompletedDaily(db, user_id, callback){
     const query = `SELECT `

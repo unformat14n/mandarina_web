@@ -242,7 +242,7 @@ app.post("/verify", async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hashed = await bcrypt.hash(password, salt);
 
-            dbOps.addUser(db, email, async (err, results) => {
+            dbOps.addUser(db, email, hashed, async (err, results) => {
                 if (err) {
                     console.error("Error inserting user:", err);
                     return res.status(500).json({
@@ -490,6 +490,61 @@ app.post("/get-task-due-soon", async (req, res) => {
         }
     });
 });
+
+app.post("/reset-password", async (req, res) => {
+    const { email, password } = req.body;
+    const passwordValidation = validatePassword(password);
+    
+    if (!email || !password) {
+        console.log("Missing username or password");
+        return res.status(400).json({ 
+            success: false,
+            error: "Username and password are required" 
+        });
+    }
+    
+    if (!passwordValidation.isValid) {
+        console.log(passwordValidation.error);
+        return res.status(400).json({
+            success: false,
+            error: passwordValidation.error,
+        });
+    }
+
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashed = await bcrypt.hash(password, salt);
+
+        dbOps.resetPassword(db, hashed, email, async (err, results) => {
+            if (err) {
+                console.error("Error resetting password:", err);
+                return res.status(500).json({
+                    success: false,
+                    error: "Internal Server Error",
+                });
+            }
+            
+            if (results.affectedRows === 0) {
+                return res.status(404).json({
+                    success: false,
+                    error: "User not found",
+                });
+            }
+
+            res.status(200).json({
+                success: true,
+                message: "Password reset successfully",
+            });
+        });
+    } catch (error) {
+        console.error("Error in password reset:", error);
+        res.status(500).json({
+            success: false,
+            error: "Internal Server Error",
+        });
+    }
+});
+
 
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
