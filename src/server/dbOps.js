@@ -1,4 +1,4 @@
-import mysql from 'mysql2'; 
+import mysql from "mysql2";
 
 export function setupDatabase(db) {
     const createDB = `CREATE DATABASE IF NOT EXISTS mandarina;`;
@@ -37,35 +37,84 @@ export function getUserByEmail(db, email, callback) {
     db.query(query, [email], callback);
 }
 
-export function checkEmail(db, email, callback){
+export function checkEmail(db, email, callback) {
     const query = `SELECT 1 FROM users WHERE email =?`;
     db.query(query, [email], callback);
 }
 
-export function addUser(db, email, password, callback){
+export function addUser(db, email, password, callback) {
     const query = `INSERT INTO users (email, password) VALUES (?, ?)`;
     db.query(query, [email, password], callback);
 }
 
-export function createTask (db, title, description, dueDate, priority, status, hour, minute, user_id, callback){
-    const query = `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute,  completionDate, user_id) VALUES (?,?,?,?,?,?,?,?,?)`;
-    db.query(query, [title, description, dueDate, priority, status, hour, minute, user_id], callback);
+export function createTask(
+    db,
+    title,
+    description,
+    dueDate,
+    priority,
+    status,
+    hour,
+    minute,
+    user_id,
+    callback
+) {
+    const query = `INSERT INTO tasks 
+    (title, 
+    description, 
+    dueDate, 
+    priority,
+     status,
+      hour, 
+      minute,  
+      completionDate,
+       user_id) VALUES (?,?,?,?,?,?,?,?,?)`;
+    db.query(
+        query,
+        [
+            title,
+            description,
+            dueDate,
+            priority,
+            status,
+            hour,
+            minute,
+            null,
+            user_id,
+        ],
+        callback
+    );
 }
 
-export function getTasksByUserID(db, user_id, callback){
+export function getTasksByUserID(db, user_id, callback) {
     const query = `SELECT * FROM tasks WHERE user_id = ?`;
     db.query(query, [user_id], callback);
 }
 
-export function updateTask(db, title, description, dueDate, priority, status, hour, minute, taskId, callback){
+export function updateTask(
+    db,
+    title,
+    description,
+    dueDate,
+    priority,
+    status,
+    hour,
+    minute,
+    taskId,
+    callback
+) {
     const query = `UPDATE tasks SET title = ?, description = ?, dueDate = ?, priority = ?, status = ?, hour = ?, minute = ? WHERE id = ?`;
-    db.query(query, [title, description, dueDate, priority, status, hour, minute, taskId], callback);
+    db.query(
+        query,
+        [title, description, dueDate, priority, status, hour, minute, taskId],
+        callback
+    );
 }
 
-export function updateStatus(db, status, taskId, callback){
+export function updateStatus(db, status, taskId, callback) {
     const today = new Date();
     let query = ``;
-    if(status == 'Completed'){
+    if (status == "Completed") {
         query = `UPDATE tasks SET status =?, completionDate=? WHERE id =?`;
         db.query(query, [status, taskId], callback);
     } else {
@@ -74,34 +123,34 @@ export function updateStatus(db, status, taskId, callback){
     }
 }
 
-export function deleteTask(db, taskId, callback){
+export function deleteTask(db, taskId, callback) {
     const query = `DELETE FROM tasks WHERE id =?`;
-    db.query(query, [taskId], callback);  
+    db.query(query, [taskId], callback);
 }
 
-export function deleteOldTasks(db, user_id, callback){
+export function deleteOldTasks(db, user_id, callback) {
     const query = `DELETE FROM tasks WHERE user_id = ? 
         AND ((status = 'Completed' AND dueDate < DATE_SUB(NOW(), INTERVAL 1 MONTH)) 
-        OR dueDate < DATE_SUB(NOW(), INTERVAL 3 MONTH));`
+        OR dueDate < DATE_SUB(NOW(), INTERVAL 3 MONTH));`;
     db.query(query, [user_id], callback);
 }
 
-export function requestUser(db, user_id, callback){
+export function requestUser(db, user_id, callback) {
     const query = `SELECT * FROM users WHERE id =?`;
     db.query(query, [user_id], callback);
 }
 
-export function deleteUser(db, user_id, callback){
+export function deleteUser(db, user_id, callback) {
     const query = `DELETE FROM users WHERE id =?`;
     db.query(query, [user_id], callback);
 }
 
-export function getTasksProgress(db, user_id, callback){
+export function getTasksProgress(db, user_id, callback) {
     const query = `SELECT COUNT(id) FROM tasks WHERE user_id =? GROUP BY status`;
     db.query(query, [user_id], callback);
 }
 
-export function getTasksDueSoon(db, user_id, callback){
+export function getTasksDueSoon(db, user_id, callback) {
     // I'm proud of this one
     const query = `SELECT title, dueDate, status, priority
     FROM tasks 
