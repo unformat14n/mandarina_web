@@ -139,7 +139,7 @@ h3.task-name {
     /* height: 100%; */
     margin-right: 0.5em;
     color: var(--primary);
-    transition:all 0.5s ease-in-out;
+    transition:all 0.25s ease-in-out;
 }
 .status-btn {
     background: none;
@@ -159,11 +159,10 @@ h3.task-name {
     background: none;
     flex-grow: 0;
     border-radius: 50%;
-    color: var(--secondary);
     /* border: none; */
 }
 .status-btn:hover .smol-icon {
-    color: var(--secondary);
+    color: var(--alt-primary);
 }
 
 @media (max-width: 1000px)  {
@@ -171,14 +170,6 @@ h3.task-name {
         display: none;
     }
     .task h3 {
-        display: none;
-    }
-
-    .status-btn {
-        display: none;
-    }
-
-    .task:hover .status-btn {
         display: none;
     }
 }

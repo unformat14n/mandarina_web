@@ -2,7 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect, useContext } from "react";
 import "./Calendar.css"; // For styling
-import { ModalContext } from "./MainPage";
+import { EditModalContext, ModalContext } from "./MainPage";
 import Task from "./TaskComponent";
 import { useUser } from "../contexts/UserContext";
 
@@ -34,14 +34,16 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
             }
 
             // Filter tasks for the current day
-            const tasksForDay = tasks ? tasks.filter((task) => {
-                const taskDate = new Date(task.dueDate);
-                return (
-                    taskDate.getDate() === day &&
-                    taskDate.getMonth() === month &&
-                    taskDate.getFullYear() === year
-                );
-            }) : [];
+            const tasksForDay = tasks
+                ? tasks.filter((task) => {
+                      const taskDate = new Date(task.dueDate);
+                      return (
+                          taskDate.getDate() === day &&
+                          taskDate.getMonth() === month &&
+                          taskDate.getFullYear() === year
+                      );
+                  })
+                : [];
 
             // Create task components
             const taskComps = tasksForDay.map((task) => (
@@ -90,7 +92,7 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
 };
 
 const DayCalendar = ({ currentDate, userId, tasks }) => {
-    console.log(userId, tasks, currentDate)
+    console.log(userId, tasks, currentDate);
     // Generates an array of 24 hours in the day
     const renderHours = () => {
         const hours = [];
@@ -105,15 +107,17 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
                     ? "12 PM"
                     : `${hour - 12} PM`;
 
-            const tasksForDay = tasks ? tasks.filter((task) => {
-                const taskDate = new Date(task.dueDate);
-                return (
-                    taskDate.getDate() === day.getDate() &&
-                    task.hour === hour &&
-                    taskDate.getMonth() === day.getMonth() &&
-                    taskDate.getFullYear() === day.getFullYear()
-                );
-            }) : [];
+            const tasksForDay = tasks
+                ? tasks.filter((task) => {
+                      const taskDate = new Date(task.dueDate);
+                      return (
+                          taskDate.getDate() === day.getDate() &&
+                          task.hour === hour &&
+                          taskDate.getMonth() === day.getMonth() &&
+                          taskDate.getFullYear() === day.getFullYear()
+                      );
+                  })
+                : [];
 
             // Create task components
             const taskComps = tasksForDay.map((task) => (
@@ -203,15 +207,17 @@ const WeekCalendar = ({ currentDate, userId, tasks }) => {
             for (let i = 0; i < 7; i++) {
                 const day = new Date(startOfWeek.getTime()); // Create a new instance for each day
                 day.setDate(startOfWeek.getDate() + i);
-                const tasksForDay = tasks ? tasks.filter((task) => {
-                    const taskDate = new Date(task.dueDate);
-                    return (
-                        taskDate.getDate() === day.getDate() &&
-                        task.hour === hour &&
-                        taskDate.getMonth() === day.getMonth() &&
-                        taskDate.getFullYear() === day.getFullYear()
-                    );
-                }) : [];
+                const tasksForDay = tasks
+                    ? tasks.filter((task) => {
+                          const taskDate = new Date(task.dueDate);
+                          return (
+                              taskDate.getDate() === day.getDate() &&
+                              task.hour === hour &&
+                              taskDate.getMonth() === day.getMonth() &&
+                              taskDate.getFullYear() === day.getFullYear()
+                          );
+                      })
+                    : [];
 
                 // Create task components
                 const taskComps = tasksForDay.map((task) => (
@@ -255,7 +261,8 @@ function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [tasks, setTasks] = useState([]);
     const [view, setView] = useState("month"); // Default view: Month
-    const { setIsOpen } = useContext(ModalContext);
+    const { setIsOpen, isOpen } = useContext(ModalContext);
+    const { isEditOpen } = useContext(EditModalContext);
     const { userId } = useUser();
 
     const handleViewChange = (event) => {
@@ -291,7 +298,7 @@ function Calendar() {
     };
 
     const renderToday = () => {
-        setCurrentDate(new Date()); // Resets the current date to today's date
+        setCurrentDate((prevDate) => new Date(prevDate));
     };
 
     const createTask = () => {
@@ -303,8 +310,8 @@ function Calendar() {
          * Resets the current date to the same date every time the tasks are updated.
          * This is to ensure a refresh of the calendar every time a task is added or deleted.
          */
-        setCurrentDate((prevDate) => new Date(prevDate));
-    }, [tasks]);
+        renderToday();
+    }, [isEditOpen, isOpen]);
 
     useEffect(() => {
         const getTasksInMonth = async () => {
@@ -332,7 +339,7 @@ function Calendar() {
         };
 
         getTasksInMonth();
-    }, [userId]);
+    }, [userId, isEditOpen, isOpen]);
 
     return (
         <div className="calendar-container">

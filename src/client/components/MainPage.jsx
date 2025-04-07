@@ -11,6 +11,7 @@ import { useUser } from "../contexts/UserContext";
 
 const ModalContext = createContext(null);
 const EditModalContext = createContext(null);
+const RefreshContext = createContext(null);
 
 function MainPage({ type }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -32,12 +33,13 @@ function MainPage({ type }) {
 
     const updateTask = async () => {
         if (
-            !editInfo.title ||
-            !editInfo.dueDate ||
-            !editInfo.hour ||
-            !editInfo.minute
+            editInfo.title == "" ||
+            editInfo.dueDate == ""
         ) {
-            console.log(editInfo);
+            console.log(editInfo.title);
+            console.log(editInfo.dueDate);
+            console.log(!editInfo.hour);
+            console.log(!editInfo.minute);
             alert("Please fill in all fields");
             return;
         }
@@ -80,6 +82,7 @@ function MainPage({ type }) {
         }
 
         try {
+            const [hours, minutes] = taskHour.split(":");
             const response = await fetch("/create-task", {
                 method: "POST",
                 headers: {

@@ -96,7 +96,7 @@
 }
 
 .day:hover {
-    background-color: var(--bg-tertiary);
+    background-color: var(--bg-secondary);
 }
 
 .hour-row {
@@ -182,7 +182,7 @@
 }
 
 .rounded-button:hover {
-    background-color: #ff7300;
+    background-color: var(--alt-primary);
     animation: spin 0.5s ease-in-out;
 }
 

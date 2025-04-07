@@ -374,7 +374,7 @@ app.post("/update-task", async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!title || !dueDate || !hour || !minute || !taskId) {
+    if (!title || !dueDate || (hour < 0 || hour > 24) || !taskId) {
         return res.status(400).json({
             success: false,
             error: "Missing required fields",
