@@ -339,34 +339,77 @@ app.post("/get-tasks", async (req, res) => {
     });
 });
 
+app.post("/get-task", async (req, res) => {
+    const { taskId } = req.body;
+
+    dbOps.getTask(db, taskId, async (err, results) => {
+        if (err) {
+            console.error("Error fetching tasks:", err);
+            return res.status(500).json({
+                success: false,
+                error: "Internal Server Error",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Tasks fetched successfully",
+            taskInfo: results[0],
+        });
+    });
+});
+
 app.post("/update-task", async (req, res) => {
-    const { title, description, dueDate, priority, hour, minute, taskId } =
-        req.body;
-    dbOps.updateTasky(
-        db,
+    const {
         title,
         description,
         dueDate,
         priority,
+        status,
         hour,
         minute,
         taskId,
-        async (err, results) => {
-            if (err) {
-                console.error("Error editing task:", err);
-                return res.status(500).json({
-                    success: false,
-                    error: "Internal Server Error",
+    } = req.body;
+
+    // Validate required fields
+    if (!title || !dueDate || !hour || !minute || !taskId) {
+        return res.status(400).json({
+            success: false,
+            error: "Missing required fields",
+        });
+    }
+
+    try {
+        dbOps.updateTask(
+            db,
+            title,
+            description || "",
+            dueDate,
+            priority || "Medium",
+            status || "Pending",
+            parseInt(hour),
+            parseInt(minute),
+            taskId,
+            (err, results) => {
+                if (err) {
+                    console.error("Error editing task:", err);
+                    return res.status(500).json({
+                        success: false,
+                        error: "Internal Server Error",
+                    });
+                }
+                res.status(200).json({
+                    success: true,
+                    message: "Task updated successfully",
                 });
             }
-            console.log("Task succesfully updated");
-
-            res.status(200).json({
-                success: true,
-                message: "Task updated successfully",
-            });
-        }
-    );
+        );
+    } catch (error) {
+        console.error("Unexpected error:", error);
+        res.status(500).json({
+            success: false,
+            error: "Unexpected server error",
+        });
+    }
 });
 
 app.post("/update-status", async (req, res) => {

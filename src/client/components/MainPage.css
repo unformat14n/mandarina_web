@@ -4,7 +4,7 @@ nav#sidebar {
     padding-left: 1em;
     /* height: 100%; */
 
-    z-index: 2;
+    z-index: 1;
     box-shadow: 0.1em 0 0.4em rgba(0, 0, 0, 0.2);
 
     display: flex;
@@ -37,7 +37,6 @@ section.main {
     padding: 0.5em;
     padding-block: 1em;
     margin-block: 0.2em;
-    /* margin-inline: 0.5em; */
     border-radius: 0.5em;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -100,6 +99,7 @@ section.main {
 .infront {
     background: var(--bg);
     color: var(--fg);
+    
     width: 420px;
     height: 420px;
     margin: auto;
@@ -109,6 +109,7 @@ section.main {
     text-align: left;
     top: 50%;
     left: 50%;
+    height: auto;
     transform: translate(-50%, -50%);
     position: absolute;
 }

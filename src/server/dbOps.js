@@ -1,5 +1,3 @@
-import mysql from "mysql2";
-
 export function setupDatabase(db) {
     const createDB = `CREATE DATABASE IF NOT EXISTS mandarina;`;
     const useDB = `USE mandarina;`;
@@ -75,6 +73,11 @@ export function getTasksByUserID(db, user_id, callback) {
     db.query(query, [user_id], callback);
 }
 
+export function getTask(db, taskId, callback) {
+    const query = `SELECT * FROM tasks WHERE id = ?`;
+    db.query(query, [taskId], callback);
+}
+
 export function updateTask(
     db,
     title,
@@ -87,6 +90,16 @@ export function updateTask(
     taskId,
     callback
 ) {
+    console.log(
+        title,
+        description,
+        dueDate,
+        priority,
+        status,
+        hour,
+        minute,
+        taskId
+    );
     const query = `UPDATE tasks SET title = ?, description = ?, dueDate = ?, priority = ?, status = ?, hour = ?, minute = ? WHERE id = ?`;
     db.query(
         query,
@@ -102,12 +115,12 @@ export function updateStatus(db, status, taskId, callback) {
         query = `UPDATE tasks SET status =?, completionDate=? WHERE id =?`;
         db.query(
             query,
-            [status, new Date(today).toISOString().split("T")[0], taskId],
+            [status, today.toISOString().split("T")[0], taskId],
             callback
         );
     } else {
         query = `UPDATE tasks SET status =? WHERE id =?`;
-        db.query(query, [status, today, taskId], callback);
+        db.query(query, [status, taskId], callback);
     }
 }
 

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./TaskComponent.css";
+import { EditModalContext } from "./MainPage";
 
 function TaskListItem({ id, name, date, hour, priority, status, description }) {
     const handleDelete = async (id) => {
@@ -64,10 +65,39 @@ function TaskListItem({ id, name, date, hour, priority, status, description }) {
 
 function Task({ id, name, date, hour, priority, curStatus }) {
     const [status, setStatus] = useState(curStatus);
+    const { setIsEditOpen, setEditInfo } = useContext(EditModalContext);
 
-    const handleClick = () => {
-        console.log("Clicked");
+    const openEditModal = (taskId) => {
+        getTaskInfo(taskId);
+        setIsEditOpen(true);
     };
+    
+    const getTaskInfo = async (id) => {
+        try {
+            const response = await fetch('/get-task', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    taskId: id,
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setEditInfo({
+                    ...data.taskInfo,
+                   taskId: id
+                });
+            } else {
+                console.error("Error changing status:", data.error);
+            }
+        } catch (error) {
+            console.error("Error changing status:", error);
+        }
+    }
 
     const updateStatus = async (newStatus) => {
         try {
@@ -100,18 +130,21 @@ function Task({ id, name, date, hour, priority, curStatus }) {
         const period = hours >= 12 ? "PM" : "AM";
         const formattedHours = hours % 12 || 12;
         return `${formattedHours}:${minutes} ${period}`;
-    }
+    };
 
     return (
         <div
-            onDoubleClick={handleClick}
-            className={`task task-${priority.toLocaleLowerCase()} task-${status.replaceAll(" ", "-").toLocaleLowerCase()}`}>
+            className={`task task-${priority.toLocaleLowerCase()} task-${status
+                .replaceAll(" ", "-")
+                .toLocaleLowerCase()}`}>
             <h3 className="task-name">{name}</h3>
             <div className="task-content">
                 <p className="task-hour">{formatTime(hour)}</p>
-                {status != "Completed" && (
-                    <button className="status-btn" onClick={() => updateStatus("Completed")}>
-                        <div className="btn-row">
+                <div className="btn-row">
+                    {status != "Completed" && (
+                        <button
+                            className="status-btn"
+                            onClick={() => updateStatus("Completed")}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
@@ -123,15 +156,12 @@ function Task({ id, name, date, hour, priority, curStatus }) {
                                     clipRule="evenodd"
                                 />
                             </svg>
-                            <p>Completed</p>
-                        </div>
-                    </button>
-                )}
-                {(status != "Completed" && status != "In Progress") && (
-                    <button
-                        className="status-btn"
-                        onClick={() => updateStatus("In Progress")}>
-                        <div className="btn-row">
+                        </button>
+                    )}
+                    {status != "Completed" && status != "In Progress" && (
+                        <button
+                            className="status-btn"
+                            onClick={() => updateStatus("In Progress")}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
@@ -143,10 +173,23 @@ function Task({ id, name, date, hour, priority, curStatus }) {
                                     clipRule="evenodd"
                                 />
                             </svg>
-                            <p>In Progress</p>
-                        </div>
-                    </button>
-                )}
+                        </button>
+                    )}
+                    {status != "Completed" && (
+                        <button
+                            className="status-btn"
+                            onClick={() => openEditModal(id)}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                className="smol-icon">
+                                <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                                <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                            </svg>
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );

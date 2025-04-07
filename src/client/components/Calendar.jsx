@@ -152,7 +152,6 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
 };
 
 const WeekCalendar = ({ currentDate, userId, tasks }) => {
-    console.log(userId, tasks, currentDate)
     const getWeekDays = () => {
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Get Sunday
@@ -298,19 +297,6 @@ function Calendar() {
     const createTask = () => {
         setIsOpen(true);
     };
-
-    // const renderCalendar = () => {
-    //     switch (view) {
-    //         case "month":
-    //             return <MonthCalendar currentDate={currentDate} userId={userId} tasks={tasks} />;
-    //         case "week":
-    //             return <WeekCalendar currentDate={currentDate} userId={userId} tasks={tasks} />;
-    //         case "day":
-    //             return <DayCalendar currentDate={currentDate} userId={userId} tasks={tasks} />;
-    //         default:
-    //             return null;
-    //     }
-    // }
 
     useEffect(() => {
         /**

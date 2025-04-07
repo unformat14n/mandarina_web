@@ -6,6 +6,7 @@
     margin: 0.25em;
     border-radius: 0.5em;
     z-index: 0;
+    flex-wrap: wrap;
 }
 
 .task-completed {
@@ -114,6 +115,7 @@ h3.task-name {
 
 .btn-row {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
