@@ -100,7 +100,11 @@ export function updateStatus(db, status, taskId, callback) {
     let query = ``;
     if (status == "Completed") {
         query = `UPDATE tasks SET status =?, completionDate=? WHERE id =?`;
-        db.query(query, [status, taskId], callback);
+        db.query(
+            query,
+            [status, new Date(today).toISOString().split("T")[0], taskId],
+            callback
+        );
     } else {
         query = `UPDATE tasks SET status =? WHERE id =?`;
         db.query(query, [status, today, taskId], callback);
@@ -146,7 +150,7 @@ export function getTasksDueSoon(db, user_id, callback) {
     db.query(query, [user_id], callback);
 }
 
-export function resetPassword(db, password, email, callback){
+export function resetPassword(db, password, email, callback) {
     const query = `UPDATE users SET password =? WHERE email =?`;
     db.query(query, [password, email], callback);
 }

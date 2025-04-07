@@ -188,31 +188,34 @@ app.post("/register", async (req, res) => {
     }
 
     // Check if the username already exists
-    dbOps.checkEmail(db, email, async (err, results) => {
-        if (err) {
-            console.error("Error checking email:", err);
-            return res.status(500).json({
-                success: false,
-                error: "Internal Server Error",
+    try {
+        // Check if the username already exists (promisified version)
+        const emailExists = await new Promise((resolve, reject) => {
+            dbOps.checkEmail(db, email, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results.length > 0);
+                }
             });
-        }
-        if (results.length > 0) {
+        });
+
+        if (emailExists) {
             console.log("Email already exists");
             return res.status(400).json({
                 success: false,
                 error: "Email already exists",
             });
         }
-    });
 
-    // Generate a 6-digit code
-    const verificationCode = Math.floor(
-        100000 + Math.random() * 900000
-    ).toString();
+        // Generate a 6-digit code
+        const verificationCode = Math.floor(
+            100000 + Math.random() * 900000
+        ).toString();
 
-    // Store the code temporarily
-    verificationCodes[email] = verificationCode;
-    try {
+        // Store the code temporarily
+        verificationCodes[email] = verificationCode;
+
         await sendVerificationEmail(email, verificationCode);
         console.log("Email sent:", email);
 
@@ -221,12 +224,11 @@ app.post("/register", async (req, res) => {
             message: "Allow verification. Email sent!",
         });
     } catch (error) {
-        console.error("Email error:", error);
-        // Ensure only one response is sent
+        console.error("Error in registration:", error);
         if (!res.headersSent) {
             res.status(500).json({
                 success: false,
-                message: "Failed to send email.",
+                message: error.message || "Registration failed",
             });
         }
     }
@@ -494,15 +496,15 @@ app.post("/get-task-due-soon", async (req, res) => {
 app.post("/reset-password", async (req, res) => {
     const { email, password } = req.body;
     const passwordValidation = validatePassword(password);
-    
+
     if (!email || !password) {
         console.log("Missing username or password");
-        return res.status(400).json({ 
+        return res.status(400).json({
             success: false,
-            error: "Username and password are required" 
+            error: "Username and password are required",
         });
     }
-    
+
     if (!passwordValidation.isValid) {
         console.log(passwordValidation.error);
         return res.status(400).json({
@@ -523,7 +525,7 @@ app.post("/reset-password", async (req, res) => {
                     error: "Internal Server Error",
                 });
             }
-            
+
             if (results.affectedRows === 0) {
                 return res.status(404).json({
                     success: false,
@@ -544,7 +546,6 @@ app.post("/reset-password", async (req, res) => {
         });
     }
 });
-
 
 // Serve static files from the build (React app)
 // app.use(express.static(path.join(__dirname, 'dist')));
