@@ -60,28 +60,12 @@ export function createTask(
     callback
 ) {
     const query = `INSERT INTO tasks 
-    (title, 
-    description, 
-    dueDate, 
-    priority,
-     status,
-      hour, 
-      minute,  
-      completionDate,
-       user_id) VALUES (?,?,?,?,?,?,?,?,?)`;
+    (title, description, dueDate, priority, status, hour, minute, user_id) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
     db.query(
         query,
-        [
-            title,
-            description,
-            dueDate,
-            priority,
-            status,
-            hour,
-            minute,
-            null,
-            user_id,
-        ],
+        [title, description, dueDate, priority, status, hour, minute, user_id],
         callback
     );
 }
