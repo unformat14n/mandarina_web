@@ -305,7 +305,7 @@ app.post("/create-task", async (req, res) => {
                 console.error("Error inserting user:", err);
                 return res.status(500).json({
                     success: false,
-                    error: "Internal Server Error",
+                    error: "Internal Server Error" + err,
                 });
             }
             console.log("Task succesfully inserted");

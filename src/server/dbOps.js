@@ -48,7 +48,7 @@ export function addUser(db, email, password, callback){
 }
 
 export function createTask (db, title, description, dueDate, priority, status, hour, minute, user_id, callback){
-    const query = `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute, user_id) VALUES (?,?,?,?,?,?,?,?)`;
+    const query = `INSERT INTO tasks (title, description, dueDate, priority, status, hour, minute,  completionDate, user_id) VALUES (?,?,?,?,?,?,?,?,?)`;
     db.query(query, [title, description, dueDate, priority, status, hour, minute, user_id], callback);
 }
 
@@ -64,9 +64,14 @@ export function updateTask(db, title, description, dueDate, priority, status, ho
 
 export function updateStatus(db, status, taskId, callback){
     const today = new Date();
-    const query = `UPDATE tasks SET status =?, completionDate=? WHERE id =?`;
-    console.log("Change status to complete at: " + today + " for task: " + taskId + " with status: " + status + "")
-    db.query(query, [status, today, taskId], callback);
+    let query = ``;
+    if(status == 'Completed'){
+        query = `UPDATE tasks SET status =?, completionDate=? WHERE id =?`;
+        db.query(query, [status, taskId], callback);
+    } else {
+        query = `UPDATE tasks SET status =? WHERE id =?`;
+        db.query(query, [status, today, taskId], callback);
+    }
 }
 
 export function deleteTask(db, taskId, callback){
