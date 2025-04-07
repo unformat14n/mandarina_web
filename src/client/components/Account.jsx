@@ -162,19 +162,37 @@ function Account() {
                     style={{
                         overlay: {
                             backgroundColor: "rgba(238, 238, 238, 0.5)",
+
                         },
                         content: {
-                            width: "350px",
-                            height: "200px",
+                            width: "250px",
+                            height: "210px",
                             margin: "auto",
                             padding: "2em",
-                            borderRadius: "12px",
+                            borderRadius: "10px",
                             textAlign: "left",
+                            overflowY: "hidden",
+    
                         },
                     }}>
                     <form onSubmit={(e) => e.preventDefault()}>
                         <label htmlFor="new-password">Enter new password: </label>
+                        <div className="input-pssw" 
+                        style={{
+                            display: "flex",
+                            flexDirection: "Column",
+                            borderRadius: "12px",
+
+                        }}
+                        > 
+
                         <input
+                            style={{
+                                borderRadius: "10px",
+                                padding: "3px", 
+                                border: "1px solid",
+                                marginBottom: "10px",
+                            }}
                             type="password"
                             id="new-password"
                             name="new-password-unique"
@@ -183,15 +201,29 @@ function Account() {
                         />
                         <label htmlFor="confirm-password">Confirm new password: </label>
                         <input
+                        style={{
+                            borderRadius: "10px",
+                            padding: "3px", 
+                            border: "1px solid",
+        
+                        }}
                             type="password"
                             id="confirm-password"
                             name="confirm-password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
-                        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} {/* Display error message */}
-                        <button onClick={handleEdit}>Confirm</button>
-                        <button onClick={handleCancel}>Cancel</button>
+                        </div>
+                        {errorMessage && <p style={{ color: "red", marginBottom: "1px", }}>{errorMessage}</p>} {/* Display error message */}
+                        <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}>
+
+                        <button onClick={handleEdit} style={{borderRadius: "15px",}} >Confirm</button>
+                        <button onClick={handleCancel} style={{borderRadius: "15px",}} >Cancel</button>
+                        </div>
                     </form>
                 </Modal>
             </div>
