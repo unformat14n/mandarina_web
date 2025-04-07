@@ -119,7 +119,10 @@ app.post("/login", async (req, res) => {
     }
 
     dbOps.getUserByEmail(db, email, async (err, results) => {
-        if (err) return res.status(500).json({ error: "Database error" });
+        if (err) {
+            console.error("Error fetching user:", err);
+            return res.status(500).json({ error: "Database error" })}
+            ;
         if (results.length > 0) {
             const match = await bcrypt.compare(password, results[0].password);
             if (!match) {
