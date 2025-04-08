@@ -25,6 +25,15 @@ function MainPage({ type }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [editInfo, setEditInfo] = useState({});
 
+    const handlePriorityChange = (e) => {
+        if (isOpen) {
+            console.log("Priority changed to:", e.target.value);
+            setPriority(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
+            console.log("Priority changed to:", priority);
+        }
+
+    };
+
     setUserId(
         userId == 0 || userId == undefined
             ? sessionStorage.getItem("userId")
@@ -32,6 +41,8 @@ function MainPage({ type }) {
     );
 
     const updateTask = async () => {
+        console.log("Title: ", editInfo.title);
+        console.log("Due Date: ", editInfo.dueDate);
         if (
             editInfo.title == "" ||
             editInfo.dueDate == ""
@@ -107,7 +118,7 @@ function MainPage({ type }) {
                 setTaskDescription("");
                 setTaskDate("");
                 setTaskHour("");
-                setPriority("");
+                setPriority("high");
                 setIsOpen(false);
             } else {
                 alert("Failed to create task: " + result.message);
@@ -146,7 +157,7 @@ function MainPage({ type }) {
                             },
                         }}>
                         <h2 style={{ margin: "0", padding: "0" }}>New Task</h2>
-                        <form onSubmit={(e) => {e.preventDefault(); saveTask();}}>
+                        <form onSubmit={(e) => {e.preventDefault();saveTask();}}>
                             <label htmlFor="task-name">Task Title:</label>
                             <input
                                 type="text"
@@ -193,12 +204,10 @@ function MainPage({ type }) {
                                 <select
                                     id="priority-select"
                                     value={priority}
-                                    onChange={(e) =>
-                                        setPriority(e.target.value)
-                                    }>
-                                    <option value="high">High</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="low">Low</option>
+                                    onChange={handlePriorityChange}>
+                                    <option>High</option>
+                                    <option>Medium</option>
+                                    <option>Low</option>
                                 </select>
                             </div>
                         </form>
@@ -363,7 +372,7 @@ function MainPage({ type }) {
                                     marginInline: "1em",
                                 }}
                                 onClick={updateTask}
-                                className="bg-red-500 text-white rounded">
+                                >
                                 Save Changes
                             </button>
                             <button
@@ -373,7 +382,7 @@ function MainPage({ type }) {
                                     background: "var(--alt-primary)",
                                 }}
                                 onClick={() => setIsEditOpen(false)}
-                                className="bg-red-500 text-white rounded">
+                                >
                                 Cancel
                             </button>
                         </div>
