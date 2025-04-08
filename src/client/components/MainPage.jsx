@@ -19,7 +19,7 @@ function MainPage({ type }) {
     const [taskDescription, setTaskDescription] = useState("");
     const [taskDate, setTaskDate] = useState("");
     const [taskHour, setTaskHour] = useState("");
-    const [priority, setPriority] = useState("HIGH");
+    const [priority, setPriority] = useState("high");
     const { userId, setUserId } = useUser();
 
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -123,6 +123,9 @@ function MainPage({ type }) {
             <EditModalContext.Provider
                 value={{ isEditOpen, setIsEditOpen, setEditInfo }}>
                 <ModalContext.Provider value={{ isOpen, setIsOpen }}>
+
+                    {/* New Task Modal */}
+
                     <Modal
                         isOpen={isOpen}
                         onRequestClose={() => setIsOpen(false)}
@@ -143,7 +146,7 @@ function MainPage({ type }) {
                             },
                         }}>
                         <h2 style={{ margin: "0", padding: "0" }}>New Task</h2>
-                        <form action={(e) => e.preventDefault()}>
+                        <form onSubmit={(e) => {e.preventDefault(); saveTask();}}>
                             <label htmlFor="task-name">Task Title:</label>
                             <input
                                 type="text"
@@ -227,6 +230,8 @@ function MainPage({ type }) {
                             </button>
                         </div>
                     </Modal>
+                    
+                    {/* Edit Modal */}
 
                     <Modal
                         isOpen={isEditOpen}
@@ -240,7 +245,7 @@ function MainPage({ type }) {
                             },
                         }}>
                         <h2 style={{ margin: "0", padding: "0" }}>Edit Task</h2>
-                        <form onSubmit={(e) => e.preventDefault()}>
+                        <form onSubmit={(e) => {e.preventDefault(); updateTask();}}>
                             <label htmlFor="task-name">Task Title:</label>
                             <input
                                 type="text"
