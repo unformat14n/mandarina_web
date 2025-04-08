@@ -376,7 +376,7 @@ function Calendar() {
                 {(view == "month" || view == "week") && (
                     <h2>
                         {currentDate.toLocaleString("default", {
-                            month: "long",
+                            month: "short",
                             year: "numeric",
                         })}
                     </h2>
