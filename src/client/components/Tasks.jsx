@@ -90,7 +90,7 @@ function Tasks() {
                         <option>Date</option>
                         <option>Priority</option>
                     </select>
-                    <label className="header-filter">Filter by </label>
+                    <label className="header-label">Filter by </label>
                     <button className="filter-btn">
                         {/* <Filter
                             size={20}

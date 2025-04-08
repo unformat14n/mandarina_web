@@ -16,12 +16,16 @@
     width: auto;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-    padding-left: 30px;
 }
 
 
 .header-label {
     padding-right: 10px;
+    font-weight: 600;
+}
+
+.header-section {
+    margin-left: 30px;
 }
 
 .sort-select {
@@ -38,10 +42,11 @@
 }
 
 .filter-btn {
-    padding: 5px;
+    margin-top: 35px;
+    padding: 4.5px;
     color: var(--fg);
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
 }
 
 .filter-btn:hover {
