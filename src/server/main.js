@@ -101,7 +101,7 @@ app.get("/hello", (req, res) => {
 
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
-    console.log("Received login request:", { email, password });
+    console.log("Received login request");
 
     // Input validation - empty
     if (!email || !password) {
@@ -162,7 +162,7 @@ app.post("/register", async (req, res) => {
     const { email, password } = req.body;
 
     // Log the incoming request
-    console.log("Received registration request:", { email, password });
+    console.log("Received registration request");
 
     // Validate that input isn't empty
     if (!email || !password) {
@@ -239,7 +239,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/verify", async (req, res) => {
     const { email, password, code } = req.body;
-    console.log("Received verification request:", { email, password, code });
+    console.log("Received verification request");
     console.log("Stored code:", verificationCodes[email]); // Log the stored code for verificatio
 
     if (verificationCodes[email] === code) {
