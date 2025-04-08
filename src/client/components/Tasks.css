@@ -124,6 +124,7 @@ button.filter-btn {
 
 .task-del:hover {
     background: var(--alt-primary);
+    color: white;
     /* color: var(--); */
 }
 
