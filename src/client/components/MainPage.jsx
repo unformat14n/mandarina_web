@@ -86,6 +86,21 @@ function MainPage({ type }) {
         }
     };
 
+    const handleDelete = async (taskId) => {
+        try {
+            const response = await fetch("/delete-task", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ taskId: taskId }),
+            }); 
+        } catch (error) {
+            console.error("Error deleting task:", error);
+            alert("Error deleting task. Please try again."); 
+        }
+    }
+
     const saveTask = async () => {
         if (!taskName || !taskDate || !taskHour || !priority) {
             alert("Please fill in all fields");
@@ -384,6 +399,16 @@ function MainPage({ type }) {
                                 onClick={() => setIsEditOpen(false)}
                                 >
                                 Cancel
+                            </button>
+                            <button
+                                style={{
+                                    marginBlock: "0.5em",
+                                    marginInline: "1em",
+                                    background: "#de3163",
+                                }}
+                                onClick={() => {setIsEditOpen(false); handleDelete(editInfo.id);}}
+                                >
+                                Delete task
                             </button>
                         </div>
                     </Modal>
