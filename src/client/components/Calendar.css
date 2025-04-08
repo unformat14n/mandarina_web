@@ -18,7 +18,7 @@
 }
 
 .calendar-header * {
-    margin-inline: 0.25em;
+    margin-inline: 10px;
 }
 
 .calendar-header h2 {

@@ -84,6 +84,8 @@ function Account() {
     const handleLogout = async () => {
         try{
         localStorage.removeItem("token");
+        localStorage.removeItem("theme");
+        localStorage.removeItem("palette");
         window.location.href = "/login"; // Redirect to login page after logout
         } catch (error) {
             console.error("Error logging out:", error);
@@ -235,7 +237,8 @@ function Account() {
             <header className="account-hdr">
                 <img src="/mandarinaLogo.png" className="mand-logo" />
                 <h1 className="account">Account</h1>
-                <button className="logout-btn"
+                <button 
+                style={{ alignSelf: "flex-end", justifyContent: "flex-end", marginLeft: "auto", marginRight: "1em"}}
                 onClick={handleLogout}>
                 Log out
                 </button>

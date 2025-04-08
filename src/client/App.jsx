@@ -111,7 +111,7 @@ function App() {
                 <div className="about-content">
                     <h2>About Us</h2>
                     <div className="who">
-                        <h3>Who Is "<em>Us</em>"?</h3>
+                        <h3>Who is "<em>Us</em>"?</h3>
                         <p>
                             We are a team of passionate college students
                             currently on our junior/sophomore year of studying

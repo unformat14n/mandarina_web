@@ -113,7 +113,7 @@ div.card {
     border: 0.2em solid rgba(209, 213, 219, 0.3);
 }
 
-button {
+button:not([class]) {
     border-radius: 8px;
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
@@ -130,7 +130,7 @@ button {
     color: white;
     font-weight: bolder;
 }
-button:hover {
+button:not([class]):hover {
     background-color: var(--alt-primary);
 }
 /* button:focus,
@@ -153,6 +153,15 @@ button:focus-visible {
     opacity: 0;
 }
 
+*::-webkit-scrollbar {
+    width: 5px;
+    background: var(--bg-secondary);
+    height: 100%;
+}
+*::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+}
 /* @media (prefers-color-scheme: light) {
     :root {
         color: #213547;

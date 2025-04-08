@@ -17,6 +17,31 @@ function Dashboard() {
     const [tasks, setTasks] = useState([]);
     const { userId } = useUser();
 
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const response = await fetch("/get-tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ userId: userId }),
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    setTasks(data.tasks);
+                } else {
+                    console.error("Error fetching tasks:", data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+            }
+        };
+
+        fetchTasks();
+    }, [userId]); // Only fetch once when the component mounts or when userId changes
+
     const weeklychart = [
         { Day: "S", completed: 0, color: "var(--secondary)" },
         { Day: "M", completed: 0, color: "var(--secondary)" },
@@ -41,33 +66,11 @@ function Dashboard() {
     };
 
     const getWeeklyChart = () => {
-        const updateTasks = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ userId: userId }),
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    setTasks(data.tasks);
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
-
-        updateTasks();
-
         const today = new Date();
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
 
+        const updatedWeeklyChart = [...weeklychart]; // Copy the original chart data
         for (let i = 0; i < 7; i++) {
             const currentDate = new Date(startOfWeek);
             currentDate.setDate(startOfWeek.getDate() + i);
@@ -79,10 +82,10 @@ function Dashboard() {
                     completed.getFullYear() === currentDate.getFullYear()
                 );
             });
-            weeklychart[i].completed = todayTasks.length;
+            updatedWeeklyChart[i].completed = todayTasks.length;
         }
 
-        return weeklychart;
+        return updatedWeeklyChart;
     };
 
     const renderWeeklyChart = () => {
@@ -123,7 +126,7 @@ function Dashboard() {
                                 dataKey="completed"
                                 radius={[4, 4, 0, 0]}
                                 animationDuration={1500}>
-                                {weeklychart.map((entry, index) => (
+                                {weeklydata.map((entry, index) => (
                                     <Cell
                                         key={`cell-${index}`}
                                         fill={entry.color}
@@ -167,45 +170,16 @@ function Dashboard() {
     };
 
     const showTasksDueSoon = () => {
-        const taskDueSoon = [];
-
-        const getTasks = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ userId: userId }),
-                });
-
-                const data = await response.json();
-                console.log(data.tasks); // Log the tasks array to the conso
-                if (data.success) {
-                    setTasks(data.tasks);
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
-            }
-        };
-
-        getTasks();
-
-        tasks.forEach((task) => {
+        const taskDueSoon = tasks.filter((task) => {
             const taskDate = new Date(task.dueDate);
             const today = new Date();
-
-            if (isDateInWeek(taskDate, today) && task.status !== "Completed") {
-                taskDueSoon.push(task);
-            }
+            return isDateInWeek(taskDate, today) && task.status !== "Completed";
         });
 
         return (
             <div className="list-duesoon">
                 <h2 className="duesoon-txt">Due Soon</h2>
-                {taskDueSoon.length == 0 ? (
+                {taskDueSoon.length === 0 ? (
                     <p>No Pending/In Progress tasks scheduled this week :D</p>
                 ) : (
                     taskDueSoon.map((task, index) => (

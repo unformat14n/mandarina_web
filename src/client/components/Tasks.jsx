@@ -7,75 +7,186 @@ import "./Tasks.css";
 
 function Tasks() {
     const [tasks, setTasks] = useState([]);
+    const [taskCopy, setTaskCopy] = useState([]); // Original tasks list (unfiltered)
     const [completionData, setData] = useState([
         { name: "Completed", value: 0 },
         { name: "Pending", value: 0 },
         { name: "In Progress", value: 0 },
     ]);
+    const [sortBy, setSortBy] = useState("Name");
+    const [keyword, setKeyword] = useState("");
 
     const { userId } = useUser();
 
-    useEffect(() => {
-        const getTasksInMonth = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
+    const handleDelete = async (id) => {
+        console.log("Deleting task:", id); // Log the task object for debugging
+        try {
+            const response = await fetch("/delete-task", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    taskId: id,
+                }),
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                setTasks((prevTasks) =>
+                    prevTasks.filter((task) => task.id !== id)
+                );
+
+                // Recalculate the completion data based on remaining tasks
+                const updatedData = [
+                    {
+                        name: "Completed",
+                        value: data.tasks.filter(
+                            (task) => task.status === "Completed"
+                        ).length,
                     },
-                    body: JSON.stringify({
-                        userId: userId,
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    setTasks(data.tasks); // Store tasks in state
-                    setData([
-                        {
-                            name: "Completed",
-                            value: data.tasks.filter(
-                                (task) => task.status === "Completed"
-                            ).length,
-                        },
-                        {
-                            name: "Pending",
-                            value: data.tasks.filter(
-                                (task) => task.status === "Pending"
-                            ).length,
-                        },
-                        {
-                            name: "In Progress",
-                            value: data.tasks.filter(
-                                (task) => task.status === "In Progress"
-                            ).length,
-                        },
-                    ]);
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
+                    {
+                        name: "Pending",
+                        value: data.tasks.filter(
+                            (task) => task.status === "Pending"
+                        ).length,
+                    },
+                    {
+                        name: "In Progress",
+                        value: data.tasks.filter(
+                            (task) => task.status === "In Progress"
+                        ).length,
+                    },
+                ];
+                setData(updatedData);
+            } else {
+                console.error("Error deleting task:", data.error);
             }
-        };
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        }
+    };
 
-        getTasksInMonth();
-    }, [userId, tasks]);
+    const getTasks = async () => {
+        try {
+            const response = await fetch("/get-tasks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                }),
+            });
 
-    const renderTasks = () => {
-        return tasks.map((task, index) => (
-            <TaskListItem
-                key={index}
-                id={task.id}
-                name={task.title}
-                date={task.dueDate}
-                hour={`${task.hour}:${String(task.minute).padStart(2, "0")}`}
-                priority={task.priority}
-                status={task.status}
-                description={task.description}
-            />
-        ));
+            const data = await response.json();
+
+            if (data.success) {
+                setTasks(data.tasks);
+                setTaskCopy(data.tasks); // Set unfiltered tasks (copy)
+                updateCompletionData(data.tasks);
+            } else {
+                console.error("Error fetching tasks:", data.error);
+            }
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    };
+
+    const updateCompletionData = (taskList) => {
+        setData([
+            {
+                name: "Completed",
+                value: taskList.filter((task) => task.status === "Completed")
+                    .length,
+            },
+            {
+                name: "Pending",
+                value: taskList.filter((task) => task.status === "Pending")
+                    .length,
+            },
+            {
+                name: "In Progress",
+                value: taskList.filter((task) => task.status === "In Progress")
+                    .length,
+            },
+        ]);
+    };
+
+    useEffect(() => {
+        getTasks();
+    }, [userId]);
+
+    const renderTasks = (sortBy) => {
+        let sortedTasks = [...tasks];
+        if (sortBy === "Date") {
+            sortedTasks.sort((a, b) => {
+                const dateA = new Date(a.dueDate);
+                const dateB = new Date(b.dueDate);
+                return dateA - dateB;
+            });
+        } else if (sortBy === "Hour") {
+            sortedTasks.sort((a, b) => {
+                const hourA = parseInt(a.hour, 10);
+                const minuteA = parseInt(a.minute, 10);
+                const hourB = parseInt(b.hour, 10);
+                const minuteB = parseInt(b.minute, 10);
+                return hourA - hourB || minuteA - minuteB;
+            });
+        } else {
+            sortedTasks.sort((a, b) => {
+                const nameA = a.title.toLowerCase();
+                const nameB = b.title.toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+        }
+
+        return sortedTasks.length != 0 ? (
+            sortedTasks.map((task, index) => (
+                <TaskListItem
+                    key={index}
+                    id={task.id}
+                    name={task.title}
+                    date={task.dueDate}
+                    hour={`${task.hour}:${String(task.minute).padStart(
+                        2,
+                        "0"
+                    )}`}
+                    priority={task.priority}
+                    status={task.status}
+                    description={task.description}
+                    onDelete={handleDelete}
+                />
+            ))
+        ) : (
+            <div className="no-tasks">
+                <p>
+                    No tasks found with{" "}
+                    <em style={{ color: "var(--primary)", fontWeight: "bold" }}>
+                        '{keyword}'
+                    </em>
+                </p>
+            </div>
+        );
+    };
+
+    const handleSortChange = (event) => {
+        setSortBy(event.target.value);
+        renderTasks(sortBy, ""); // Re-render tasks after selection change
+    };
+    const handleKeyword = () => {
+        if (keyword) {
+            const filteredTasks = taskCopy.filter(
+                (task) =>
+                    task.title.toLowerCase().includes(keyword.toLowerCase()) ||
+                    task.description
+                        .toLowerCase()
+                        .includes(keyword.toLowerCase())
+            );
+            setTasks(filteredTasks);
+        } else {
+            setTasks(taskCopy); // Reset to all tasks when search is cleared
+        }
     };
 
     return (
@@ -83,74 +194,72 @@ function Tasks() {
 
         <div className="task-container">
             <header className="task-header">
-                <div className="header-section">
-                    <label className="header-label">Sort by:</label>
-                    <select className="sort-select">
-                        <option>Name</option>
-                        <option>Date</option>
-                        <option>Priority</option>
-                    </select>
-                    <label className="header-label">Filter by </label>
-                    <button className="filter-btn">
-                        {/* <Filter
-                            size={20}
-                            strokeWidth={2}
-                            fill="none"
-                        /> */}
-                        <svg
-                            width={24}
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="white"
-                            className="size-6">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </header>
-            {/* <label>Sort by: </label>
-                <select className="option-box">
+                <label className="header-label">Sort by:</label>
+                <select
+                    className="sort-select"
+                    id="view-select"
+                    value={sortBy}
+                    onChange={handleSortChange}>
                     <option>Name</option>
                     <option>Date</option>
-                    <option>Priority</option>
+                    <option>Hour</option>
                 </select>
-                <button className="filter-btn">
-                    <Filter
-                        size= {20}
+                <label className="header-label">Find keyword:</label>
+                <input
+                    className="search-input"
+                    type="text"
+                    id="search-input"
+                    placeholder="Search..."
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                />
+                <button className="filter-btn" onClick={handleKeyword}>
+                    <svg
+                        data-slot="icon"
+                        aria-hidden="true"
+                        fill="none"
                         strokeWidth={2}
-                        fill="none">
-                    </Filter>
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="smol-icon">
+                        <path
+                            fillRule="evenodd"
+                            d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
                 </button>
-                <label>Filter by </label>
-            </header> */}
-
-            {/*Body*/}
+            </header>
 
             <div className="task-body">
-                <div className="task-list">{renderTasks()}</div>
+                <div className="task-list">{renderTasks(sortBy)}</div>
                 <div className="task-chart">
                     <div>
                         <p>Task Status</p>
                         <ul>
                             <li>
                                 Completed:{" "}
-                                {((completionData[0].value * 100) / tasks.length).toFixed(2)}
+                                {(
+                                    (completionData[0].value * 100) /
+                                    taskCopy.length
+                                ).toFixed(0)}
                                 %
                             </li>
                             <li>
                                 Pending:{" "}
-                                {((completionData[1].value * 100) / tasks.length).toFixed(2)}
+                                {(
+                                    (completionData[1].value * 100) /
+                                    taskCopy.length
+                                ).toFixed(0)}
                                 %
                             </li>
                             <li>
                                 In Progress:{" "}
-                                {((completionData[2].value * 100) / tasks.length).toFixed(2)}
+                                {(
+                                    (completionData[2].value * 100) /
+                                    taskCopy.length
+                                ).toFixed(0)}
                                 %
                             </li>
                         </ul>
@@ -166,9 +275,13 @@ function Tasks() {
                             {completionData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
-                                    fill={index === 0 ? "#00C49F" : (
-                                        index === 1? "#FFBB58" : "#FF647C"
-                                    )}
+                                    fill={
+                                        index === 0
+                                            ? "var(--primary)"
+                                            : index === 1
+                                            ? "var(--alt-primary)"
+                                            : "var(--secondary)"
+                                    }
                                 />
                             ))}
                         </Pie>

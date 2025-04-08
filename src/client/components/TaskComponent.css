@@ -5,13 +5,19 @@
     padding: 0.25em;
     margin: 0.25em;
     border-radius: 0.5em;
-    z-index: 0;
     flex-wrap: wrap;
 }
 
 .task-completed {
-    opacity: 0.5;
+    background: var(--bg-tertiary) !important;
+    border: solid 0.2em var(--bg-tertiary) !important;
+    color: var(--fg-tertiary) !important;
 }
+
+.task-completed p {
+    color: var(--fg-tertiary)!important;
+}
+
 .task-in-progress.task-low {
     box-shadow: 0 0 15px var(--lowp);
 }
@@ -132,27 +138,24 @@ h3.task-name {
     opacity: 1;
 }
 
-.smol-icon {
-    min-width: 30px;
+.status-btn .smol-icon {
     max-width: 30px;
     width: 100%;
-    /* height: 100%; */
     margin-right: 0.5em;
     color: var(--primary);
     transition:all 0.25s ease-in-out;
 }
-.status-btn {
+.status-btn  {
     background: none;
-    /* width: auto; */
-    flex-grow: 0;
-    border-radius: 50%;
+    border: none;
+    color: var(--primary);
     padding: 0;
     margin: 0;  
-    /* border: none; */
     display: none;
 }
 .task:hover .status-btn {
     display: block;
+    color: var(--alt-primary);
 }
 
 .status-btn:hover {
@@ -161,6 +164,7 @@ h3.task-name {
     border-radius: 50%;
     /* border: none; */
 }
+
 .status-btn:hover .smol-icon {
     color: var(--alt-primary);
 }

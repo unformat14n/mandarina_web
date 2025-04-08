@@ -4,20 +4,26 @@
     flex-direction: column;
     width: 100%;
     background: var(--bg);
+    max-height: 100%;
     height: 100%;
+    overflow-y: hidden;
 }
 
 /* Header Styling */
 .task-header {
     display: flex;
     flex-direction: row;
-    position: sticky;
+    flex-wrap: wrap;
+    /* position: sticky; */
     background: var(--bg);
     width: auto;
+    height: 50px;
+    align-items: center;
+    /* justify-content: space-between; */
+    padding: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
 }
-
 
 .header-label {
     padding-right: 10px;
@@ -41,17 +47,34 @@
     background-color: var(--bg);
 }
 
-.filter-btn {
-    margin-top: 35px;
-    padding: 4.5px;
+button.filter-btn {
+    /* margin: 10px; */
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    border: none;
+    align-self: center;
+    justify-self: center;
+    border-radius: 5px;
+    padding-left: 15px;
+    
+    /* padding: 5px 10px; */
+}
+
+.search-input {
+    padding: 5px;
+    background-color: var(--bg);
+    border-radius: 5px;
+    border: 1px solid var(--bg-tertiary);
     color: var(--fg);
-    width: 35px;
-    height: 35px;
+    margin-right: 5px;
 }
 
 .filter-btn:hover {
-    background-color: var(--primary);
-
+    background-color: var(--alt-primary);
 }
 
 /* Body of the tasks */
@@ -62,9 +85,8 @@
     /* Ensures left and right elements are spaced apart */
     margin-left: 20px;
     height: 100%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
-
 
 /* Task List Styling */
 .task-item {
@@ -78,6 +100,8 @@
     display: flex;
     width: 100%;
     flex-direction: column;
+    height: 90%;
+    overflow-y: scroll;
     padding: 15px;
     background-color: var(--bg-secondary);
     border-radius: 10px;
@@ -89,14 +113,18 @@
     height: 30px;
     width: 30px;
     padding: 3px;
+    border: none;
     background: none;
-    color: black;
+    color: var(--fg);
+    border-radius: 5px;
     align-self: flex-start;
     justify-self: flex-end;
+    transition: all 0.25s;
 }
 
 .task-del:hover {
-    color: white;
+    background: var(--alt-primary);
+    /* color: var(--); */
 }
 
 .task-title {
@@ -138,6 +166,12 @@
     border-radius: 8px;
     justify-content: center;
     align-items: center;
+}
+
+.smol-icon {
+    height: 25px;
+    width: 25px;
+    color: white;
 }
 
 @media screen and (max-width: 1000px) {

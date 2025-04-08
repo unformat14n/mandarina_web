@@ -5,8 +5,9 @@ import "./Calendar.css"; // For styling
 import { EditModalContext, ModalContext } from "./MainPage";
 import Task from "./TaskComponent";
 import { useUser } from "../contexts/UserContext";
+import StreamTransport from "nodemailer/lib/stream-transport";
 
-const MonthCalendar = ({ currentDate, userId, tasks }) => {
+const MonthCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
     const getDaysInMonth = (year, month) => {
         return new Date(year, month + 1, 0).getDate();
     };
@@ -59,6 +60,7 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
                         "0"
                     )}`}
                     priority={task.priority}
+                    onStatusChange={updateStatus}
                 />
             ));
 
@@ -91,7 +93,7 @@ const MonthCalendar = ({ currentDate, userId, tasks }) => {
     );
 };
 
-const DayCalendar = ({ currentDate, userId, tasks }) => {
+const DayCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
     console.log(userId, tasks, currentDate);
     // Generates an array of 24 hours in the day
     const renderHours = () => {
@@ -133,6 +135,7 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
                         "0"
                     )}`}
                     priority={task.priority}
+                    onStatusChange={updateStatus}
                 />
             ));
 
@@ -155,7 +158,7 @@ const DayCalendar = ({ currentDate, userId, tasks }) => {
     );
 };
 
-const WeekCalendar = ({ currentDate, userId, tasks }) => {
+const WeekCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
     const getWeekDays = () => {
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay()); // Get Sunday
@@ -233,6 +236,7 @@ const WeekCalendar = ({ currentDate, userId, tasks }) => {
                             "0"
                         )}`}
                         priority={task.priority}
+                        onStatusChange={updateStatus}
                     />
                 ));
 
@@ -298,48 +302,72 @@ function Calendar() {
     };
 
     const renderToday = () => {
-        setCurrentDate((prevDate) => new Date(prevDate));
+        setCurrentDate((prevDate) => new Date());
     };
 
     const createTask = () => {
         setIsOpen(true);
     };
+    const getTasks = async () => {
+        try {
+            const response = await fetch("/get-tasks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                }),
+            });
 
-    useEffect(() => {
-        /**
-         * Resets the current date to the same date every time the tasks are updated.
-         * This is to ensure a refresh of the calendar every time a task is added or deleted.
-         */
-        renderToday();
-    }, [isEditOpen, isOpen]);
+            const data = await response.json();
 
-    useEffect(() => {
-        const getTasksInMonth = async () => {
-            try {
-                const response = await fetch("/get-tasks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    setTasks(data.tasks); // Store tasks in state
-                } else {
-                    console.error("Error fetching tasks:", data.error);
-                }
-            } catch (error) {
-                console.error("Error fetching tasks:", error);
+            if (data.success) {
+                setTasks(data.tasks); // Store tasks in state
+            } else {
+                console.error("Error fetching tasks:", data.error);
             }
-        };
+        } catch (error) {
+            console.error("Error fetching tasks:", error);
+        }
+    };
 
-        getTasksInMonth();
-    }, [userId, isEditOpen, isOpen]);
+    useEffect(() => {
+        getTasks();
+        renderToday();
+    }, [userId, isEditOpen, isOpen, view]);
+
+    const handleStatus = async (id, newStatus) => {
+        try {
+            const response = await fetch("/update-status", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    taskId: id,
+                    status: newStatus,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setTasks((prevTasks) => {
+                    return prevTasks.map((task) =>
+                        task.id === id
+                            ? { ...task, status: newStatus }
+                            : task
+                    );
+                });
+                console.log("Status changed");
+            } else {
+                console.error("Error changing status:", data.error);
+            }
+        } catch (error) {
+            console.error("Error changing status:", error);
+        }
+    };
 
     return (
         <div className="calendar-container">
@@ -362,9 +390,7 @@ function Calendar() {
                     </h2>
                 )}
                 <button onClick={handleNext}>{">"}</button>
-                <button onClick={renderToday} className="simple">
-                    Today
-                </button>
+                <button onClick={renderToday}>Today</button>
                 {view == "day" && (
                     <h3>
                         {currentDate.toLocaleString("default", {
@@ -408,6 +434,7 @@ function Calendar() {
                         currentDate={currentDate}
                         userId={userId}
                         tasks={tasks}
+                        updateStatus={handleStatus}
                     />
                 )}
                 {view === "week" && (
@@ -415,6 +442,7 @@ function Calendar() {
                         currentDate={currentDate}
                         userId={userId}
                         tasks={tasks}
+                        updateStatus={handleStatus}
                     />
                 )}
                 {view === "day" && (
@@ -422,6 +450,7 @@ function Calendar() {
                         currentDate={currentDate}
                         userId={userId}
                         tasks={tasks}
+                        updateStatus={handleStatus}
                     />
                 )}
             </div>
