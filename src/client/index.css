@@ -56,6 +56,27 @@
     --alt-secondary: #8f775c;
 }
 
+.blueberry {
+    --primary: #3165c5;
+    --secondary: #6ac28d;
+    --alt-primary: #0947ab;
+    --alt-secondary: #4e8854;
+}
+
+.olive {
+    --primary: #5F6F52;
+    --secondary: #A27B5C;
+    --alt-primary: #284034;
+    --alt-secondary: #654d39;
+}
+
+.grape {
+    --primary: #55679C;
+    --secondary: #8c8db5;
+    --alt-primary: #7C93C3;
+    --alt-secondary: #1E2A5E;
+}
+
 body {
     margin: 0;
     padding: 0;

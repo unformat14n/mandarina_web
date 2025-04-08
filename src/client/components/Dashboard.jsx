@@ -142,8 +142,18 @@ function Dashboard() {
 
     const renderTaskStatus = () => {
         const tasksStatusHdr = [
-            { status: "Pending", count: 0, color: "var(--primary)" },
-            { status: "In Progress", count: 0, color: "var(--alt-secondary)" },
+            {
+                status: "Pending",
+                count: 0,
+                from: "var(--primary)",
+                to: "var(--alt-primary)",
+            },
+            {
+                status: "In Progress",
+                count: 0,
+                from: "var(--alt-secondary)",
+                to: "var(--secondary)",
+            },
         ];
 
         tasks.forEach((task) => {
@@ -160,7 +170,9 @@ function Dashboard() {
                     <div
                         key={index}
                         className="track-card"
-                        style={{ backgroundColor: item.color }}>
+                        style={{
+                            background: `linear-gradient(45deg, ${tasksStatusHdr[index].from}, ${tasksStatusHdr[index].to})`,
+                        }}>
                         <h3 className="status-text">{item.status}</h3>
                         <p className="status-count">{item.count}</p>
                     </div>
