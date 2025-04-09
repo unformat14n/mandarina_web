@@ -94,7 +94,6 @@ const MonthCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
 };
 
 const DayCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
-    console.log(userId, tasks, currentDate);
     // Generates an array of 24 hours in the day
     const renderHours = () => {
         const hours = [];
@@ -226,7 +225,7 @@ const WeekCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
                 const taskComps = tasksForDay.map((task) => (
                     // <p key={task.id} className="task">{task.title}</p>
                     <Task
-                        key={task.id}
+                        key={`task-${task.id}`}
                         id={task.id}
                         name={task.title}
                         date={task.dueDate}
@@ -241,7 +240,7 @@ const WeekCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
                 ));
 
                 hours.push(
-                    <div key={`day-${i}-hour-${hour}`} className="hour-slot">
+                    <div key={`day-${i}-hour-${formattedHour}`} className="hour-slot">
                         {taskComps}
                     </div>
                 );
@@ -355,9 +354,7 @@ function Calendar() {
             if (data.success) {
                 setTasks((prevTasks) => {
                     return prevTasks.map((task) =>
-                        task.id === id
-                            ? { ...task, status: newStatus }
-                            : task
+                        task.id === id ? { ...task, status: newStatus } : task
                     );
                 });
                 console.log("Status changed");

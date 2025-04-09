@@ -38,12 +38,12 @@ section.main {
     padding-block: 1em;
     margin-block: 0.2em;
     border-radius: 0.5em;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease, color 0.3s ease;
 }
 
 /* Highlight the active (selected) item */
 .sidebar-item.active {
-    background-color: var(--primary);
+    background: linear-gradient(to right, var(--primary) 50%, var(--alt-primary));
     color: white;
     font-weight: 900;
     width: 90%;
@@ -99,7 +99,6 @@ section.main {
 .infront {
     background: var(--bg);
     color: var(--fg);
-    
     width: 420px;
     height: 420px;
     margin: auto;

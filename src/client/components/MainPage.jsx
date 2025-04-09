@@ -160,7 +160,7 @@ function MainPage({ type }) {
                         closeTimeoutMS={100}
                         style={{
                             overlay: {
-                                backgroundColor: "rgba(238, 238, 238, 0.5)",
+                                backgroundColor: 'var(--bg-modals)',
                                 zIndex: 1000,
                             },
                             content: {
@@ -241,35 +241,16 @@ function MainPage({ type }) {
                             className="buttons"
                             style={{
                                 display: "flex",
-                                justifyContent: "center",
+                                justifyContent: "space-between",
                                 marginTop: "20px",
+
                             }}>
                             <button
-                                style={{
-                                    width: "100px",
-                                    height: "40px",
-                                    marginInline: "1em",
-                                    borderRadius: "5px",
-                                    fontSize: "16px",
-                            
-                                }}
-                                onClick={saveTask}
-                                className="bg-red-500 text-white rounded">
+                                onClick={saveTask}>
                                 Create
                             </button>
                             <button
-                                style={{
-
-                                    color: "white",
-                                    background: "var(--alt-primary)",
-                                    width: "100px",
-                                    height: "40px",
-                                    marginInline: "1em",
-                                    borderRadius: "5px",
-                                    fontSize: "16px",
-                                }}
-                                onClick={() => setIsOpen(false)}
-                                className="bg-red-500 text-white rounded">
+                                onClick={() => setIsOpen(false)}>
                                 Cancel
                             </button>
                         </div>
@@ -285,7 +266,7 @@ function MainPage({ type }) {
                         closeTimeoutMS={100}
                         style={{
                             overlay: {
-                                backgroundColor: "rgba(238, 238, 238, 0.5)",
+                                backgroundColor: "var(--",
                                 zIndex: 1000,
                             },
                         }}>

@@ -25,6 +25,7 @@
     --bg: #ffffff;
     --bg-secondary: #f3f2f5;
     --bg-tertiary: #e5e0ed;
+    --bg-modals: rgb(243 242 245 / 0.7);
 }
 
 .dark {
@@ -33,6 +34,7 @@
     --bg: #222024;
     --bg-secondary: #323036;
     --bg-tertiary: #3f3c43;
+    --bg-modals: rgb(50 48 54 / 0.7);
 }
 
 .mandarina {

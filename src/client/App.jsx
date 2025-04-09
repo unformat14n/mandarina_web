@@ -15,17 +15,25 @@ function App() {
             <header className="header">
                 <div className="logo">
                     <img
-                        src="../public/mandarinaLogo.png"
+                        src="/mandarinaLogo.png"
                         alt=""
                         className="logo"
                     />
                     <h1 className="logo">Mandarina</h1>
                 </div>
                 <div className="quick-access">
-                    <a href="#features" className="quickaccs">Features</a>
-                    <a href="#how-it-works" className="quickaccs">How it works</a>
-                    <a href="#about-us" className="quickaccs">About Us</a>
-                    <a href="#contact" className="quickaccs">Something else</a>
+                    <a href="#features" className="quickaccs">
+                        Features
+                    </a>
+                    <a href="#how-it-works" className="quickaccs">
+                        How it works
+                    </a>
+                    <a href="#about-us" className="quickaccs">
+                        About Us
+                    </a>
+                    <a href="#contact" className="quickaccs">
+                        Something else
+                    </a>
                 </div>
             </header>
 
@@ -107,11 +115,82 @@ function App() {
                 </section>
             </section>
 
+            <div className="testimonials">
+                <div className="testimonial-card">
+                    <p className="tbody">
+                        Uno de los calendarios mas vistosos que he visto.
+                    </p>
+                    <p className="author">Josue Chávez</p>
+                    <p className="career">
+                        Software Engineering Student, KULAC
+                    </p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">
+                        Un recurso muy accesible y estéticament placentero.
+                    </p>
+                    <p className="author">Gabriel Pocurull</p>
+                    <p className="career">Psychology Student, KULAC</p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">User friendly y listo para usarse</p>
+                    <p className="author">Ms. Alejandra Mora</p>
+                    <p className="career">Professor at KULAC</p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">
+                        Ser organizado nunca se vio tan bien.
+                    </p>
+                    <p className="author">Marcos Gonzales</p>
+                    <p className="career">
+                        Business Aministrator Student, KULAC
+                    </p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">Facil, sencillo y creativo.</p>
+                    <p className="author">Stephany Dávila</p>
+                    <p className="career">
+                        Integrated Marketing Communications Student, KULAC
+                    </p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">
+                        Tiene gran personalidad, llamativo y muy eficiente.
+                    </p>
+                    <p className="author">Alisson Munguia</p>
+                    <p className="career">
+                        Integrated Marketing Communications Student, KULAC
+                    </p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">
+                        Visualmente atractivo, compacto, y una experiencia de
+                        usuario amigable.
+                    </p>
+                    <p className="author">María Alejandra Castillo</p>
+                    <p className="career">
+                        Business Administration Student, KULAC
+                    </p>
+                </div>
+                <div className="testimonial-card">
+                    <p className="tbody">
+                        Como estudiante cambio la manera en la que hacia mis
+                        tareas. Ya nunca pierdo una deadline.
+                    </p>
+                    <p className="author">Odalys Diaz</p>
+                    <p className="career">
+                        Business Administration Student, KULAC
+                    </p>
+                </div>
+            </div>
+
             <section className="about" id="about-us">
                 <div className="about-content">
                     <h2>About Us</h2>
                     <div className="who">
-                        <h3>Who is "<em>Us</em>"?</h3>
+                        <h3>
+                            Who is "<em>Us</em>"?
+                        </h3>
                         <p>
                             We are a team of passionate college students
                             currently on our junior/sophomore year of studying

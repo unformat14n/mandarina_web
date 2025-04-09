@@ -217,7 +217,6 @@ function Tasks() {
                     <svg
                         data-slot="icon"
                         aria-hidden="true"
-                        fill="none"
                         strokeWidth={2}
                         stroke="currentColor"
                         viewBox="0 0 24 24"
