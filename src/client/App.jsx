@@ -28,11 +28,11 @@ function App() {
                     <a href="#how-it-works" className="quickaccs">
                         How it works
                     </a>
+                    <a href="#testimonies" className="quickaccs">
+                        Testimonies
+                    </a>
                     <a href="#about-us" className="quickaccs">
                         About Us
-                    </a>
-                    <a href="#contact" className="quickaccs">
-                        Something else
                     </a>
                 </div>
             </header>
@@ -115,7 +115,7 @@ function App() {
                 </section>
             </section>
 
-            <div className="testimonials">
+            <div className="testimonials" id="testimonies">
                 <div className="testimonial-card">
                     <p className="tbody">
                         Uno de los calendarios mas vistosos que he visto.
