@@ -103,7 +103,7 @@ section.main {
     width: 420px;
     height: 420px;
     margin: auto;
-    z-index: 10;
+    z-index: 9999 !important;
     padding: 2em;
     border-radius: 12px;
     text-align: left;

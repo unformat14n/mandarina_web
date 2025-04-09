@@ -86,6 +86,21 @@ function MainPage({ type }) {
         }
     };
 
+    const handleDelete = async (taskId) => {
+        try {
+            const response = await fetch("/delete-task", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ taskId: taskId }),
+            }); 
+        } catch (error) {
+            console.error("Error deleting task:", error);
+            alert("Error deleting task. Please try again."); 
+        }
+    }
+
     const saveTask = async () => {
         if (!taskName || !taskDate || !taskHour || !priority) {
             alert("Please fill in all fields");
@@ -146,6 +161,7 @@ function MainPage({ type }) {
                         style={{
                             overlay: {
                                 backgroundColor: "rgba(238, 238, 238, 0.5)",
+                                zIndex: 1000,
                             },
                             content: {
                                 // position: "sticky",
@@ -169,6 +185,11 @@ function MainPage({ type }) {
                             />
                             <label htmlFor="task-content">Description:</label>
                             <textarea
+                                style={{
+                                    resize: "none",
+                                }}
+
+
                                 id="task-content"
                                 name="task-content"
                                 rows="4"
@@ -202,6 +223,11 @@ function MainPage({ type }) {
                                     Priority:
                                 </label>
                                 <select
+                                style={{
+
+                                    borderRadius: "5px",
+                                    marginLeft: "10px",
+                                }}
                                     id="priority-select"
                                     value={priority}
                                     onChange={handlePriorityChange}>
@@ -220,8 +246,12 @@ function MainPage({ type }) {
                             }}>
                             <button
                                 style={{
-                                    marginBlock: "0.5em",
+                                    width: "100px",
+                                    height: "40px",
                                     marginInline: "1em",
+                                    borderRadius: "5px",
+                                    fontSize: "16px",
+                            
                                 }}
                                 onClick={saveTask}
                                 className="bg-red-500 text-white rounded">
@@ -229,9 +259,14 @@ function MainPage({ type }) {
                             </button>
                             <button
                                 style={{
-                                    marginBlock: "0.5em",
-                                    marginInline: "1em",
+
+                                    color: "white",
                                     background: "var(--alt-primary)",
+                                    width: "100px",
+                                    height: "40px",
+                                    marginInline: "1em",
+                                    borderRadius: "5px",
+                                    fontSize: "16px",
                                 }}
                                 onClick={() => setIsOpen(false)}
                                 className="bg-red-500 text-white rounded">
@@ -251,6 +286,7 @@ function MainPage({ type }) {
                         style={{
                             overlay: {
                                 backgroundColor: "rgba(238, 238, 238, 0.5)",
+                                zIndex: 1000,
                             },
                         }}>
                         <h2 style={{ margin: "0", padding: "0" }}>Edit Task</h2>
@@ -272,6 +308,10 @@ function MainPage({ type }) {
 
                             <label htmlFor="task-content">Description:</label>
                             <textarea
+
+                                style={{
+                                    resize: "none",
+                                }}
                                 id="task-content"
                                 name="task-content"
                                 rows="4"
@@ -338,6 +378,11 @@ function MainPage({ type }) {
                                     Priority:
                                 </label>
                                 <select
+
+                                style={{
+                                    borderRadius: "5px",
+                                    marginLeft: "10px",
+                                }}
                                     id="priority-select"
                                     value={
                                         editInfo.priority?.toLowerCase() ||
@@ -369,21 +414,34 @@ function MainPage({ type }) {
                             <button
                                 style={{
                                     marginBlock: "0.5em",
-                                    marginInline: "1em",
+                                    marginInline: "0.5em",
+            
                                 }}
                                 onClick={updateTask}
                                 >
-                                Save Changes
+                                Save
                             </button>
                             <button
                                 style={{
                                     marginBlock: "0.5em",
-                                    marginInline: "1em",
+                                    marginInline: "0.5em",
                                     background: "var(--alt-primary)",
+                    
+
                                 }}
                                 onClick={() => setIsEditOpen(false)}
                                 >
                                 Cancel
+                            </button>
+                            <button
+                                style={{
+                                    marginBlock: "0.5em",
+                                    marginInline: "0.5em",
+                                    background: "#de3163",
+                                }}
+                                onClick={() => {setIsEditOpen(false); handleDelete(editInfo.id);}}
+                                >
+                                Delete
                             </button>
                         </div>
                     </Modal>
