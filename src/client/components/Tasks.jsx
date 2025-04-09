@@ -119,6 +119,7 @@ function Tasks() {
 
     const renderTasks = (sortBy) => {
         let sortedTasks = [...tasks];
+    
         if (sortBy === "Date") {
             sortedTasks.sort((a, b) => {
                 const dateA = new Date(a.dueDate);
@@ -127,10 +128,16 @@ function Tasks() {
             });
         } else if (sortBy === "Hour") {
             sortedTasks.sort((a, b) => {
-                const hourA = parseInt(a.hour, 10);
-                const minuteA = parseInt(a.minute, 10);
-                const hourB = parseInt(b.hour, 10);
-                const minuteB = parseInt(b.minute, 10);
+                const dateA = new Date(a.dueDate); // Parse the dueDate into Date object
+                const dateB = new Date(b.dueDate);
+    
+                // Get the hours and minutes
+                const hourA = dateA.getUTCHours();
+                const minuteA = dateA.getUTCMinutes();
+                const hourB = dateB.getUTCHours();
+                const minuteB = dateB.getUTCMinutes();
+    
+                // Sort by hour and then by minute
                 return hourA - hourB || minuteA - minuteB;
             });
         } else {
@@ -140,18 +147,14 @@ function Tasks() {
                 return nameA.localeCompare(nameB);
             });
         }
-
-        return sortedTasks.length != 0 ? (
+    
+        return sortedTasks.length !== 0 ? (
             sortedTasks.map((task, index) => (
                 <TaskListItem
                     key={index}
                     id={task.id}
                     name={task.title}
                     date={task.dueDate}
-                    hour={`${task.hour}:${String(task.minute).padStart(
-                        2,
-                        "0"
-                    )}`}
                     priority={task.priority}
                     status={task.status}
                     description={task.description}
@@ -190,8 +193,6 @@ function Tasks() {
     };
 
     return (
-        /* Tasks header*/
-
         <div className="task-container">
             <header className="task-header">
                 <label className="header-label">Sort by:</label>

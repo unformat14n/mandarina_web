@@ -11,7 +11,6 @@ import { useUser } from "../contexts/UserContext";
 
 const ModalContext = createContext(null);
 const EditModalContext = createContext(null);
-const RefreshContext = createContext(null);
 
 function MainPage({ type }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,10 +27,11 @@ function MainPage({ type }) {
     const handlePriorityChange = (e) => {
         if (isOpen) {
             console.log("Priority changed to:", e.target.value);
-            setPriority(e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1));
+            setPriority(
+                e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+            );
             console.log("Priority changed to:", priority);
         }
-
     };
 
     setUserId(
@@ -41,21 +41,37 @@ function MainPage({ type }) {
     );
 
     const updateTask = async () => {
-        console.log("Title: ", editInfo.title);
-        console.log("Due Date: ", editInfo.dueDate);
-        if (
-            editInfo.title == "" ||
-            editInfo.dueDate == ""
-        ) {
-            console.log(editInfo.title);
-            console.log(editInfo.dueDate);
-            console.log(!editInfo.hour);
-            console.log(!editInfo.minute);
+        if (editInfo.title === "" || !editInfo.dueDate) {
             alert("Please fill in all fields");
             return;
         }
 
         try {
+            // Split taskHour to get hours and minutes
+            const [hours, minutes] = editInfo.hour.split(":");
+
+            // Parse taskDate into a Date object (local time)
+            const localDate = new Date(editInfo.dueDate);
+
+            // Create a UTC date object with the same year, month, day but with UTC time
+            const combinedDate = new Date(
+                Date.UTC(
+                    localDate.getUTCFullYear(), // Use UTC year
+                    localDate.getUTCMonth(), // Use UTC month
+                    localDate.getUTCDate(), // Use UTC date
+                    parseInt(hours), // Use the provided hour in UTC
+                    parseInt(minutes), // Use the provided minutes in UTC
+                    0, // Set seconds to 0
+                    0 // Set milliseconds to 0
+                )
+            );
+
+            // Format the date in UTC as MySQL expects: 'YYYY-MM-DD HH:MM:SS'
+            const formattedDate = combinedDate
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " "); // 'YYYY-MM-DD HH:MM:SS'
+
             const response = await fetch("/update-task", {
                 method: "POST",
                 headers: {
@@ -64,11 +80,9 @@ function MainPage({ type }) {
                 body: JSON.stringify({
                     title: editInfo.title,
                     description: editInfo.description || "", // Handle empty description
-                    dueDate: new Date(editInfo.dueDate).toISOString().slice(0, 19).replace('T', ' '),
+                    dueDate: formattedDate, // Send the formatted UTC date
                     priority: editInfo.priority || "Medium", // Default if missing
                     status: editInfo.status || "Pending", // Default if missing
-                    hour: parseInt(editInfo.hour),
-                    minute: parseInt(editInfo.minute),
                     taskId: editInfo.id, // Make sure this is included
                 }),
             });
@@ -94,12 +108,12 @@ function MainPage({ type }) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ taskId: taskId }),
-            }); 
+            });
         } catch (error) {
             console.error("Error deleting task:", error);
-            alert("Error deleting task. Please try again."); 
+            alert("Error deleting task. Please try again.");
         }
-    }
+    };
 
     const saveTask = async () => {
         if (!taskName || !taskDate || !taskHour || !priority) {
@@ -108,7 +122,32 @@ function MainPage({ type }) {
         }
 
         try {
+            // Split taskHour to get hours and minutes
             const [hours, minutes] = taskHour.split(":");
+
+            // Parse taskDate into a Date object (local time)
+            const localDate = new Date(taskDate);
+
+            // Create a UTC date object with the same year, month, day but with UTC time
+            const combinedDate = new Date(
+                Date.UTC(
+                    localDate.getUTCFullYear(), // Use UTC year
+                    localDate.getUTCMonth(), // Use UTC month
+                    localDate.getUTCDate(), // Use UTC date
+                    parseInt(hours), // Use the provided hour in UTC
+                    parseInt(minutes), // Use the provided minutes in UTC
+                    0, // Set seconds to 0
+                    0 // Set milliseconds to 0
+                )
+            );
+
+            // Format the date in UTC as MySQL expects: 'YYYY-MM-DD HH:MM:SS'
+            const formattedDate = combinedDate
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " "); // 'YYYY-MM-DD HH:MM:SS'
+
+            // Send the task data with the UTC date and time
             const response = await fetch("/create-task", {
                 method: "POST",
                 headers: {
@@ -117,10 +156,8 @@ function MainPage({ type }) {
                 body: JSON.stringify({
                     title: taskName,
                     description: taskDescription,
-                    dueDate: taskDate,
+                    dueDate: formattedDate, // Send the UTC date and time
                     status: "PENDING",
-                    hour: parseInt(hours),
-                    minute: parseInt(minutes),
                     priority: priority.toUpperCase(),
                     userId: userId,
                 }),
@@ -149,7 +186,6 @@ function MainPage({ type }) {
             <EditModalContext.Provider
                 value={{ isEditOpen, setIsEditOpen, setEditInfo }}>
                 <ModalContext.Provider value={{ isOpen, setIsOpen }}>
-
                     {/* New Task Modal */}
 
                     <Modal
@@ -160,11 +196,10 @@ function MainPage({ type }) {
                         closeTimeoutMS={100}
                         style={{
                             overlay: {
-                                backgroundColor: 'var(--bg-modals)',
+                                backgroundColor: "var(--bg-modals)",
                                 zIndex: 1000,
                             },
                             content: {
-                                // position: "sticky",
                                 top: "50%",
                                 left: "50%",
                                 right: "auto",
@@ -173,7 +208,11 @@ function MainPage({ type }) {
                             },
                         }}>
                         <h2 style={{ margin: "0", padding: "0" }}>New Task</h2>
-                        <form onSubmit={(e) => {e.preventDefault();saveTask();}}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                saveTask();
+                            }}>
                             <label htmlFor="task-name">Task Title:</label>
                             <input
                                 type="text"
@@ -185,11 +224,7 @@ function MainPage({ type }) {
                             />
                             <label htmlFor="task-content">Description:</label>
                             <textarea
-                                style={{
-                                    resize: "none",
-                                }}
-
-
+                                style={{ resize: "none" }}
                                 id="task-content"
                                 name="task-content"
                                 rows="4"
@@ -223,11 +258,10 @@ function MainPage({ type }) {
                                     Priority:
                                 </label>
                                 <select
-                                style={{
-
-                                    borderRadius: "5px",
-                                    marginLeft: "10px",
-                                }}
+                                    style={{
+                                        borderRadius: "5px",
+                                        marginLeft: "10px",
+                                    }}
                                     id="priority-select"
                                     value={priority}
                                     onChange={handlePriorityChange}>
@@ -243,19 +277,14 @@ function MainPage({ type }) {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 marginTop: "20px",
-
                             }}>
-                            <button
-                                onClick={saveTask}>
-                                Create
-                            </button>
-                            <button
-                                onClick={() => setIsOpen(false)}>
+                            <button onClick={saveTask}>Create</button>
+                            <button onClick={() => setIsOpen(false)}>
                                 Cancel
                             </button>
                         </div>
                     </Modal>
-                    
+
                     {/* Edit Modal */}
 
                     <Modal
@@ -271,7 +300,11 @@ function MainPage({ type }) {
                             },
                         }}>
                         <h2 style={{ margin: "0", padding: "0" }}>Edit Task</h2>
-                        <form onSubmit={(e) => {e.preventDefault(); updateTask();}}>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                updateTask();
+                            }}>
                             <label htmlFor="task-name">Task Title:</label>
                             <input
                                 type="text"
@@ -289,7 +322,6 @@ function MainPage({ type }) {
 
                             <label htmlFor="task-content">Description:</label>
                             <textarea
-
                                 style={{
                                     resize: "none",
                                 }}
@@ -312,20 +344,11 @@ function MainPage({ type }) {
                                 type="date"
                                 id="task-date"
                                 name="task-date"
-                                // Convert the ISO string to YYYY-MM-DD format for date input
-                                value={
-                                    editInfo.dueDate
-                                        ? editInfo.dueDate.split("T")[0]
-                                        : ""
-                                }
+                                value={editInfo.dueDate || ""}
                                 onChange={(e) =>
                                     setEditInfo({
                                         ...editInfo,
-                                        dueDate: e.target.value
-                                            ? new Date(e.target.value)
-                                                  .toISOString()
-                                                  .split("T")[0]
-                                            : null,
+                                        dueDate: e.target.value,
                                     })
                                 }
                                 className="input-box"
@@ -336,19 +359,11 @@ function MainPage({ type }) {
                                 type="time"
                                 id="task-hour"
                                 name="task-hour"
-                                // Format hour and minute into HH:MM format
-                                value={`${String(
-                                    editInfo.hour || "00"
-                                ).padStart(2, "0")}:${String(
-                                    editInfo.minute || "00"
-                                ).padStart(2, "0")}`}
+                                value={editInfo.hour || "08:00"}
                                 onChange={(e) => {
-                                    const [hour, minute] =
-                                        e.target.value.split(":");
                                     setEditInfo({
                                         ...editInfo,
-                                        hour: parseInt(hour, 10),
-                                        minute: parseInt(minute, 10),
+                                        hour: e.target.value,
                                     });
                                 }}
                                 className="input-box"
@@ -359,11 +374,10 @@ function MainPage({ type }) {
                                     Priority:
                                 </label>
                                 <select
-
-                                style={{
-                                    borderRadius: "5px",
-                                    marginLeft: "10px",
-                                }}
+                                    style={{
+                                        borderRadius: "5px",
+                                        marginLeft: "10px",
+                                    }}
                                     id="priority-select"
                                     value={
                                         editInfo.priority?.toLowerCase() ||
@@ -396,10 +410,8 @@ function MainPage({ type }) {
                                 style={{
                                     marginBlock: "0.5em",
                                     marginInline: "0.5em",
-            
                                 }}
-                                onClick={updateTask}
-                                >
+                                onClick={updateTask}>
                                 Save
                             </button>
                             <button
@@ -407,11 +419,8 @@ function MainPage({ type }) {
                                     marginBlock: "0.5em",
                                     marginInline: "0.5em",
                                     background: "var(--alt-primary)",
-                    
-
                                 }}
-                                onClick={() => setIsEditOpen(false)}
-                                >
+                                onClick={() => setIsEditOpen(false)}>
                                 Cancel
                             </button>
                             <button
@@ -420,8 +429,10 @@ function MainPage({ type }) {
                                     marginInline: "0.5em",
                                     background: "#de3163",
                                 }}
-                                onClick={() => {setIsEditOpen(false); handleDelete(editInfo.id);}}
-                                >
+                                onClick={() => {
+                                    setIsEditOpen(false);
+                                    handleDelete(editInfo.id);
+                                }}>
                                 Delete
                             </button>
                         </div>

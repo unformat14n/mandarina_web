@@ -5,7 +5,6 @@ import "./Calendar.css"; // For styling
 import { EditModalContext, ModalContext } from "./MainPage";
 import Task from "./TaskComponent";
 import { useUser } from "../contexts/UserContext";
-import StreamTransport from "nodemailer/lib/stream-transport";
 
 const MonthCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
     const getDaysInMonth = (year, month) => {
@@ -113,7 +112,7 @@ const DayCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
                       const taskDate = new Date(task.dueDate);
                       return (
                           taskDate.getDate() === day.getDate() &&
-                          task.hour === hour &&
+                          taskDate.getHours() == hour &&
                           taskDate.getMonth() === day.getMonth() &&
                           taskDate.getFullYear() === day.getFullYear()
                       );
@@ -214,7 +213,7 @@ const WeekCalendar = ({ currentDate, userId, tasks, updateStatus }) => {
                           const taskDate = new Date(task.dueDate);
                           return (
                               taskDate.getDate() === day.getDate() &&
-                              task.hour === hour &&
+                              taskDate.getHours() === hour &&
                               taskDate.getMonth() === day.getMonth() &&
                               taskDate.getFullYear() === day.getFullYear()
                           );
@@ -357,7 +356,6 @@ function Calendar() {
                         task.id === id ? { ...task, status: newStatus } : task
                     );
                 });
-                console.log("Status changed");
             } else {
                 console.error("Error changing status:", data.error);
             }

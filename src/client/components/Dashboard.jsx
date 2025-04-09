@@ -56,12 +56,15 @@ function Dashboard() {
         const check = new Date(date);
         const ref = new Date(reference);
 
-        check.setDate(check.getDate() - check.getDay());
-        ref.setDate(ref.getDate() - ref.getDay());
+        // Set the date to the start of the week (Monday) in UTC
+        check.setUTCDate(check.getUTCDate() - check.getUTCDay());
+        ref.setUTCDate(ref.getUTCDate() - ref.getUTCDay());
 
-        check.setHours(0, 0, 0, 0);
-        ref.setHours(0, 0, 0, 0);
+        // Set the hours to 00:00:00:000 UTC
+        check.setUTCHours(0, 0, 0, 0);
+        ref.setUTCHours(0, 0, 0, 0);
 
+        // Compare both dates
         return check.getTime() === ref.getTime();
     };
 
@@ -71,17 +74,43 @@ function Dashboard() {
         startOfWeek.setDate(today.getDate() - today.getDay());
 
         const updatedWeeklyChart = [...weeklychart]; // Copy the original chart data
+
         for (let i = 0; i < 7; i++) {
             const currentDate = new Date(startOfWeek);
             currentDate.setDate(startOfWeek.getDate() + i);
+
+            // Normalize currentDate to UTC at 00:00:00 for consistent comparison
+            const currentDateUTC = new Date(
+                Date.UTC(
+                    currentDate.getUTCFullYear(),
+                    currentDate.getUTCMonth(),
+                    currentDate.getUTCDate(),
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            );
+
             let todayTasks = tasks.filter((task) => {
                 const completed = new Date(task.completionDate);
-                return (
-                    completed.getDate() === currentDate.getDate() &&
-                    completed.getMonth() === currentDate.getMonth() &&
-                    completed.getFullYear() === currentDate.getFullYear()
+
+                // Normalize completed date to UTC at 00:00:00 for consistent comparison
+                const completedDateUTC = new Date(
+                    Date.UTC(
+                        completed.getUTCFullYear(),
+                        completed.getUTCMonth(),
+                        completed.getUTCDate(),
+                        0,
+                        0,
+                        0,
+                        0
+                    )
                 );
+
+                return completedDateUTC.getTime() === currentDateUTC.getTime(); // Compare in UTC time
             });
+
             updatedWeeklyChart[i].completed = todayTasks.length;
         }
 

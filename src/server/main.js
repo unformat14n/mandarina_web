@@ -239,8 +239,6 @@ app.post("/register", async (req, res) => {
 
 app.post("/verify", async (req, res) => {
     const { email, password, code } = req.body;
-    console.log("Received verification request");
-    console.log("Stored code:", verificationCodes[email]); // Log the stored code for verificatio
 
     if (verificationCodes[email] === code) {
         try {
@@ -290,8 +288,6 @@ app.post("/create-task", async (req, res) => {
         dueDate,
         priority,
         status,
-        hour,
-        minute,
         userId,
     } = req.body;
 
@@ -302,8 +298,6 @@ app.post("/create-task", async (req, res) => {
         dueDate,
         priority,
         status,
-        hour,
-        minute,
         userId,
         async (err, results) => {
             if (err) {
@@ -356,7 +350,10 @@ app.post("/get-task", async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Tasks fetched successfully",
-            taskInfo: results[0],
+            taskInfo: {
+                ...results[0],
+                dueDate: new Date(results[0].dueDate),
+            },
         });
     });
 });
@@ -368,13 +365,11 @@ app.post("/update-task", async (req, res) => {
         dueDate,
         priority,
         status,
-        hour,
-        minute,
         taskId,
     } = req.body;
 
     // Validate required fields
-    if (!title || !dueDate || (hour < 0 || hour > 24) || !taskId) {
+    if (!title || !dueDate || !taskId) {
         return res.status(400).json({
             success: false,
             error: "Missing required fields",
@@ -389,8 +384,6 @@ app.post("/update-task", async (req, res) => {
             dueDate,
             priority || "Medium",
             status || "Pending",
-            parseInt(hour),
-            parseInt(minute),
             taskId,
             (err, results) => {
                 if (err) {

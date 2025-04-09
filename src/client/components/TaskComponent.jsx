@@ -2,16 +2,28 @@ import React, { useContext, useState } from "react";
 import "./TaskComponent.css";
 import { EditModalContext } from "./MainPage";
 
-function TaskListItem({ id, name, date, hour, priority, status, description, onDelete }) {
+function TaskListItem({
+    id,
+    name,
+    date,
+    priority,
+    status,
+    description,
+    onDelete,
+}) {
+    const taskDate = new Date(date); // The date is in UTC
+    const formattedDate = taskDate.toISOString().split("T")[0]; // Display as YYYY-MM-DD
+    const formattedTime = taskDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+    }); // Display as local time
 
     return (
         <div key={id} className="task-li">
             <div className="task-li-content">
                 <h3 className="task-name-li">{name}</h3>
-                <p className="task-date-li">
-                    {new Date(date).toISOString().split("T")[0]}
-                </p>
-                <p className="task-hour-li">{hour}</p>
+                <p className="task-date-li">{formattedDate}</p>
+                <p className="task-hour-li">{formattedTime}</p>
                 <p className="task-description-li">{description}</p>
                 <p
                     className={`task-priority-li task-${priority.toLocaleLowerCase()}-li`}>
@@ -40,7 +52,7 @@ function TaskListItem({ id, name, date, hour, priority, status, description, onD
     );
 }
 
-function Task({ id, name, date, hour, priority, curStatus, onStatusChange }) {
+function Task({ id, name, date, priority, curStatus, onStatusChange }) {
     const [status, setStatus] = useState(curStatus);
     const { setIsEditOpen, setEditInfo } = useContext(EditModalContext);
 
@@ -48,44 +60,63 @@ function Task({ id, name, date, hour, priority, curStatus, onStatusChange }) {
         getTaskInfo(taskId);
         setIsEditOpen(true);
     };
-    
+
     const getTaskInfo = async (id) => {
         try {
-            const response = await fetch('/get-task', {
+            const response = await fetch("/get-task", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
                     taskId: id,
-                })
+                }),
             });
 
             const data = await response.json();
 
             if (data.success) {
-                setEditInfo({
+                const newInfo = {
                     ...data.taskInfo,
-                   taskId: id
-                });
+                    dueDate: new Date(data.taskInfo.dueDate)
+                        .toISOString()
+                        .split("T")[0],
+                    hour:
+                        new String(
+                            new Date(data.taskInfo.dueDate).getHours()
+                        ).padStart(2, "0") +
+                        ":" +
+                        String(
+                            new Date(data.taskInfo.dueDate).getMinutes()
+                        ).padStart(2, "0"), // Store hour separately
+                    id: id,
+                };
+                setEditInfo(newInfo);
             } else {
                 console.error("Error changing status:", data.error);
             }
         } catch (error) {
             console.error("Error changing status:", error);
         }
-    }
+    };
 
     const handleStatusChange = (newStatus) => {
         setStatus(newStatus);
         onStatusChange(id, newStatus); // Call handler to update status
     };
 
-    const formatTime = (hour) => {
-        const [hours, minutes] = hour.split(":");
+    const formatTime = (dateStr) => {
+        // Convert the date string to a Date object
+        const date = new Date(dateStr);
+
+        // Adjust for time zone if needed (converting to local time)
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
         const period = hours >= 12 ? "PM" : "AM";
-        const formattedHours = hours % 12 || 12;
-        return `${formattedHours}:${minutes} ${period}`;
+        const formattedHours = hours % 12 || 12; // Converts 0 hours to 12 (for 12 AM)
+        const formattedMinutes = String(minutes).padStart(2, "0");
+
+        return `${formattedHours}:${formattedMinutes} ${period}`;
     };
 
     return (
@@ -95,9 +126,9 @@ function Task({ id, name, date, hour, priority, curStatus, onStatusChange }) {
                 .toLocaleLowerCase()}`}>
             <h3 className="task-name">{name}</h3>
             <div className="task-content">
-                <p className="task-hour">{formatTime(hour)}</p>
+                <p className="task-hour">{formatTime(date)}</p>
                 <div className="btn-row">
-                    {status != "Completed" && (
+                    {status !== "Completed" && (
                         <button
                             className="status-btn"
                             onClick={() => handleStatusChange("Completed")}>
@@ -114,7 +145,7 @@ function Task({ id, name, date, hour, priority, curStatus, onStatusChange }) {
                             </svg>
                         </button>
                     )}
-                    {status != "Completed" && status != "In Progress" && (
+                    {status !== "Completed" && status !== "In Progress" && (
                         <button
                             className="status-btn"
                             onClick={() => handleStatusChange("In Progress")}>
@@ -131,7 +162,7 @@ function Task({ id, name, date, hour, priority, curStatus, onStatusChange }) {
                             </svg>
                         </button>
                     )}
-                    {status != "Completed" && (
+                    {status !== "Completed" && (
                         <button
                             className="status-btn"
                             onClick={() => openEditModal(id)}>

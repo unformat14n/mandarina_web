@@ -13,11 +13,9 @@ export function setupDatabase(db) {
             id INT AUTO_INCREMENT PRIMARY KEY,
             title VARCHAR(255),
             description TEXT,
-            dueDate DATE,
+            dueDate TIMESTAMP,  -- Changed from DATE to TIMESTAMP
             priority ENUM('Low', 'Medium', 'High'),
             status ENUM('Pending', 'In Progress', 'Completed'),
-            hour int,
-            minute int,
             completionDate DATE,
             user_id INT,
             FOREIGN KEY (user_id) REFERENCES users(id)
@@ -52,18 +50,17 @@ export function createTask(
     dueDate,
     priority,
     status,
-    hour,
-    minute,
     user_id,
     callback
 ) {
+    // Combine the dueDate and time into a TIMESTAMP
     const query = `INSERT INTO tasks 
-    (title, description, dueDate, priority, status, hour, minute, user_id) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    (title, description, dueDate, priority, status, user_id) 
+    VALUES (?, ?, ?, ?, ?, ?)`;
 
     db.query(
         query,
-        [title, description, dueDate, priority, status, hour, minute, user_id],
+        [title, description, dueDate, priority, status, user_id],
         callback
     );
 }
@@ -85,39 +82,30 @@ export function updateTask(
     dueDate,
     priority,
     status,
-    hour,
-    minute,
     taskId,
     callback
 ) {
-    console.log(
-        title,
-        description,
-        dueDate,
-        priority,
-        status,
-        hour,
-        minute,
-        taskId
-    );
-    const query = `UPDATE tasks SET title = ?, description = ?, dueDate = ?, priority = ?, status = ?, hour = ?, minute = ? WHERE id = ?`;
+    const query = `UPDATE tasks SET title = ?, description = ?, dueDate = ?, priority = ?, status = ? WHERE id = ?`;
     db.query(
         query,
-        [title, description, dueDate, priority, status, hour, minute, taskId],
+        [title, description, dueDate, priority, status, taskId],
         callback
     );
 }
 
 export function updateStatus(db, status, taskId, callback) {
+    // Get the current date in UTC
     const today = new Date();
+
+    // Format current date as 'YYYY-MM-DD HH:MM:SS'
+    const formattedDate = today
+        .toISOString() // Convert to UTC ISO string
+        .slice(0, 19) // Slice off milliseconds and timezone
+        .replace("T", " ");
     let query = ``;
     if (status == "Completed") {
         query = `UPDATE tasks SET status =?, completionDate=? WHERE id =?`;
-        db.query(
-            query,
-            [status, today.toISOString().split("T")[0], taskId],
-            callback
-        );
+        db.query(query, [status, formattedDate, taskId], callback);
     } else {
         query = `UPDATE tasks SET status =? WHERE id =?`;
         db.query(query, [status, taskId], callback);
@@ -152,7 +140,6 @@ export function getTasksProgress(db, user_id, callback) {
 }
 
 export function getTasksDueSoon(db, user_id, callback) {
-    // I'm proud of this one
     const query = `SELECT title, dueDate, status, priority
     FROM tasks 
     WHERE user_id =? 
@@ -167,9 +154,3 @@ export function resetPassword(db, password, email, callback) {
     const query = `UPDATE users SET password =? WHERE email =?`;
     db.query(query, [password, email], callback);
 }
-
-/*
-export function getCompletedDaily(db, user_id, callback){
-    const query = `SELECT `
-}
-*/
